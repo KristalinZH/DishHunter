@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Web", "DishHunter.Web\DishHunter.Web.csproj", "{70099761-75E0-4A9D-B28C-B15E11844F3B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{822CA6D0-E04D-45EA-85BB-2C6BF436E0A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{211DAF07-D919-4A2E-B81C-91C74B39F28F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{9D823B91-75EB-48BE-BC7F-D77BCE2CA91C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Web.ViewModels", "DishHunter.Web.ViewModels\DishHunter.Web.ViewModels.csproj", "{016D4C51-0084-4B16-B5FE-0C981DA562EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Services", "DishHunter.Services\DishHunter.Services.csproj", "{F4A0B650-77E1-40DC-B0D4-030D0CB9D1E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Data", "DishHunter.Data\DishHunter.Data.csproj", "{F0FC1840-A1F5-4EF6-A8D2-232779C1C3FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Data.Models", "DishHunter.Data.Models\DishHunter.Data.Models.csproj", "{FE2A9A2F-91F5-45A6-8159-3981DA082F70}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70099761-75E0-4A9D-B28C-B15E11844F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70099761-75E0-4A9D-B28C-B15E11844F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70099761-75E0-4A9D-B28C-B15E11844F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70099761-75E0-4A9D-B28C-B15E11844F3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{016D4C51-0084-4B16-B5FE-0C981DA562EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{016D4C51-0084-4B16-B5FE-0C981DA562EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{016D4C51-0084-4B16-B5FE-0C981DA562EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{016D4C51-0084-4B16-B5FE-0C981DA562EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4A0B650-77E1-40DC-B0D4-030D0CB9D1E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4A0B650-77E1-40DC-B0D4-030D0CB9D1E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4A0B650-77E1-40DC-B0D4-030D0CB9D1E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4A0B650-77E1-40DC-B0D4-030D0CB9D1E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0FC1840-A1F5-4EF6-A8D2-232779C1C3FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0FC1840-A1F5-4EF6-A8D2-232779C1C3FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0FC1840-A1F5-4EF6-A8D2-232779C1C3FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0FC1840-A1F5-4EF6-A8D2-232779C1C3FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE2A9A2F-91F5-45A6-8159-3981DA082F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE2A9A2F-91F5-45A6-8159-3981DA082F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE2A9A2F-91F5-45A6-8159-3981DA082F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE2A9A2F-91F5-45A6-8159-3981DA082F70}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{70099761-75E0-4A9D-B28C-B15E11844F3B} = {822CA6D0-E04D-45EA-85BB-2C6BF436E0A4}
+		{016D4C51-0084-4B16-B5FE-0C981DA562EF} = {822CA6D0-E04D-45EA-85BB-2C6BF436E0A4}
+		{F4A0B650-77E1-40DC-B0D4-030D0CB9D1E6} = {9D823B91-75EB-48BE-BC7F-D77BCE2CA91C}
+		{F0FC1840-A1F5-4EF6-A8D2-232779C1C3FD} = {211DAF07-D919-4A2E-B81C-91C74B39F28F}
+		{FE2A9A2F-91F5-45A6-8159-3981DA082F70} = {211DAF07-D919-4A2E-B81C-91C74B39F28F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {62A8629A-E2E3-42C5-89E3-671FA753C5A5}
+	EndGlobalSection
+EndGlobal
