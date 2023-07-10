@@ -9,12 +9,13 @@ namespace DishHunter.Web
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
-			//Add database context
-			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+			//Add database contexts
+
+			var restaurantConnectionString = builder.Configuration.GetConnectionString("RestaurantConnection")
+				?? throw new InvalidOperationException("Connection string 'RestaurantConnection' not found.");
 
 			builder.Services.AddDbContext<RestaurantDbContext>(options =>
-				options.UseSqlServer(connectionString));
+				options.UseSqlServer(restaurantConnectionString));
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
 
