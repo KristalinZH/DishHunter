@@ -9,17 +9,23 @@ namespace DishHunter.Data.Models.Restaurant
             Restaurants = new HashSet<Restaurant>();
 			Menus = new HashSet<Menu>();
 		}
+
         [Key]
 		public Guid Id { get; set; }
+
 		[Required]
 		public string BrandName { get; set; } = null!;
-		public string? LogoUrl { get; set; }
+		[Required]
+		public string LogoUrl { get; set; } = null!;
+		[Required]
+        public string WebsiteUrl { get; set; } = null!;
+		[Required]
+		public string Description { get; set; } = null!;
 
-        public string? WebsiteUrl { get; set; }
-
-        public string? Description { get; set; }
+		public bool IsActive { get; set; }
 
         public virtual ICollection<Restaurant> Restaurants { get; set; }
+
 		public virtual ICollection<Menu> Menus { get; set; }
 	}
 }

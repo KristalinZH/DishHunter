@@ -15,8 +15,14 @@ namespace DishHunter.Data.Models.Restaurant
         public string Description { get; set; } = null!;
         [Required]
         public string FoodCategory { get; set; } = null!;
-        [ForeignKey(nameof(Menu))]
+
+		[Required]
+		public string ImageUrl { get; set; } = null!;
+
+		[ForeignKey(nameof(Menu))]
         public int MenuId { get; set; }
         public virtual Menu Menu { get; set; } = null!;
-    }
+
+		public bool IsActive { get; set; }
+	}
 }

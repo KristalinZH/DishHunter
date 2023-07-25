@@ -18,6 +18,7 @@ namespace DishHunter.Data.Models.Restaurant
 
 		[ForeignKey(nameof(Categoy))]
 		public int CategoryId { get; set; }
+
 		public virtual Category Categoy { get; set; } = null!;
 
 		[ForeignKey(nameof(Settlement))]
@@ -26,6 +27,12 @@ namespace DishHunter.Data.Models.Restaurant
 
         [ForeignKey(nameof(Brand))]
         public Guid BrandId { get; set; }
+
         public virtual Brand Brand { get; set; } = null!;
-    }
+
+		public bool IsActive { get; set; }
+
+		[Required]
+		public string ImageUrl { get; set; } = null!;
+	}
 }

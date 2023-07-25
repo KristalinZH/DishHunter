@@ -14,6 +14,9 @@ namespace DishHunter.Data.Models.Restaurant
         public string SettlementName { get; set; } = null!;
         [Required]
         public string Region { get; set; } = null!;
-        public virtual ICollection<Restaurant> Restaurants { get; set; }
+
+		public bool IsActive { get; set; }
+
+		public virtual ICollection<Restaurant> Restaurants { get; set; }
     }
 }

@@ -12,7 +12,10 @@ namespace DishHunter.Data.Models.Restaurant
 
         [ForeignKey(nameof(Brand))]
         public Guid BrandId { get; set; }
+
         public Brand Brand { get; set; } = null!;
-        public virtual ICollection<MenuItem> MenuItems { get; set; }
+
+		public bool IsActive { get; set; }
+		public virtual ICollection<MenuItem> MenuItems { get; set; }
     }
 }
