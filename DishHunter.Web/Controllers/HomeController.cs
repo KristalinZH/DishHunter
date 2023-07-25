@@ -1,9 +1,9 @@
-﻿
-namespace DishHunter.Web.Controllers
+﻿namespace DishHunter.Web.Controllers
 {
-	using System.Diagnostics;
+	using DishHunter.Web.ViewModels;
 	using Microsoft.AspNetCore.Mvc;
-	using ViewModels;
+	using System.Diagnostics;
+
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;

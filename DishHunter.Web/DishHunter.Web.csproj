@@ -4,7 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-DishHunter.Web-1ae366c0-3fb6-4eae-9e3a-06422b3d2e2d</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DishHunter.Services\DishHunter.Services.csproj" />

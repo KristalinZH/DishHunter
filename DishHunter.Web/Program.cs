@@ -1,28 +1,36 @@
-
 namespace DishHunter.Web
 {
+	using DishHunter.Data;
+	using Microsoft.AspNetCore.Identity;
 	using Microsoft.EntityFrameworkCore;
-	using Data;
 
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			var builder = WebApplication.CreateBuilder(args);
-			//Add database contexts
+			WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-			var restaurantConnectionString = builder.Configuration.GetConnectionString("RestaurantConnection")
-				?? throw new InvalidOperationException("Connection string 'RestaurantConnection' not found.");
-
-			builder.Services.AddDbContext<RestaurantDbContext>(options =>
-				options.UseSqlServer(restaurantConnectionString));
 			// Add services to the container.
+			string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+			builder.Services.AddDbContext<ApplicationDbContext>(options =>
+				options.UseSqlServer(connectionString));
+
+			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+				.AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews();
 
-			var app = builder.Build();
+			WebApplication app = builder.Build();
 
 			// Configure the HTTP request pipeline.
-			if (!app.Environment.IsDevelopment())
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseMigrationsEndPoint();
+				app.UseDeveloperExceptionPage();
+			}
+			else
 			{
 				app.UseExceptionHandler("/Home/Error");
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -34,11 +42,13 @@ namespace DishHunter.Web
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
+			app.MapRazorPages();
 
 			app.Run();
 		}
