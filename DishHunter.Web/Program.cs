@@ -11,15 +11,26 @@ namespace DishHunter.Web
 			WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-			string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+			string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(connectionString));
 
 			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+			{
+				options.SignIn.RequireConfirmedAccount = builder.Configuration.GetValue<bool>("Identity:SignIn:RequireConfirmedAccount");
+				options.SignIn.RequireConfirmedEmail = builder.Configuration.GetValue<bool>("Identity:SignIn:RequireConfirmedEmail");
+				options.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
+				options.Password.RequiredUniqueChars = builder.Configuration.GetValue<int>("Identity:Password:RequiredUniqueChars");
+				options.Password.RequireDigit = builder.Configuration.GetValue<bool>("Identity:Password:RequireDigit"); 
+				options.Password.RequireLowercase = builder.Configuration.GetValue<bool>("Identity:Password:RequireLowercase"); 
+				options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:Password:RequireNonAlphanumeric"); 
+				options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:Password:RequireUppercase"); 
+			})
 				.AddEntityFrameworkStores<ApplicationDbContext>();
+
 			builder.Services.AddControllersWithViews();
 
 			WebApplication app = builder.Build();
