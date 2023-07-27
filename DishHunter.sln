@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Data", "DishHunt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Data.Models", "DishHunter.Data.Models\DishHunter.Data.Models.csproj", "{FE2A9A2F-91F5-45A6-8159-3981DA082F70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Web", "DishHunter.Web\DishHunter.Web.csproj", "{E9EEFF84-7BAB-4BAA-8308-40829F9ED3C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Web", "DishHunter.Web\DishHunter.Web.csproj", "{E9EEFF84-7BAB-4BAA-8308-40829F9ED3C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Common", "DishHuner.Common\DishHunter.Common.csproj", "{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{E9EEFF84-7BAB-4BAA-8308-40829F9ED3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9EEFF84-7BAB-4BAA-8308-40829F9ED3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9EEFF84-7BAB-4BAA-8308-40829F9ED3C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

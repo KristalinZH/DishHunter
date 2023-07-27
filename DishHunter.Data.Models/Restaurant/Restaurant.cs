@@ -3,17 +3,21 @@ namespace DishHunter.Data.Models.Restaurant
 {
 	using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using static Common.EntityValidationConstants.Restaurant;
     public class Restaurant
     {
         [Key]
         public Guid Id { get; set; }
         [Required]
+        [MaxLength(NameMaxLenght)]
         public string Name { get; set; } = null!;
         [Required]
+        [MaxLength(AddressMaxLenght)]
         public string Address { get; set; } = null!;
 
         [Required]
+        [Phone]
+        [MaxLength(PhoneMaxLenght)]
         public string PhoneNumber { get; set; } = null!;
 
 		[ForeignKey(nameof(Categoy))]
@@ -33,6 +37,7 @@ namespace DishHunter.Data.Models.Restaurant
 		public bool IsActive { get; set; }
 
 		[Required]
+        [MaxLength(UrlMaxLenght)]
 		public string ImageUrl { get; set; } = null!;
 	}
 }
