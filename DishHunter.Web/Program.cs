@@ -1,8 +1,8 @@
 namespace DishHunter.Web
 {
-	using DishHunter.Data;
-	using Microsoft.AspNetCore.Identity;
 	using Microsoft.EntityFrameworkCore;
+	using Data;
+	using Data.Models.Account;
 
 	public class Program
 	{
@@ -16,7 +16,7 @@ namespace DishHunter.Web
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(connectionString));
 
-			builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+			builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
 			{
 				options.SignIn.RequireConfirmedAccount = builder.Configuration.GetValue<bool>("Identity:SignIn:RequireConfirmedAccount");
 				options.SignIn.RequireConfirmedEmail = builder.Configuration.GetValue<bool>("Identity:SignIn:RequireConfirmedEmail");
