@@ -16,8 +16,6 @@ namespace DishHunter.Web
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(connectionString));
 
-			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 			builder.Services.AddDefaultIdentity<IdentityUser>(options => 
 			{
 				options.SignIn.RequireConfirmedAccount = builder.Configuration.GetValue<bool>("Identity:SignIn:RequireConfirmedAccount");
