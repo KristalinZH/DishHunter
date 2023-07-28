@@ -1,10 +1,12 @@
 ﻿namespace DishHunter.Data
 {
+	using System.Reflection;
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 	using Models.Account;
 	using Models.Restaurant;
+
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -18,6 +20,9 @@
 		public DbSet<MenuItem> MenuItems { get; set; } = null!;
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
+			Assembly configAssembly = Assembly.GetAssembly(typeof(ApplicationDbContext))
+				?? Assembly.GetExecutingAssembly();
+			builder.ApplyConfigurationsFromAssembly(configAssembly);
 			base.OnModelCreating(builder);
 		}
 
