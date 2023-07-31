@@ -15,6 +15,7 @@ namespace DishHunter.Data.Models.Restaurant
         [Required]
         [MaxLength(DescriptionMaxLenght)]
         public string Description { get; set; } = null!;
+        public DateTime CreatedOn { get; set; }
         [Required]
         [MaxLength(FoodCategoryMaxLenght)]
         public string FoodCategory { get; set; } = null!;
