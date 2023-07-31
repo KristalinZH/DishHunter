@@ -20,10 +20,10 @@ namespace DishHunter.Data.Models.Restaurant
         [MaxLength(PhoneMaxLenght)]
         public string PhoneNumber { get; set; } = null!;
 
-		[ForeignKey(nameof(Categoy))]
+		[ForeignKey(nameof(Category))]
 		public int CategoryId { get; set; }
 
-		public virtual Category Categoy { get; set; } = null!;
+		public virtual Category Category { get; set; } = null!;
 
 		[ForeignKey(nameof(Settlement))]
         public int SettlementId { get; set; }
