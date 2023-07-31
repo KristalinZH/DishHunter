@@ -5,8 +5,11 @@ namespace DishHunter.Web
 	using Data.Models.Account;
     using Data.Repositories.Interfaces;
     using Data.Repositories;
- //   using Services.Data;
-	//using Services.Data.Interfaces;
+    using Services.Data.Interfaces;
+	using Infrastructrure.Extensions;
+
+    //   using Services.Data;
+    //using Services.Data.Interfaces;
 
     //using NuGet.Protocol.Core.Types;
 
@@ -37,7 +40,7 @@ namespace DishHunter.Web
 
 			builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IRepository, Repository>();
-
+			builder.Services.AddAplicationServices(typeof(IBrandService));
             WebApplication app = builder.Build();
 
 			// Configure the HTTP request pipeline.

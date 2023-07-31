@@ -1,16 +1,18 @@
 ﻿
 namespace DishHunter.Data.Models.Restaurant
-{ 
-	using System.ComponentModel.DataAnnotations;
-	using static Common.EntityValidationConstants.Brand;
+{
+    using DishHunter.Data.Models.Account;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using static Common.EntityValidationConstants.Brand;
 	public class Brand
 	{
-        public Brand()
-        {
-            Restaurants = new HashSet<Restaurant>();
+		public Brand()
+		{
+			Restaurants = new HashSet<Restaurant>();
 			Menus = new HashSet<Menu>();
 		}
-        [Key]
+		[Key]
 		public Guid Id { get; set; }
 		[Required]
 		[MaxLength(BrandNameMaxLenght)]
@@ -25,7 +27,10 @@ namespace DishHunter.Data.Models.Restaurant
 		[MaxLength(DescriptionMaxLenght)]
 		public string Description { get; set; } = null!;
 		public bool IsActive { get; set; }
-        public virtual ICollection<Restaurant> Restaurants { get; set; }
+		[ForeignKey(nameof(RestaurantOwner))]
+		public Guid RestaurantOwnerId { get; set; }
+		public virtual RestaurantOwner RestaurantOwner { get; set; } = null!;
+		public virtual ICollection<Restaurant> Restaurants { get; set; }
 		public virtual ICollection<Menu> Menus { get; set; }
 	}
 }

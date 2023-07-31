@@ -1,20 +1,21 @@
 ﻿namespace DishHunter.Data.Models.Account
 {
-	using System.ComponentModel.DataAnnotations;
-	using System.ComponentModel.DataAnnotations.Schema;
-	using Restaurant;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using Restaurant;
 
-	public class RestaurantOwner
-	{
+    public class RestaurantOwner
+    {
         public RestaurantOwner()
         {
-			OwnedBrands = new HashSet<Brand>();
-		}
+            OwnedBrands = new HashSet<Brand>();
+        }
         [Key]
         public Guid Id { get; set; }
-		[ForeignKey(nameof(ApplicationUser))]
-        public Guid ApplicationUserId { get; set; }
-		public virtual ApplicationUser ApplicationUser { get; set; } = null!;
+        public bool IsActive { get; set; }
+        [ForeignKey(nameof(ApplicationUser))]
+        public Guid? UserId { get; set; }
+        public virtual ApplicationUser? User { get; set; }
         public IEnumerable<Brand> OwnedBrands { get; set; }
     }
 }

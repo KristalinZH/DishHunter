@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity;
 	using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using static Common.EntityValidationConstants.ApplicationUser;
 	public class ApplicationUser : IdentityUser<Guid>
     {
@@ -15,5 +16,8 @@
 		[Required]
 		[MaxLength(LastNameMaxLenght)]
 		public string LastName { get; set; } = null!;
-	}
+        [ForeignKey(nameof(RestaurantOwner))]
+        public Guid? RestaurantOwnerId { get; set; }
+        public virtual RestaurantOwner? RestaurantOwner { get; set; } 
+    }
 }

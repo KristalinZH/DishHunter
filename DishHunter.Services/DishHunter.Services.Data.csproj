@@ -12,8 +12,4 @@
     <ProjectReference Include="..\DishHunter.Services.Data.Models\DishHunter.Services.Data.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
 </Project>

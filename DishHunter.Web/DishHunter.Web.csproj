@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DishHunter.Services\DishHunter.Services.Data.csproj" />
+    <ProjectReference Include="..\DishHunter.Web.Infrastructrure\DishHunter.Web.Infrastructrure.csproj" />
     <ProjectReference Include="..\DishHunter.Web.ViewModels\DishHunter.Web.ViewModels.csproj" />
   </ItemGroup>
 

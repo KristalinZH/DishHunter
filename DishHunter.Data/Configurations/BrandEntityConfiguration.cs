@@ -19,6 +19,10 @@
                 .HasMany(b => b.Restaurants)
                 .WithOne(r => r.Brand)
                 .OnDelete(DeleteBehavior.Restrict);
+            builder
+                .HasOne(b => b.RestaurantOwner)
+                .WithMany(ro => ro.OwnedBrands)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
