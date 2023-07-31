@@ -3,8 +3,14 @@ namespace DishHunter.Web
 	using Microsoft.EntityFrameworkCore;
 	using Data;
 	using Data.Models.Account;
+    using Data.Repositories.Interfaces;
+    using Data.Repositories;
+ //   using Services.Data;
+	//using Services.Data.Interfaces;
 
-	public class Program
+    //using NuGet.Protocol.Core.Types;
+
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -30,8 +36,9 @@ namespace DishHunter.Web
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IRepository, Repository>();
 
-			WebApplication app = builder.Build();
+            WebApplication app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())

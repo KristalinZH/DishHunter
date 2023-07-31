@@ -72,6 +72,11 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account
         {
             [Required]
             [DataType(DataType.Text)]
+            [StringLength(UserNameMaxLenght, MinimumLength = UserNameMinLenght)]
+            [Display(Name = "User Name")]
+            public string UserName { get; set; }
+            [Required]
+            [DataType(DataType.Text)]
             [StringLength(FirstNameMaxLenght,MinimumLength =FirstNameMinLenght)]
             [Display(Name ="First Name")]
             public string FirstName { get; set; }
@@ -94,7 +99,7 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(PasswordMaxLenght, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",MinimumLength =4)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -125,7 +130,7 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

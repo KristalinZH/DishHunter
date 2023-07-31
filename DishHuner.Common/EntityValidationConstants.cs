@@ -8,7 +8,10 @@
 			public const int FirstNameMinLenght = 2;
 			public const int LastNameMaxLenght = 30;
 			public const int LastNameMinLenght = 2;
-		}
+            public const int UserNameMaxLenght = 30;
+            public const int UserNameMinLenght = 2;
+            public const int PasswordMaxLenght = 100;
+        }
 		public static class Brand
 		{
 			public const int BrandNameMaxLenght = 50;

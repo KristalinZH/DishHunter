@@ -1,17 +1,19 @@
 ﻿namespace DishHunter.Web.Controllers
 {
-	using DishHunter.Web.ViewModels;
-	using Microsoft.AspNetCore.Mvc;
 	using System.Diagnostics;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+	using ViewModels;
 
-	public class HomeController : Controller
-	{
+	public class HomeController : BaseController
+    {
 		private readonly ILogger<HomeController> _logger;
 
 		public HomeController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
 		}
+		[AllowAnonymous]
 
 		public IActionResult Index()
 		{

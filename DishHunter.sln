@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{9D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Web.ViewModels", "DishHunter.Web.ViewModels\DishHunter.Web.ViewModels.csproj", "{016D4C51-0084-4B16-B5FE-0C981DA562EF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Services", "DishHunter.Services\DishHunter.Services.csproj", "{F4A0B650-77E1-40DC-B0D4-030D0CB9D1E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Services.Data", "DishHunter.Services\DishHunter.Services.Data.csproj", "{F4A0B650-77E1-40DC-B0D4-030D0CB9D1E6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Data", "DishHunter.Data\DishHunter.Data.csproj", "{F0FC1840-A1F5-4EF6-A8D2-232779C1C3FD}"
 EndProject
@@ -19,7 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Data.Models", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Web", "DishHunter.Web\DishHunter.Web.csproj", "{E9EEFF84-7BAB-4BAA-8308-40829F9ED3C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Common", "DishHuner.Common\DishHunter.Common.csproj", "{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Common", "DishHuner.Common\DishHunter.Common.csproj", "{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DishHunter.Services.Data.Models", "DishHunter.Services.Data.Models\DishHunter.Services.Data.Models.csproj", "{84DD8F1C-ED7C-4241-8105-5A2C8B374E3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DishHunter.Data.Repositories", "DishHunter.Data.Repositories\DishHunter.Data.Repositories.csproj", "{E3114B20-2E2A-42A9-80F4-56C6794AF97B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,14 @@ Global
 		{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47A3CF4F-65D0-48C7-86FB-37D78ECFA7E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84DD8F1C-ED7C-4241-8105-5A2C8B374E3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84DD8F1C-ED7C-4241-8105-5A2C8B374E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84DD8F1C-ED7C-4241-8105-5A2C8B374E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84DD8F1C-ED7C-4241-8105-5A2C8B374E3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3114B20-2E2A-42A9-80F4-56C6794AF97B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3114B20-2E2A-42A9-80F4-56C6794AF97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3114B20-2E2A-42A9-80F4-56C6794AF97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3114B20-2E2A-42A9-80F4-56C6794AF97B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +73,8 @@ Global
 		{F0FC1840-A1F5-4EF6-A8D2-232779C1C3FD} = {211DAF07-D919-4A2E-B81C-91C74B39F28F}
 		{FE2A9A2F-91F5-45A6-8159-3981DA082F70} = {211DAF07-D919-4A2E-B81C-91C74B39F28F}
 		{E9EEFF84-7BAB-4BAA-8308-40829F9ED3C6} = {822CA6D0-E04D-45EA-85BB-2C6BF436E0A4}
+		{84DD8F1C-ED7C-4241-8105-5A2C8B374E3A} = {9D823B91-75EB-48BE-BC7F-D77BCE2CA91C}
+		{E3114B20-2E2A-42A9-80F4-56C6794AF97B} = {211DAF07-D919-4A2E-B81C-91C74B39F28F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {62A8629A-E2E3-42C5-89E3-671FA753C5A5}

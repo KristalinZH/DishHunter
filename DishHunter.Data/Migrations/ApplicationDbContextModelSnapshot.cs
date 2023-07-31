@@ -111,7 +111,7 @@ namespace DishHunter.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("RestaurantOwners");
+                    b.ToTable("RestaurantOwners", (string)null);
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Brand", b =>
@@ -150,7 +150,7 @@ namespace DishHunter.Data.Migrations
 
                     b.HasIndex("RestaurantOwnerId");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Category", b =>
@@ -171,7 +171,7 @@ namespace DishHunter.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Menu", b =>
@@ -192,7 +192,7 @@ namespace DishHunter.Data.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Menus");
+                    b.ToTable("Menus", (string)null);
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.MenuItem", b =>
@@ -237,7 +237,7 @@ namespace DishHunter.Data.Migrations
 
                     b.HasIndex("MenuId");
 
-                    b.ToTable("MenuItems");
+                    b.ToTable("MenuItems", (string)null);
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Restaurant", b =>
@@ -286,7 +286,7 @@ namespace DishHunter.Data.Migrations
 
                     b.HasIndex("SettlementId");
 
-                    b.ToTable("Restaurants");
+                    b.ToTable("Restaurants", (string)null);
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Settlement", b =>
@@ -312,7 +312,7 @@ namespace DishHunter.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Settlements");
+                    b.ToTable("Settlements", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
