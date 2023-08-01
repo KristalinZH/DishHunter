@@ -3,16 +3,8 @@ namespace DishHunter.Web
 	using Microsoft.EntityFrameworkCore;
 	using Data;
 	using Data.Models.Account;
-    using Data.Repositories.Interfaces;
-    using Data.Repositories;
     using Services.Data.Interfaces;
 	using Infrastructrure.Extensions;
-
-    //   using Services.Data;
-    //using Services.Data.Interfaces;
-
-    //using NuGet.Protocol.Core.Types;
-
     public class Program
 	{
 		public static void Main(string[] args)
@@ -39,7 +31,6 @@ namespace DishHunter.Web
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<IRepository, Repository>();
 			builder.Services.AddAplicationServices(typeof(IBrandService));
             WebApplication app = builder.Build();
 

@@ -25,6 +25,15 @@
 			public const int CategoryNameMaxLenght = 20;
 			public const int CategoryNameMinLenght = 5;
 		}
+		public static class Menu
+		{
+            public const int DescriptionMaxLenght = 1500;
+            public const int DescriptionMinLenght = 20;
+            public const int MenuTypeMaxLenght = 20;
+            public const int MenuTypeMinLenght = 3;
+            public const int FoodTypeMaxLenght = 50;
+            public const int FoodTypeMinLenght = 3;
+        }
 		public static class MenuItem
 		{
 			public const int NameMaxLenght = 30;
@@ -49,9 +58,9 @@
 		}
 		public static class Settlement
 		{
-			public const int SettlementNameMaxLenght = 20;
+			public const int SettlementNameMaxLenght = 30;
 			public const int SettlementNameMinLenght = 4;
-			public const int RegionMaxLenght = 20;
+			public const int RegionMaxLenght = 30;
 			public const int RegionMinLenght = 4;
 		}
 	}

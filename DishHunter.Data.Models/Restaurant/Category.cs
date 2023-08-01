@@ -14,6 +14,6 @@ namespace DishHunter.Data.Models.Restaurant
         [MaxLength(CategoryNameMaxLenght)]
         public string CategoryName { get; set; } = null!;
 		public bool IsActive { get; set; }
-		public virtual ICollection<Restaurant> Restaurants { get; set; }
+		public virtual IEnumerable<Restaurant> Restaurants { get; set; }
     }
 }

@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DishHunter.Data.Models\DishHunter.Data.Models.csproj" />
-    <ProjectReference Include="..\DishHunter.Data.Repositories\DishHunter.Data.Repositories.csproj" />
+    <ProjectReference Include="..\DishHunter.Data\DishHunter.Data.csproj" />
     <ProjectReference Include="..\DishHunter.Services.Data.Models\DishHunter.Services.Data.Models.csproj" />
   </ItemGroup>
 

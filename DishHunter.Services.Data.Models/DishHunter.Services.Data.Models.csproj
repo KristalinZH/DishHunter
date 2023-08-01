@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DishHuner.Common\DishHunter.Common.csproj" />
+  </ItemGroup>
+
 </Project>

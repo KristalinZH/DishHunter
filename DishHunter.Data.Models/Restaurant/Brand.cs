@@ -30,7 +30,7 @@ namespace DishHunter.Data.Models.Restaurant
 		[ForeignKey(nameof(RestaurantOwner))]
 		public Guid RestaurantOwnerId { get; set; }
 		public virtual RestaurantOwner RestaurantOwner { get; set; } = null!;
-		public virtual ICollection<Restaurant> Restaurants { get; set; }
-		public virtual ICollection<Menu> Menus { get; set; }
+		public virtual IEnumerable<Restaurant> Restaurants { get; set; }
+		public virtual IEnumerable<Menu> Menus { get; set; }
 	}
 }
