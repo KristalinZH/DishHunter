@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 	using ViewModels;
-
+	[AllowAnonymous]
 	public class HomeController : BaseController
     {
 		private readonly ILogger<HomeController> _logger;
@@ -13,7 +13,6 @@
 		{
 			_logger = logger;
 		}
-		[AllowAnonymous]
 
 		public IActionResult Index()
 		{
@@ -26,9 +25,17 @@
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
+		public IActionResult Error(int statuscode)
 		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+			if (statuscode == 400 || statuscode == 404)
+			{
+				return View("Error404");
+			}
+			if (statuscode == 401)
+			{
+				return View("Error401");
+			}
+			return View();
 		}
 	}
 }
