@@ -5,7 +5,9 @@ namespace DishHunter.Web
 	using Data.Models.Account;
     using Services.Data.Interfaces;
 	using Infrastructrure.Extensions;
-    public class Program
+	using Infrastructrure.ModelBinders;
+
+	public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -32,7 +34,13 @@ namespace DishHunter.Web
 
 			builder.Services.AddControllersWithViews();
 			builder.Services.AddAplicationServices(typeof(IBrandService));
-            WebApplication app = builder.Build();
+			builder.Services
+				.AddControllersWithViews()
+				.AddMvcOptions(opt =>
+				{
+					opt.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+				});
+			WebApplication app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
