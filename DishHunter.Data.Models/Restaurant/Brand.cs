@@ -21,7 +21,7 @@ namespace DishHunter.Data.Models.Restaurant
 		[MaxLength(UrlMaxLenght)]
 		public string LogoUrl { get; set; } = null!;
 		[MaxLength(UrlMaxLenght)]
-		public string? WebsiteUrl { get; set; }
+		public string WebsiteUrl { get; set; } = null!;
 		[Required]
 		[MaxLength(DescriptionMaxLenght)]
 		public string Description { get; set; } = null!;

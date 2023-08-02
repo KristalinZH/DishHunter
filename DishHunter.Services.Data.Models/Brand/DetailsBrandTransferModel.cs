@@ -7,14 +7,14 @@
     {
         public DetailsBrandTransferModel()
         {
-            Restarants = new HashSet<BrandRestaurantTranferModel>();
-            Menus = new HashSet<BrandMenuTrasnferModel>();
+            Restarants = new HashSet<RestaurantListTranferModel>();
+            Menus = new HashSet<MenuListTrasnferModel>();
         }
         public string BrandName { get; set; } = null!;
         public string LogoUrl { get; set; } = null!;
         public string WebsiteUrl { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public IEnumerable<BrandRestaurantTranferModel> Restarants;
-        public IEnumerable<BrandMenuTrasnferModel> Menus { get; set; }
+        public IEnumerable<RestaurantListTranferModel> Restarants;
+        public IEnumerable<MenuListTrasnferModel> Menus { get; set; }
     }
 }

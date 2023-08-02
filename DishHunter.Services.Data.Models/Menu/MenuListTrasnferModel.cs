@@ -1,6 +1,6 @@
 ﻿namespace DishHunter.Services.Data.Models.Menu
 {
-    public class BrandMenuTrasnferModel
+    public class MenuListTrasnferModel
     {
         public int Id { get; set; }
         public string MenuType { get; set; } = null!;

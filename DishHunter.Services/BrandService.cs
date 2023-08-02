@@ -13,11 +13,17 @@
     public class BrandService : IBrandService
     {
         private readonly ApplicationDbContext dbContext;
-        public BrandService(ApplicationDbContext _dbContext)
+        private readonly IRestaurantService restaurantService;
+        private readonly IMenuService menuService;
+        public BrandService(ApplicationDbContext _dbContext, 
+                            IRestaurantService _restaurantService, 
+                            IMenuService _menuService)
         {
             dbContext = _dbContext;
+            restaurantService = _restaurantService;
+            menuService = _menuService;
         }
-        public async Task<string> CreateBrandAsync(string restaurantOwnerId, AddBrandTransferModel brandModel)
+        public async Task<string> CreateBrandAsync(string restaurantOwnerId, BrandPostTransferModel brandModel)
         {
             Brand newBrand = new Brand()
             {
@@ -29,19 +35,22 @@
             newBrand.RestaurantOwnerId = Guid.Parse(restaurantOwnerId);
             await dbContext.AddAsync(newBrand);
             await dbContext.SaveChangesAsync();
+
             return newBrand.Id.ToString();
         }
-
+        public async Task<bool> ExistsByIdAsync(string brandId)
+            => await dbContext
+                    .Brands
+                    .Where(b => b.IsActive)
+                    .AnyAsync(b => b.Id.ToString() == brandId);
         public async Task<DetailsBrandTransferModel> GetBrandByIdAsync(string brandId)
         {
-            Brand? brand = await dbContext.Brands
+            Brand brand = await dbContext.Brands
                 .Where(b => b.IsActive)
                 .Include(b => b.Menus.Where(m => m.IsActive))
                 .Include(b => b.Restaurants.Where(r => r.IsActive))
                 .Include(b => b.Restaurants.Where(r => r.IsActive).Select(r => r.Settlement))
-                .FirstOrDefaultAsync(b => b.Id.ToString() == brandId);
-            if (brand == null)
-                throw new ArgumentNullException($"Brand with this id: {brandId} does not exist");
+                .FirstAsync(b => b.Id.ToString() == brandId);
             return new DetailsBrandTransferModel()
             {
                 BrandName = brand.BrandName,
@@ -49,7 +58,7 @@
                 WebsiteUrl = brand.LogoUrl,
                 Description = brand.LogoUrl,
                 Restarants = brand.Restaurants
-                    .Select(r => new BrandRestaurantTranferModel()
+                    .Select(r => new RestaurantListTranferModel()
                     {
                         Id = r.Id,
                         Name = r.Name,
@@ -58,7 +67,7 @@
                         Address = r.Address
                     }),
                 Menus = brand.Menus
-                    .Select(m => new BrandMenuTrasnferModel()
+                    .Select(m => new MenuListTrasnferModel()
                     {
                         Id = m.Id,
                         MenuType = m.MenuType,
@@ -66,14 +75,11 @@
                     })
             };
         }
-
-        public async Task<string> GetBrandOwnerId(string brandId)
+        public async Task<string> GetBrandOwnerIdAsync(string brandId)
         {
-            Brand? brand = await dbContext.Brands
+            Brand brand = await dbContext.Brands
                 .Where(b => b.IsActive)
-                .FirstOrDefaultAsync(b => b.Id.ToString() == brandId);
-            if (brand == null)
-                throw new ArgumentNullException($"Brand with this id: {brandId} does not exists");
+                .FirstAsync(b => b.Id.ToString() == brandId);
             return brand.RestaurantOwnerId.ToString();
         }
         public async Task<IEnumerable<AllBrandsTransferModel>> GetAllBrandsAsync()
@@ -86,5 +92,9 @@
                     WebsiteUrl = b.WebsiteUrl
                 })
                 .ToArrayAsync();
+        public Task<BrandPostTransferModel> GetBrandForEditByIdAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

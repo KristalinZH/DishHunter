@@ -1,6 +1,6 @@
 ﻿namespace DishHunter.Services.Data.Models.Restaurant
 {
-    public class BrandRestaurantTranferModel
+    public class RestaurantListTranferModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
