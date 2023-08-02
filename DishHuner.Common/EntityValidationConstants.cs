@@ -22,7 +22,7 @@
 		}
 		public static class Category
 		{
-			public const int CategoryNameMaxLenght = 20;
+			public const int CategoryNameMaxLenght = 30;
 			public const int CategoryNameMinLenght = 5;
 		}
 		public static class Menu

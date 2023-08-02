@@ -8,6 +8,7 @@
     using Models.Restaurant;
     using Models.Menu;
     using Interfaces;
+    using System.Collections.Generic;
 
     public class BrandService : IBrandService
     {
@@ -35,9 +36,9 @@
         {
             Brand? brand = await dbContext.Brands
                 .Where(b => b.IsActive)
-                .Include(b => b.Menus.Where(m=>m.IsActive))
-                .Include(b => b.Restaurants.Where(r=>r.IsActive))
-                .Include(b=>b.Restaurants.Where(r => r.IsActive).Select(r=>r.Settlement))
+                .Include(b => b.Menus.Where(m => m.IsActive))
+                .Include(b => b.Restaurants.Where(r => r.IsActive))
+                .Include(b => b.Restaurants.Where(r => r.IsActive).Select(r => r.Settlement))
                 .FirstOrDefaultAsync(b => b.Id.ToString() == brandId);
             if (brand == null)
                 throw new ArgumentNullException($"Brand with this id: {brandId} does not exist");
@@ -75,5 +76,15 @@
                 throw new ArgumentNullException($"Brand with this id: {brandId} does not exists");
             return brand.RestaurantOwnerId.ToString();
         }
+        public async Task<IEnumerable<AllBrandsTransferModel>> GetAllBrandsAsync()
+            => await dbContext.Brands
+                .Where(b => b.IsActive)
+                .Select(b => new AllBrandsTransferModel()
+                {
+                    BrandName = b.BrandName,
+                    LogoUrl = b.LogoUrl,
+                    WebsiteUrl = b.WebsiteUrl
+                })
+                .ToArrayAsync();
     }
 }

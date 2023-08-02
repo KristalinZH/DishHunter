@@ -7,5 +7,6 @@
         Task<string> CreateBrandAsync(string restaurantOwnerId, AddBrandTransferModel brandModel);
         Task<DetailsBrandTransferModel> GetBrandByIdAsync(string brandId);
         Task<string> GetBrandOwnerId(string brandId);
+        Task<IEnumerable<AllBrandsTransferModel>> GetAllBrandsAsync();
     }
 }
