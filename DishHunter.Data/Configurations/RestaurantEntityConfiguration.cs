@@ -9,6 +9,12 @@
         public void Configure(EntityTypeBuilder<Restaurant> builder)
         {
             builder
+                .Property(r => r.Longitude)
+                .HasPrecision(9, 6);
+            builder
+                .Property(r => r.Latitude)
+                .HasPrecision(9, 6);
+            builder
                 .Property(r => r.IsActive)
                 .HasDefaultValue(true);
             builder

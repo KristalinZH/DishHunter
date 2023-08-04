@@ -5,5 +5,6 @@
     public interface ISettlementService
     {
         Task<IEnumerable<SettlementSelectTransferModel>> AllSettlementsAsync();
+        Task<bool> SettlementExistsByNameAndRegionAsync(string name, string region);
     }
 }

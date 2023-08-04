@@ -17,7 +17,7 @@ namespace DishHunter.Data.Models.Restaurant
         [Required]
         [MaxLength(RegionMaxLenght)]
         public string Region { get; set; } = null!;
-		public bool IsActive { get; set; }
+        public bool IsActive { get; set; }
 		public virtual IEnumerable<Restaurant> Restaurants { get; set; }
     }
 }

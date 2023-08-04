@@ -24,5 +24,10 @@
                         SettlementName = s.SettlementName,
                         Region = s.Region
                     }).ToArrayAsync();
+
+        public async Task<bool> SettlementExistsByNameAndRegionAsync(string name, string region)
+        {
+            return true;
+        }
     }
 }

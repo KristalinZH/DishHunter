@@ -11,10 +11,12 @@
             Id = new Guid();
         }
         [Required]
+        [PersonalData]
         [MaxLength(FirstNameMaxLenght)]
         public string FirstName { get; set; } = null!;
 		[Required]
-		[MaxLength(LastNameMaxLenght)]
+        [PersonalData]
+        [MaxLength(LastNameMaxLenght)]
 		public string LastName { get; set; } = null!;
         [ForeignKey(nameof(RestaurantOwner))]
         public Guid? RestaurantOwnerId { get; set; }

@@ -34,8 +34,7 @@
             };
             newBrand.RestaurantOwnerId = Guid.Parse(restaurantOwnerId);
             await dbContext.AddAsync(newBrand);
-            await dbContext.SaveChangesAsync();
-
+            await dbContext.SaveChangesAsync();       
             return newBrand.Id.ToString();
         }
         public async Task<bool> ExistsByIdAsync(string brandId)

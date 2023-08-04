@@ -62,6 +62,6 @@
 			public const int SettlementNameMinLenght = 4;
 			public const int RegionMaxLenght = 30;
 			public const int RegionMinLenght = 4;
-		}
+        }
 	}
 }

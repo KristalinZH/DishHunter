@@ -28,6 +28,8 @@ namespace DishHunter.Data.Models.Restaurant
 		[ForeignKey(nameof(Settlement))]
         public int SettlementId { get; set; }
         public virtual Settlement Settlement { get; set; } = null!;
+        public decimal Longitude { get; set; }
+        public decimal Latitude { get; set; }
 
         [ForeignKey(nameof(Brand))]
         public Guid BrandId { get; set; }
