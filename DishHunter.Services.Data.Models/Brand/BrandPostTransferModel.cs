@@ -9,8 +9,8 @@
     {
         public BrandPostTransferModel()
         {
-            Menus = new HashSet<MenuPostPreBrandTransferModel>();
-            Restaurants = new HashSet<RestaurantPostPreBrandTransferModel>();
+            Menus = new HashSet<MenuExcelTransferModel>();
+            Restaurants = new HashSet<RestaurantPostTransferModel>();
         }
         [Required]
         [StringLength(BrandNameMaxLenght, MinimumLength = BrandNameMinLenght, ErrorMessage = FieldLenghtMessage)]
@@ -24,7 +24,7 @@
         [Required]
         [StringLength(DescriptionMaxLenght, MinimumLength = DescriptionMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string Description { get; set; } = null!;
-        public IEnumerable<MenuPostPreBrandTransferModel> Menus { get; set; }
-        public IEnumerable<RestaurantPostPreBrandTransferModel> Restaurants { get; set; }
+        public IEnumerable<MenuExcelTransferModel> Menus { get; set; }
+        public IEnumerable<RestaurantPostTransferModel> Restaurants { get; set; }
     }
 }

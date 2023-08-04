@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EPPlus" Version="6.2.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DishHunter.Data\DishHunter.Data.csproj" />
     <ProjectReference Include="..\DishHunter.Services.Data.Models\DishHunter.Services.Data.Models.csproj" />
   </ItemGroup>

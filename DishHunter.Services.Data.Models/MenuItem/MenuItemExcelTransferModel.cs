@@ -3,8 +3,11 @@
     using System.ComponentModel.DataAnnotations;
     using static Common.EntityValidationConstants.MenuItem;
     using static Common.ValidationErrorMessages;
-    public class MenuItemPostPreMenuTransferModel
+    public class MenuItemExcelTransferModel
     {
+        [Required]
+        [StringLength(FoodCategoryMaxLenght, MinimumLength = FoodCategoryMinLenght, ErrorMessage = FieldLenghtMessage)]
+        public string FoodCategory { get; set; } = null!;
         [Required]
         [StringLength(NameMaxLenght, MinimumLength = NameMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string Name { get; set; } = null!;
@@ -13,9 +16,6 @@
         [Required]
         [StringLength(DescriptionMaxLenght, MinimumLength = DescriptionMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string Description { get; set; } = null!;
-        [Required]
-        [StringLength(FoodCategoryMaxLenght, MinimumLength = FoodCategoryMinLenght, ErrorMessage = FieldLenghtMessage)]
-        public string FoodCategory { get; set; } = null!;
         [Required]
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]
         public string ImageUrl { get; set; } = null!;

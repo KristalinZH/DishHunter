@@ -1,21 +1,21 @@
 ﻿namespace DishHunter.Services.Data.Models.Restaurant
 {
-    using DishHunter.Services.Data.Models.Category;
-    using DishHunter.Services.Data.Models.Settlement;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
     using static Common.EntityValidationConstants.Restaurant;
+    using static Common.EntityValidationConstants.Category;
+    using static Common.EntityValidationConstants.Settlement;
     using static Common.ValidationErrorMessages;
-    public class RestaurantPostPreBrandTransferModel
+    public class RestaurantExcelTransferModel
     {
-        public RestaurantPostPreBrandTransferModel()
-        {
-            Settlements = new HashSet<SettlementSelectTransferModel>();
-            Categories = new HashSet<CategorySelectTransferModel>();
-        }
         [Required]
         [StringLength(NameMaxLenght, MinimumLength = NameMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string Name { get; set; } = null!;
+        [Required]
+        [StringLength(RegionMaxLenght, MinimumLength = RegionMinLenght, ErrorMessage = FieldLenghtMessage)]
+        public string Region { get; set; } = null!;
+        [Required]
+        [StringLength(SettlementNameMaxLenght, MinimumLength = SettlementNameMinLenght, ErrorMessage = FieldLenghtMessage)]
+        public string SettlementName { get; set; } = null!;
         [Required]
         [StringLength(AddressMaxLenght, MinimumLength = AddressMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string Address { get; set; } = null!;
@@ -24,11 +24,10 @@
         [StringLength(PhoneMaxLenght, MinimumLength = PhoneMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string PhoneNumber { get; set; } = null!;
         [Required]
+        [StringLength(CategoryNameMaxLenght,MinimumLength =CategoryNameMinLenght,ErrorMessage = FieldLenghtMessage)]
+        public string CategoryName { get; set; } = null!;
+        [Required]
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]
         public string ImageUrl { get; set; } = null!;
-        public int CategoryId { get; set; }
-        public IEnumerable<CategorySelectTransferModel> Categories { get; set; }
-        public int SettlementId { get; set; }
-        public IEnumerable<SettlementSelectTransferModel> Settlements { get; set; }
     }
 }
