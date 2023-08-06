@@ -4,5 +4,6 @@
     public interface ICategoryService
     {
         Task<IEnumerable<CategorySelectTransferModel>> AllCategoriesAsync();
+        Task<int?> CategoryExistsByNameAsync(string categoryName);
     }
 }

@@ -42,38 +42,6 @@
                     .Brands
                     .Where(b => b.IsActive)
                     .AnyAsync(b => b.Id.ToString() == brandId);
-        public async Task<DetailsBrandTransferModel> GetBrandByIdAsync(string brandId)
-        {
-            Brand brand = await dbContext.Brands
-                .Where(b => b.IsActive)
-                .Include(b => b.Menus.Where(m => m.IsActive))
-                .Include(b => b.Restaurants.Where(r => r.IsActive))
-                .Include(b => b.Restaurants.Where(r => r.IsActive).Select(r => r.Settlement))
-                .FirstAsync(b => b.Id.ToString() == brandId);
-            return new DetailsBrandTransferModel()
-            {
-                BrandName = brand.BrandName,
-                LogoUrl = brand.LogoUrl,
-                WebsiteUrl = brand.LogoUrl,
-                Description = brand.LogoUrl,
-                Restarants = brand.Restaurants
-                    .Select(r => new RestaurantListTranferModel()
-                    {
-                        Id = r.Id,
-                        Name = r.Name,
-                        Region = r.Settlement.Region,
-                        SettlementName = r.Settlement.SettlementName,
-                        Address = r.Address
-                    }),
-                Menus = brand.Menus
-                    .Select(m => new MenuListTrasnferModel()
-                    {
-                        Id = m.Id,
-                        MenuType = m.MenuType,
-                        FoodType = m.FoodType
-                    })
-            };
-        }
         public async Task<string> GetBrandOwnerIdAsync(string brandId)
         {
             Brand brand = await dbContext.Brands
@@ -91,9 +59,66 @@
                     WebsiteUrl = b.WebsiteUrl
                 })
                 .ToArrayAsync();
-        public Task<BrandPostTransferModel> GetBrandForEditByIdAsync()
+        public async Task<BrandPostTransferModel> GetBrandForEditByIdAsync(string brandId)
         {
-            throw new NotImplementedException();
+            Brand brandForEdit = await dbContext.Brands
+            .Where(b => b.IsActive)
+            .FirstAsync(b => b.Id.ToString() == brandId);
+            return new BrandPostTransferModel()
+            {
+                BrandName = brandForEdit.BrandName,
+                LogoUrl = brandForEdit.LogoUrl,
+                WebsiteUrl = brandForEdit.WebsiteUrl,
+                Description = brandForEdit.Description
+            };
+        }
+        public async Task EditBrandByIdAsync(string brandId, BrandPostTransferModel brand)
+        {
+            Brand brandForEdit = await dbContext.Brands
+                .Where(b => b.IsActive)
+                .FirstAsync(b => b.Id.ToString() == brandId);
+            brandForEdit.BrandName = brand.BrandName;
+            brandForEdit.LogoUrl = brand.LogoUrl;
+            brandForEdit.WebsiteUrl = brand.WebsiteUrl;
+            brandForEdit.Description = brand.Description;
+            await dbContext.SaveChangesAsync();
+        }
+        public async Task DeleteBrandByIdAsync(string brandId)
+        {
+            Brand brandForDelete = await dbContext.Brands
+                .Where(b => b.IsActive)
+                .FirstAsync(b => b.Id.ToString() == brandId);
+            await menuService.DeleteMenusByBrandIdAsync(brandId);
+            await restaurantService.DeleteRestaurantsByBrandIdAsync(brandId);
+            brandForDelete.IsActive = false;
+            await dbContext.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<BrandListTransferModel>> GetOwnersBrandsByOwnerIdAsync(string ownerId)
+            => await dbContext.Brands
+               .Where(b => b.IsActive && b.RestaurantOwnerId.ToString() == ownerId)
+               .Select(b => new BrandListTransferModel()
+               {
+                   Id=b.Id.ToString(),
+                   BrandName=b.BrandName,
+                   LogoUrl=b.LogoUrl
+               }).ToArrayAsync();
+
+        public async Task<DetailsBrandTransferModel> GetBrandDetailsByIdAsync(string brandId)
+        {
+            Brand brand = await dbContext.Brands
+                .Where(b => b.IsActive)               
+                .FirstAsync(b => b.Id.ToString() == brandId);
+            var restaurants = await restaurantService.GetRestaurantsByBrandIdAsync(brandId);
+            var menus = await menuService.GetMenusByBrandIdAsync(brandId);
+            return new DetailsBrandTransferModel()
+            {
+                BrandName = brand.BrandName,
+                LogoUrl = brand.LogoUrl,
+                WebsiteUrl = brand.LogoUrl,
+                Description = brand.LogoUrl,
+                Restarants = restaurants,
+                Menus = menus
+            };
         }
     }
 }

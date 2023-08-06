@@ -4,6 +4,8 @@
 
     public interface IRestaurantService
     {
-        Task AddRestaurantsByBrandIdAsync(IEnumerable<RestaurantExcelTransferModel> restaurants, string brandId);
+        Task<StatusRestaurantsFromExcelModel> AddRestaurantsByBrandIdAsync(IEnumerable<RestaurantExcelTransferModel> restaurants, string brandId);
+        Task DeleteRestaurantsByBrandIdAsync(string brandId);
+        Task<IEnumerable<RestaurantListTranferModel>> GetRestaurantsByBrandIdAsync(string brandId);
     }
 }

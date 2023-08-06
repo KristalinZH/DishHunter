@@ -6,6 +6,7 @@
     using DishHunter.Data;
     using Models.Settlement;
     using Interfaces;
+    using DishHunter.Data.Models.Restaurant;
 
     public class SettlementService : ISettlementService
     {
@@ -25,9 +26,15 @@
                         Region = s.Region
                     }).ToArrayAsync();
 
-        public async Task<bool> SettlementExistsByNameAndRegionAsync(string name, string region)
+        public async Task<int?> SettlementExistsByNameAndRegionAsync(string name, string region)
         {
-            return true;
+            Settlement? settlement = await dbContext
+                .Settlements
+                .Where(s => s.IsActive)
+                .FirstOrDefaultAsync(s => s.SettlementName == name && s.Region == s.Region);
+            if (settlement == null)
+                return null;
+            return settlement.Id;
         }
     }
 }

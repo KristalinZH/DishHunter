@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using DishHunter.Data;
+    using DishHunter.Data.Models.Restaurant;
     using Models.Category;
     using Interfaces;
 
@@ -22,5 +23,15 @@
                         Id = c.Id,
                         CategoryName = c.CategoryName
                     }).ToArrayAsync();
+
+        public async Task<int?> CategoryExistsByNameAsync(string categoryName)
+        {
+            Category? category = await dbContext
+                .Categories
+                .FirstOrDefaultAsync(c => c.CategoryName == categoryName);
+            if (category == null)
+                return null;
+            return category.Id;
+        }
     }
 }

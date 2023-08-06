@@ -33,6 +33,7 @@ namespace DishHunter.Web
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			builder.Services.AddControllersWithViews();
+			builder.Services.AddHttpClient();
 			builder.Services.AddAplicationServices(typeof(IBrandService));
 			builder.Services
 				.AddControllersWithViews()
