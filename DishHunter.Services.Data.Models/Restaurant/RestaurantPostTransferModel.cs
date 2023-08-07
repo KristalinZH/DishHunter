@@ -1,15 +1,16 @@
 ﻿namespace DishHunter.Services.Data.Models.Restaurant
 {
+    using DishHunter.Services.Data.Models.Brand;
     using DishHunter.Services.Data.Models.Category;
     using DishHunter.Services.Data.Models.Settlement;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
     using static Common.EntityValidationConstants.Restaurant;
     using static Common.ValidationErrorMessages;
     public class RestaurantPostTransferModel
     {
         public RestaurantPostTransferModel()
         {
+            Brands = new HashSet<BrandListTransferModel>();
             Settlements = new HashSet<SettlementSelectTransferModel>();
             Categories = new HashSet<CategorySelectTransferModel>();
         }
@@ -26,6 +27,8 @@
         [Required]
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]
         public string ImageUrl { get; set; } = null!;
+        public Guid BrandId { get; set; }
+        public IEnumerable<BrandListTransferModel> Brands { get; set; }
         public int CategoryId { get; set; }
         public IEnumerable<CategorySelectTransferModel> Categories { get; set; }
         public int SettlementId { get; set; }

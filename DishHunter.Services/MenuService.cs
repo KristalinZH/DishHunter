@@ -43,6 +43,30 @@
             return SuccessfullyAddedMenus;
         }
 
+        public async Task<int> CreateMenuAsync(MenuPostTransferModel menu)
+        {
+            Menu menuToAdd = new Menu()
+            {
+                MenuType=menu.MenuType,
+                FoodType=menu.FoodType,
+                Description =menu.Description,
+                BrandId=menu.BrandId,
+            };
+            await dbContext.Menus.AddAsync(menuToAdd);
+            await dbContext.SaveChangesAsync();
+            await menuItemService.AddMenuItemsByMenuIdAsync(menu.MenuItems, menuToAdd.Id);
+            return menuToAdd.Id;
+        }
+
+        public async Task DeleteMenuByIdAsync(int menuId)
+        {
+            Menu menu = await dbContext.Menus
+                .Where(m => m.IsActive)
+                .FirstAsync(m => m.Id == menuId);
+            menu.IsActive = false;
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task DeleteMenusByBrandIdAsync(string brandId)
         {
             List<Menu> menusToDelete = await dbContext.Menus
@@ -53,6 +77,47 @@
             foreach (var m in menusToDelete)           
                 m.IsActive = false;
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task EditMenuByIdAsync(int menuId, MenuPostTransferModel menu)
+        {
+            Menu menuForEdit = await dbContext.Menus
+               .Where(m => m.IsActive)
+               .FirstAsync(m => m.Id == menuId);
+            menuForEdit.MenuType = menu.MenuType;
+            menuForEdit.FoodType = menu.FoodType;
+            menuForEdit.Description = menu.Description;
+            menuForEdit.BrandId = menu.BrandId;
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<DetailsMenuTransferModel> GetMenuDetailsByIdAsync(int menuId)
+        {
+            Menu menu = await dbContext.Menus
+               .Where(m => m.IsActive)
+               .Include(m=>m.Brand)
+               .FirstAsync(m => m.Id == menuId);
+            return new DetailsMenuTransferModel()
+            {
+                MenuType = menu.MenuType,
+                FoodType = menu.FoodType,
+                Description = menu.Description,
+                Brand = menu.Brand.BrandName
+            };
+        }
+
+        public async Task<MenuPostTransferModel> GetMenuForEditByIdAsync(int menuId)
+        {
+            Menu menuForEdit = await dbContext.Menus
+                .Where(m => m.IsActive)
+                .FirstAsync(m => m.Id == menuId);
+            return new MenuPostTransferModel()
+            {
+                MenuType = menuForEdit.MenuType,
+                FoodType = menuForEdit.FoodType,
+                Description = menuForEdit.Description,
+                BrandId = menuForEdit.BrandId,
+            };
         }
 
         public async Task<IEnumerable<MenuListTrasnferModel>> GetMenusByBrandIdAsync(string brandId)

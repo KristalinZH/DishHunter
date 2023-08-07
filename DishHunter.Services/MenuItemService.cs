@@ -17,24 +17,24 @@
             dbContext = _dbContext;
         }
 
-        public async Task<string> AddMenuItemsByMenuIdAsync(IEnumerable<MenuItemExcelTransferModel> menuItems,int menuId)
+        public async Task<string> AddMenuItemsByMenuIdAsync(IEnumerable<MenuItemExcelTransferModel> menuItems, int menuId)
         {
             List<MenuItem> menuItemsToAdd = menuItems
                 .Select(mi => new MenuItem()
                 {
-                    FoodCategory=mi.FoodCategory,
-                    Name=mi.Name,
-                    Price=mi.Price,
-                    Description=mi.Description,
-                    ImageUrl=mi.ImageUrl,
-                    MenuId=menuId
+                    FoodCategory = mi.FoodCategory,
+                    Name = mi.Name,
+                    Price = mi.Price,
+                    Description = mi.Description,
+                    ImageUrl = mi.ImageUrl,
+                    MenuId = menuId
                 }).ToList();
             await dbContext.MenuItems.AddRangeAsync(menuItemsToAdd);
             await dbContext.SaveChangesAsync();
             return SuccessfullyAddedMenuItems;
         }
 
-        public async Task<int> CreateMenuItemByMenuIdAsync(MenuItemPostTransferModel menuItem)
+        public async Task<int> CreateMenuItemAsync(MenuItemPostTransferModel menuItem)
         {
             MenuItem menuItemToAdd = new MenuItem()
             {
@@ -96,10 +96,27 @@
                 .Where(mi => mi.IsActive)
                 .AnyAsync(mi => mi.Id == menuItemId);
 
+        public async Task<DetailsMenuItemTransferModel> GetMenuItemDetailsByIdAsync(int menuItemId)
+        {
+            MenuItem menuItem = await dbContext.MenuItems
+                .Where(mi => mi.IsActive)
+                .Include(mi=>mi.Menu.Brand)
+                .FirstAsync(mi => mi.Id == menuItemId);
+            return new DetailsMenuItemTransferModel()
+            {
+                Name = menuItem.Name,
+                Price = menuItem.Price,
+                Description = menuItem.Description,
+                FoodCategory = menuItem.FoodCategory,
+                ImageUrl = menuItem.ImageUrl,
+                Menu = menuItem.Menu.MenuType,
+                Brand = menuItem.Menu.Brand.BrandName
+            };
+        }
         public async Task<MenuItemPostTransferModel> GetMenuItemForEditById(int menuItemUd)
         {
             MenuItem menuItem = await dbContext.MenuItems
-                .Where(mi=>mi.IsActive)
+                .Where(mi => mi.IsActive)
                 .FirstAsync(mi => mi.Id == menuItemUd);
             return new MenuItemPostTransferModel()
             {
@@ -112,9 +129,14 @@
             };
         }
 
-        public Task<IEnumerable<MenuItemListTransferModel>> GetMenuItemsByMenuIdAsync(int menuId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<MenuItemListTransferModel>> GetMenuItemsByMenuIdAsync(int menuId)
+            => await dbContext.MenuItems
+                .Where(mi => mi.IsActive && mi.MenuId == menuId)
+                .Select(mi => new MenuItemListTransferModel()
+                {
+                    Id = mi.Id,
+                    Name = mi.Name,
+                    FoodCategory = mi.FoodCategory
+                }).ToArrayAsync();
     }
 }

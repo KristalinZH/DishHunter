@@ -81,6 +81,40 @@
             return result;
         }
 
+        public async Task<StatusRestaurantTransferModel> CreateRestaurantAsync(RestaurantPostTransferModel restaurant)
+        {
+            StatusRestaurantTransferModel result = new StatusRestaurantTransferModel()
+            {
+                IsRestaurantAdded = false,
+                Message = string.Empty,
+                RestaurantId = null
+            };
+            //Settlement settlement=await settlementService.
+            //GeocodingStatusModel geocodingResult = await geocodingService
+            //        .RetreiveCoordinatesByAddressAndSettlementAsync(restaurant.Address, excelRestaurant.SettlementName, excelRestaurant.Region);
+            //if (!geocodingResult.AreCoordinatedFound)
+            //{
+            //    result.AreRestaurantsAddedSuccessfully = false;
+            //    result.Message = geocodingResult.Message;
+            //    return result;
+            //}
+            Restaurant restaurantToAdd = new Restaurant()
+            {
+                Name=restaurant.Name,
+                Address=restaurant.Address,
+                PhoneNumber=restaurant.PhoneNumber,
+                ImageUrl=restaurant.ImageUrl,
+                CategoryId =restaurant.CategoryId,
+                SettlementId=restaurant.SettlementId,
+                BrandId=restaurant.BrandId,
+
+            };
+            return result;
+        }
+        /*
+        public decimal Longitude { get; set; }
+        public decimal Latitude { get; set; }
+         */
         public async Task DeleteRestaurantsByBrandIdAsync(string brandId)
         {
             List<Restaurant> restaurantsToDelete = await dbContext.Restaurants

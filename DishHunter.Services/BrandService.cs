@@ -98,7 +98,7 @@
                .Where(b => b.IsActive && b.RestaurantOwnerId.ToString() == ownerId)
                .Select(b => new BrandListTransferModel()
                {
-                   Id=b.Id.ToString(),
+                   Id=b.Id,
                    BrandName=b.BrandName,
                    LogoUrl=b.LogoUrl
                }).ToArrayAsync();
