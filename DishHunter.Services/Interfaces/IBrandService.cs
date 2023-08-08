@@ -13,5 +13,6 @@
         Task DeleteBrandByIdAsync(string brandId);
         Task<IEnumerable<BrandListTransferModel>> GetOwnersBrandsByOwnerIdAsync(string ownerId);
         Task<DetailsBrandTransferModel> GetBrandDetailsByIdAsync(string brandId);
+        Task<IEnumerable<BrandSelectTransferModel>> GetBrandsForSelectByOwnerId(string restaurantOwnerId);
     }
 }

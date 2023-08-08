@@ -2,13 +2,14 @@
 {
     using System.Threading.Tasks;
     using System.Collections.Generic;
+    using Microsoft.EntityFrameworkCore;
     using DishHunter.Data;
     using DishHunter.Data.Models.Restaurant;
+    using Models.Settlement;
     using Models.Restaurant;
     using Models.Geocoding;
     using Interfaces;
     using static Common.NotificationMessagesConstants;
-    using Microsoft.EntityFrameworkCore;
 
     public class RestaurantService : IRestaurantService
     {
@@ -26,7 +27,6 @@
             categoryService = _categoryService;
             geocodingService = _geocodingService;
         }
-
         public async Task<StatusRestaurantsFromExcelModel> AddRestaurantsByBrandIdAsync(IEnumerable<RestaurantExcelTransferModel> restaurants, string brandId)
         {
             StatusRestaurantsFromExcelModel result = new StatusRestaurantsFromExcelModel()
@@ -80,7 +80,6 @@
             result.Message = SuccessfullyAddedRestaurantsFromExcel;
             return result;
         }
-
         public async Task<StatusRestaurantTransferModel> CreateRestaurantAsync(RestaurantPostTransferModel restaurant)
         {
             StatusRestaurantTransferModel result = new StatusRestaurantTransferModel()
@@ -89,15 +88,17 @@
                 Message = string.Empty,
                 RestaurantId = null
             };
-            //Settlement settlement=await settlementService.
-            //GeocodingStatusModel geocodingResult = await geocodingService
-            //        .RetreiveCoordinatesByAddressAndSettlementAsync(restaurant.Address, excelRestaurant.SettlementName, excelRestaurant.Region);
-            //if (!geocodingResult.AreCoordinatedFound)
-            //{
-            //    result.AreRestaurantsAddedSuccessfully = false;
-            //    result.Message = geocodingResult.Message;
-            //    return result;
-            //}
+            GeoSettlementTransferModel settlement = await settlementService
+                .GeoSettlementInfoByIdAsync(restaurant.SettlementId);
+            GeocodingStatusModel geocodingResult = await geocodingService
+                    .RetreiveCoordinatesByAddressAndSettlementAsync(restaurant.Address, settlement.SettlementName, settlement.Region);
+            if (!geocodingResult.AreCoordinatedFound)
+            {
+                result.IsRestaurantAdded = false;
+                result.Message = geocodingResult.Message;
+                result.RestaurantId = null;
+                return result;
+            }
             Restaurant restaurantToAdd = new Restaurant()
             {
                 Name=restaurant.Name,
@@ -107,14 +108,24 @@
                 CategoryId =restaurant.CategoryId,
                 SettlementId=restaurant.SettlementId,
                 BrandId=restaurant.BrandId,
-
+                Longitude= geocodingResult.Longitude!.Value,
+                Latitude=geocodingResult.Latitude!.Value
             };
+            await dbContext.Restaurants.AddAsync(restaurantToAdd);
+            await dbContext.SaveChangesAsync();
+            result.IsRestaurantAdded = true;
+            result.Message = SuccessfullyAddedRestaurant;
+            result.RestaurantId = restaurantToAdd.Id.ToString();
             return result;
         }
-        /*
-        public decimal Longitude { get; set; }
-        public decimal Latitude { get; set; }
-         */
+        public async Task DeleteRestaurantByIdAsync(string restaurantId)
+        {
+            Restaurant restaurant = await dbContext.Restaurants
+                .Where(r => r.IsActive)
+                .FirstAsync(r => r.Id.ToString() == restaurantId);
+            restaurant.IsActive = false;
+            await dbContext.SaveChangesAsync();
+        }
         public async Task DeleteRestaurantsByBrandIdAsync(string brandId)
         {
             List<Restaurant> restaurantsToDelete = await dbContext.Restaurants
@@ -124,16 +135,91 @@
                 r.IsActive = false;
             await dbContext.SaveChangesAsync();
         }
-
+        public async Task<StatusRestaurantTransferModel> EditRestaurantByIdAsync(string restaurantId, RestaurantPostTransferModel restaurant)
+        {
+            StatusRestaurantTransferModel result = new StatusRestaurantTransferModel()
+            {
+                IsRestaurantAdded = false,
+                Message = string.Empty,
+                RestaurantId = null
+            };
+            Restaurant restaurantForEdit = await dbContext.Restaurants
+                .Where(r => r.IsActive)
+                .FirstAsync(r => r.Id.ToString() == restaurantId);
+            if (restaurantForEdit.Address != restaurant.Address)
+            {
+                GeoSettlementTransferModel settlement = await settlementService
+                .GeoSettlementInfoByIdAsync(restaurant.SettlementId);
+                GeocodingStatusModel geocodingResult = await geocodingService
+                        .RetreiveCoordinatesByAddressAndSettlementAsync(restaurant.Address, settlement.SettlementName, settlement.Region);
+                if (!geocodingResult.AreCoordinatedFound)
+                {
+                    result.IsRestaurantAdded = false;
+                    result.Message = geocodingResult.Message;
+                    result.RestaurantId = null;
+                    return result;
+                }
+                restaurantForEdit.Address = restaurant.Address;
+                restaurantForEdit.Latitude = geocodingResult.Latitude!.Value;
+                restaurantForEdit.Longitude = geocodingResult.Longitude!.Value;
+            }
+            restaurantForEdit.Name = restaurant.Name;
+            restaurantForEdit.PhoneNumber = restaurant.PhoneNumber;
+            restaurantForEdit.ImageUrl = restaurant.ImageUrl;
+            restaurantForEdit.SettlementId = restaurant.SettlementId;
+            restaurantForEdit.BrandId = restaurant.BrandId;
+            await dbContext.SaveChangesAsync();
+            result.IsRestaurantAdded = true;
+            result.Message = SuccessfullyEditedRestaurant;
+            result.RestaurantId = restaurantId;
+            return result;
+        }
+        public async Task<DetailsRestaurantTransferModel> GetRestaurantDetailsByIdAsync(string restaurantId)
+        {
+            Restaurant restaurant = await dbContext.Restaurants
+                .Where(r => r.IsActive)
+                .Include(r=>r.Category)
+                .Include(r=>r.Settlement)
+                .Include(r=>r.Brand)
+                .FirstAsync(r => r.Id.ToString() == restaurantId);
+            return new DetailsRestaurantTransferModel()
+            {
+                Name=restaurant.Name,
+                Address=restaurant.Address,
+                PhoneNumber=restaurant.PhoneNumber,
+                ImageUrl=restaurant.ImageUrl,
+                Category=restaurant.Category.CategoryName,
+                Region=restaurant.Settlement.Region,
+                Settlement=restaurant.Settlement.SettlementName,
+                Brand=restaurant.Brand.BrandName,
+                Longitude=restaurant.Longitude,
+                Latitude=restaurant.Latitude
+            };
+        }
+        public async Task<RestaurantPostTransferModel> GetRestaurantForEditByIdAsync(string restaurantId)
+        {
+            Restaurant restaurant = await dbContext.Restaurants
+                .Where(r => r.IsActive)
+                .FirstAsync(r => r.Id.ToString() == restaurantId);
+            return new RestaurantPostTransferModel()
+            {
+                Name = restaurant.Name,
+                Address = restaurant.Address,
+                PhoneNumber = restaurant.PhoneNumber,
+                ImageUrl = restaurant.ImageUrl,
+                BrandId = restaurant.BrandId,
+                CategoryId = restaurant.CategoryId,
+                SettlementId = restaurant.SettlementId
+            };
+        }
         public async Task<IEnumerable<RestaurantListTranferModel>> GetRestaurantsByBrandIdAsync(string brandId)
             => await dbContext.Restaurants
                 .Where(r => r.IsActive && r.BrandId.ToString() == brandId)
+                .Include(r=>r.Settlement)
                 .Select(r=>new RestaurantListTranferModel()
                 {
                     Id=r.Id.ToString(),
                     Name=r.Name,
-                    Address=r.Address,
-                    Region=r.Settlement.Region,
                     SettlementName=r.Settlement.SettlementName
                 })
                 .ToListAsync();

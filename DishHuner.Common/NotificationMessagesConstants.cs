@@ -16,5 +16,7 @@
 		public const string MultipleAddressesFound = "Открити са повече от един адреса, спрямо посочения от Вас адрес! Моля въведете повече данни за адреса!";
 		public const string SuccessfullyAddedMenuItems = "Успешно добавихте Вашите продукти в избраното от Вас меню!";
 		public const string SuccessfullyAddedMenus = "Успешно добавихте Вашите менюта с техните продукти!";
+		public const string SuccessfullyAddedRestaurant = "Успешно добавихте ресторант към Вашия бранд!";
+        public const string SuccessfullyEditedRestaurant = "Успешно редактирахте Вашият ресторант!";
     }
 }

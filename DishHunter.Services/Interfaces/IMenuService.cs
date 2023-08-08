@@ -11,5 +11,7 @@
         Task DeleteMenuByIdAsync(int menuId);
         Task<IEnumerable<MenuListTrasnferModel>> GetMenusByBrandIdAsync(string brandId);
         Task<DetailsMenuTransferModel> GetMenuDetailsByIdAsync(int menuId);
+        Task<IEnumerable<MenuSelectTransferModel>> GetMenusForSelectByOwnerIdAsync(string restaurantOwnerId);
+        Task<IEnumerable<MenuListTrasnferModel>> GetOwnerMenusByOwnerIdAsync(string restaurantOwnerId);
     }
 }

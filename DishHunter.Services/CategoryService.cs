@@ -34,7 +34,7 @@
             return category.Id;
         }
 
-        public async Task<int> CreateCategoryAsync(CategoryPostTransferModel category)
+        public async Task CreateCategoryAsync(CategoryPostTransferModel category)
         {
             Category categoryToAdd = new Category()
             {
@@ -42,8 +42,6 @@
             };
             await dbContext.Categories.AddAsync(categoryToAdd);
             await dbContext.SaveChangesAsync();
-            return categoryToAdd.Id;
-
         }
 
         public async Task DeleteCategoryByIdAsync(int categoryId)

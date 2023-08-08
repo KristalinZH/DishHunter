@@ -15,8 +15,8 @@
         private readonly ApplicationDbContext dbContext;
         private readonly IRestaurantService restaurantService;
         private readonly IMenuService menuService;
-        public BrandService(ApplicationDbContext _dbContext, 
-                            IRestaurantService _restaurantService, 
+        public BrandService(ApplicationDbContext _dbContext,
+                            IRestaurantService _restaurantService,
                             IMenuService _menuService)
         {
             dbContext = _dbContext;
@@ -34,7 +34,7 @@
             };
             newBrand.RestaurantOwnerId = Guid.Parse(restaurantOwnerId);
             await dbContext.AddAsync(newBrand);
-            await dbContext.SaveChangesAsync();       
+            await dbContext.SaveChangesAsync();
             return newBrand.Id.ToString();
         }
         public async Task<bool> ExistsByIdAsync(string brandId)
@@ -98,15 +98,15 @@
                .Where(b => b.IsActive && b.RestaurantOwnerId.ToString() == ownerId)
                .Select(b => new BrandListTransferModel()
                {
-                   Id=b.Id,
-                   BrandName=b.BrandName,
-                   LogoUrl=b.LogoUrl
+                   Id = b.Id,
+                   BrandName = b.BrandName,
+                   LogoUrl = b.LogoUrl
                }).ToArrayAsync();
 
         public async Task<DetailsBrandTransferModel> GetBrandDetailsByIdAsync(string brandId)
         {
             Brand brand = await dbContext.Brands
-                .Where(b => b.IsActive)               
+                .Where(b => b.IsActive)
                 .FirstAsync(b => b.Id.ToString() == brandId);
             var restaurants = await restaurantService.GetRestaurantsByBrandIdAsync(brandId);
             var menus = await menuService.GetMenusByBrandIdAsync(brandId);
@@ -120,5 +120,14 @@
                 Menus = menus
             };
         }
+
+        public async Task<IEnumerable<BrandSelectTransferModel>> GetBrandsForSelectByOwnerId(string restaurantOwnerId)
+            => await dbContext.Brands
+                .Where(b => b.IsActive && b.RestaurantOwnerId.ToString() == restaurantOwnerId)
+                .Select(b => new BrandSelectTransferModel()
+                {
+                    Id = b.Id,
+                    BrandName = b.BrandName
+                }).ToArrayAsync();
     }
 }

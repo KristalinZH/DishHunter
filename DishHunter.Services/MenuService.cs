@@ -47,10 +47,10 @@
         {
             Menu menuToAdd = new Menu()
             {
-                MenuType=menu.MenuType,
-                FoodType=menu.FoodType,
-                Description =menu.Description,
-                BrandId=menu.BrandId,
+                MenuType = menu.MenuType,
+                FoodType = menu.FoodType,
+                Description = menu.Description,
+                BrandId = menu.BrandId,
             };
             await dbContext.Menus.AddAsync(menuToAdd);
             await dbContext.SaveChangesAsync();
@@ -74,7 +74,7 @@
                 .ToListAsync();
             List<int> menusIndexex = menusToDelete.Select(m => m.Id).ToList();
             await menuItemService.DeleteMenuItemsByMenusIdRangeAsync(menusIndexex);
-            foreach (var m in menusToDelete)           
+            foreach (var m in menusToDelete)
                 m.IsActive = false;
             await dbContext.SaveChangesAsync();
         }
@@ -95,7 +95,7 @@
         {
             Menu menu = await dbContext.Menus
                .Where(m => m.IsActive)
-               .Include(m=>m.Brand)
+               .Include(m => m.Brand)
                .FirstAsync(m => m.Id == menuId);
             return new DetailsMenuTransferModel()
             {
@@ -128,6 +128,29 @@
                     Id = m.Id,
                     MenuType = m.MenuType,
                     FoodType = m.FoodType
+                }).ToArrayAsync();
+
+        public async Task<IEnumerable<MenuSelectTransferModel>> GetMenusForSelectByOwnerIdAsync(string restaurantOwnerId)
+            => await dbContext.Menus
+                .Where(m => m.IsActive)
+                .Include(m => m.Brand)
+                .Where(m => m.Brand.RestaurantOwnerId.ToString() == restaurantOwnerId)
+                .Select(m => new MenuSelectTransferModel()
+                {
+                    Id = m.Id,
+                    MenuType = m.MenuType
+                }).ToArrayAsync();
+
+        public async Task<IEnumerable<MenuListTrasnferModel>> GetOwnerMenusByOwnerIdAsync(string restaurantOwnerId)
+        => await dbContext.Menus
+                .Where(m => m.IsActive)
+                .Include(m => m.Brand)
+                .Where(m => m.Brand.RestaurantOwnerId.ToString() == restaurantOwnerId)
+                .Select(m => new MenuListTrasnferModel()
+                {
+                    Id = m.Id,
+                    MenuType = m.MenuType,
+                    FoodType=m.FoodType
                 }).ToArrayAsync();
     }
 }
