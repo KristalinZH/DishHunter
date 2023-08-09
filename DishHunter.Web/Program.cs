@@ -6,8 +6,9 @@ namespace DishHunter.Web
     using Services.Data.Interfaces;
 	using Infrastructrure.Extensions;
 	using Infrastructrure.ModelBinders;
+    using Microsoft.AspNetCore.Identity;
 
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -30,6 +31,7 @@ namespace DishHunter.Web
 				options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:Password:RequireNonAlphanumeric"); 
 				options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:Password:RequireUppercase"); 
 			})
+				.AddRoles<IdentityRole<Guid>>()
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			builder.Services.AddControllersWithViews();
