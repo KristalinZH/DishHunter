@@ -12,6 +12,12 @@
 			public const int UserNameMinLenght = 2;
 			public const int PasswordMaxLenght = 60;
 		}
+		public static class RestaurantOwner
+		{
+			public const int PhoneNumberMaxLenght = 15;
+			public const int PhoneNumberMinLenght = 7;
+
+        };
 		public static class Brand
 		{
 			public const int BrandNameMaxLenght = 50;
