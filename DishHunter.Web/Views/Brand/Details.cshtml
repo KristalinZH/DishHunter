@@ -1,0 +1,74 @@
+﻿@model BrandDetailsViewModel
+@{
+	ViewData["Title"] = Model.BrandName;
+}
+<h1 class="display-4 text-center fw-bold fst-italic">@Model.BrandName</h1>
+<hr />
+<div class="container">
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body d-flex">
+                    <img src="@Model.LogoUrl" alt="Лого">
+                    <div class="card-text text-center flex-grow-1">
+                        <h3>Описание</h3>
+                        <p>@Model.Description</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text text-center">
+                        <a href="@Model.WebsiteUrl" target="_blank" class="btn btn-primary btn-sm m-1">Линк към уебсайт</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Менюта</h5>
+                    @if (!Model.Menus.Any())
+                    {
+                        <h5 class="card-text text-lg-center text-danger">Няма налични менюта</h5>
+                    }
+                    else
+                    {
+                        <ul class="list-group">
+                            @foreach (var menu in Model.Menus)
+                            {
+                                <li class="list-group-item">
+                                    @menu.MenuType - @menu.FoodType
+                                    <!-- Add delete, edit, and details links based on user role -->
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">                 
+                    <h5 class="card-title text-center">Ресторанти</h5>
+                    @if (!Model.Restaurants.Any())
+                    {
+                        <h5 class="card-text text-lg-center text-danger">Няма налични ресторанти</h5>
+                    }
+                    else
+                    {
+                        <ul class="list-group">
+                            @foreach (var restaurant in Model.Restaurants)
+                            {
+                                <li class="list-group-item">
+                                    @restaurant.Name - @restaurant.SettlementName
+                                    <!-- Add delete, edit, and details links based on user role -->
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

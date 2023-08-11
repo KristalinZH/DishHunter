@@ -49,11 +49,13 @@
                 .FirstAsync(b => b.Id.ToString() == brandId);
             return brand.RestaurantOwnerId.ToString();
         }
-        public async Task<IEnumerable<AllBrandsTransferModel>> GetAllBrandsAsync()
+        public async Task<IEnumerable<BrandsCardTransferModel>> GetAllBrandsAsCardsAsync()
             => await dbContext.Brands
                 .Where(b => b.IsActive)
-                .Select(b => new AllBrandsTransferModel()
+                .OrderBy(b=>b.BrandName)
+                .Select(b => new BrandsCardTransferModel()
                 {
+                    Id=b.Id.ToString(),
                     BrandName = b.BrandName,
                     LogoUrl = b.LogoUrl,
                     WebsiteUrl = b.WebsiteUrl
@@ -114,9 +116,9 @@
             {
                 BrandName = brand.BrandName,
                 LogoUrl = brand.LogoUrl,
-                WebsiteUrl = brand.LogoUrl,
-                Description = brand.LogoUrl,
-                Restarants = restaurants,
+                WebsiteUrl = brand.WebsiteUrl,
+                Description = brand.Description,
+                Restaurants = restaurants,
                 Menus = menus
             };
         }

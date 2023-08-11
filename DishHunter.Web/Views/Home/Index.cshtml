@@ -1,8 +1,34 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<BrandsCardViewModel>
+@{
+    ViewData["Title"] = "Топ вериги заведения";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1 class="text-lg-center">@ViewData["Title"]</h1>
+<hr />
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <p class="display-4 lead">В момента няма налични вериги заведения!</p>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var brand in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img class="bd-placeholder-img card-img-top" src="@brand.LogoUrl" alt="Лого">
+                        <div class="card-body">
+                            <h3 class="card-title text-center">@brand.BrandName</h3>
+                            <p class="card-text text-center">
+                                <a asp-controller="Brand" asp-action="Details" asp-route-id="@brand.Id" class="btn btn-primary btn-sm m-1">Повече подробности</a>
+                                <a href="@brand.WebsiteUrl" target="_blank" class="btn btn-primary btn-sm m-1">Линк към уебсайт</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

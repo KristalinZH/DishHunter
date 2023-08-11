@@ -1,22 +1,31 @@
 ﻿namespace DishHunter.Web.Controllers
 {
-	using System.Diagnostics;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-	using ViewModels;
+    using Microsoft.AspNetCore.Authorization;
+    using Services.Data.Interfaces;
+    using ViewModels.Brand;
 	[AllowAnonymous]
 	public class HomeController : BaseController
     {
-		private readonly ILogger<HomeController> _logger;
+		private readonly IBrandService brandService;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(IBrandService _brandService)
 		{
-			_logger = logger;
-		}
+			brandService = _brandService;
+        }
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			IEnumerable<BrandsCardViewModel> brands = (await brandService
+				.GetAllBrandsAsCardsAsync())
+				.Select(tm => new BrandsCardViewModel()
+				{
+					Id = tm.Id,
+					BrandName = tm.BrandName,
+					LogoUrl = tm.LogoUrl,
+					WebsiteUrl = tm.WebsiteUrl
+				});
+            return View(brands);
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
