@@ -1,0 +1,10 @@
+﻿@model BrandFormViewModel
+@{
+	ViewData["Title"] = "Добави верига";
+}
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+<partial name="_BrandFormPartial" model="@Model" />
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
+}

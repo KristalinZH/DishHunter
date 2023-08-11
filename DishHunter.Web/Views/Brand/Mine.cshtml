@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BrandListViewModel>
+@{
+	ViewData["Title"] = "Моите вериги заведения";
+}
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+@if (!Model.Any())
+{
+	<h2 class="text-lg-center">Не сте създали верига все още!</h2>
+	<p class="text-center">
+		Създайте своята първа верига!
+		<a asp-controller="Brand" asp-action="Add" class="btn btn-primary btn-sm m-1">Създай</a>
+	</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var brand in Model)
+        {
+            <li class="list-group-item d-flex align-items-center">
+                
+                <img class="bd-placeholder-img m-2 col-md-2" src="@brand.LogoUrl" alt="Лого">
+                <h4 class="m-2 col-md-1">@brand.BrandName</h4>
+                <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-warning m-2 col-md-2">Редактирай</a>
+                <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-danger m-2 col-md-2">Изтрий</a>
+                <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-info m-2 col-md-2">Повече подробности</a>
+            </li>
+        }
+    </ul>
+}

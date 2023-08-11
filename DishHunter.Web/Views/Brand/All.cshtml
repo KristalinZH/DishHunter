@@ -1,34 +1,37 @@
 ﻿@model IEnumerable<BrandsCardViewModel>
 @{
-	ViewData["Title"] = "Всички вериги заведения";
+    ViewData["Title"] = "Вериги заведения";
 }
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-lg-center">@ViewData["Title"]</h1>
 <hr />
-<table>
-    <thead>
-        <tr>
-            <th>Brand Name</th>
-            <th>Logo</th>
-            <th>Website</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var brand in Model)
-        {
-            <tr>
-                <td>@brand.BrandName</td>
-                <td><img src="@brand.LogoUrl" alt="@brand.BrandName Logo" style="width: 50px; height: 50px;" /></td>
-                <td>
-                    @if (!string.IsNullOrEmpty(brand.WebsiteUrl))
-                    {
-                        <a href="@brand.WebsiteUrl" target="_blank">@brand.WebsiteUrl</a>
-                    }
-                    else
-                    {
-                        <h3>No Website Provided</h3>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <p class="display-4 lead">В момента няма налични вериги заведения!</p>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var brand in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img class="bd-placeholder-img card-img-top" src="@brand.LogoUrl" alt="Лого">
+                        <div class="card-body">
+                            <h3 class="card-title text-center">@brand.BrandName</h3>
+                            <p class="card-text text-center">
+                                <a asp-controller="Brand" asp-action="Details" asp-route-id="@brand.Id" class="btn btn-primary btn-sm m-1">Повече подробности</a>
+                                <a href="@brand.WebsiteUrl" target="_blank" class="btn btn-primary btn-sm m-1">Линк към уебсайт</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

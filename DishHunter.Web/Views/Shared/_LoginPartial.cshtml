@@ -1,26 +1,37 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using DishHunter.Services.Data.Interfaces
+@using DishHunter.Web.Infrastructrure.Extensions
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@inject IRestaurantOwnerService ownerService
+@{
+	bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+}
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+	@if (SignInManager.IsSignedIn(User))
+	{
+		if (!isUserOwner)
+		{
+			<li class="nav-item">
+				<a class="nav-link text-dark" asp-area="" asp-controller="Owner" asp-action="Become">Стани ресторантьор</a>
+			</li>
+		}
+		<li class="nav-item">
+			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Настройки</a>
+		</li>
+		<li class="nav-item">
+			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+				<button type="submit" class="nav-link btn btn-link text-dark">Излез</button>
+			</form>
+		</li>
+	}
+	else
+	{
+		<li class="nav-item">
+			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Влез</a>
+		</li>
+	}
 </ul>

@@ -2,6 +2,7 @@
 @{
 	ViewData["Title"] = Model.BrandName;
 }
+@*Opravi si butonite pich*@
 <h1 class="display-4 text-center fw-bold fst-italic">@Model.BrandName</h1>
 <hr />
 <div class="container">
@@ -37,9 +38,11 @@
                         <ul class="list-group">
                             @foreach (var menu in Model.Menus)
                             {
-                                <li class="list-group-item">
-                                    @menu.MenuType - @menu.FoodType
-                                    <!-- Add delete, edit, and details links based on user role -->
+                                <li class="list-group-item d-flex align-content-between">
+                                    <p class="m-1">@menu.MenuType - @menu.FoodType</p>
+                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-warning m-1">Редактирай</a>
+                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-danger m-1">Изтрий</a>
+                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-info m-1">Повече подробности</a>
                                 </li>
                             }
                         </ul>
@@ -60,9 +63,11 @@
                         <ul class="list-group">
                             @foreach (var restaurant in Model.Restaurants)
                             {
-                                <li class="list-group-item">
-                                    @restaurant.Name - @restaurant.SettlementName
-                                    <!-- Add delete, edit, and details links based on user role -->
+                                <li class="list-group-item d-flex align-content-between">
+                                    <p class="m-1">@restaurant.Name - @restaurant.SettlementName</p>
+                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-warning m-1">Редактирай</a>
+                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-danger m-1">Изтрий</a>
+                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-info m-1">Повече подробности</a>
                                 </li>
                             }
                         </ul>
@@ -72,3 +77,6 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

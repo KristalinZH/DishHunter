@@ -17,7 +17,7 @@
 		public async Task<IActionResult> Index()
 		{
 			IEnumerable<BrandsCardViewModel> brands = (await brandService
-				.GetAllBrandsAsCardsAsync())
+				.GetTop3BrandsAsCardsAsync())
 				.Select(tm => new BrandsCardViewModel()
 				{
 					Id = tm.Id,

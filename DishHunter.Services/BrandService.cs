@@ -61,7 +61,20 @@
                     WebsiteUrl = b.WebsiteUrl
                 })
                 .ToArrayAsync();
-        public async Task<BrandPostTransferModel> GetBrandForEditByIdAsync(string brandId)
+        public async Task<IEnumerable<BrandsCardTransferModel>> GetTop3BrandsAsCardsAsync() 
+            => await dbContext.Brands
+				.Where(b => b.IsActive)
+				.OrderBy(b => b.BrandName)
+                .Take(3)
+				.Select(b => new BrandsCardTransferModel()
+				{
+					Id = b.Id.ToString(),
+					BrandName = b.BrandName,
+					LogoUrl = b.LogoUrl,
+					WebsiteUrl = b.WebsiteUrl
+				})
+				.ToArrayAsync();
+		public async Task<BrandPostTransferModel> GetBrandForEditByIdAsync(string brandId)
         {
             Brand brandForEdit = await dbContext.Brands
             .Where(b => b.IsActive)
@@ -100,7 +113,7 @@
                .Where(b => b.IsActive && b.RestaurantOwnerId.ToString() == ownerId)
                .Select(b => new BrandListTransferModel()
                {
-                   Id = b.Id,
+                   Id = b.Id.ToString(),
                    BrandName = b.BrandName,
                    LogoUrl = b.LogoUrl
                }).ToArrayAsync();
@@ -131,5 +144,13 @@
                     Id = b.Id,
                     BrandName = b.BrandName
                 }).ToArrayAsync();
-    }
+
+		public async Task<bool> BrandOwnedByOwnerIdAndBrandIdAsync(string brandId, string restaurantOwnerId)
+		{
+			Brand brand = await dbContext.Brands
+				.Where(b => b.IsActive)
+				.FirstAsync(b => b.Id.ToString() == brandId);
+            return brand.RestaurantOwnerId.ToString() == restaurantOwnerId;
+		}
+	}
 }

@@ -1,34 +1,48 @@
 ﻿@model IEnumerable<BrandsCardViewModel>
 @{
-    ViewData["Title"] = "Топ вериги заведения";
+	ViewData["Title"] = "Топ вериги заведения";
+	var brands = Model.ToList();
 }
 <h1 class="text-lg-center">@ViewData["Title"]</h1>
 <hr />
 @if (!Model.Any())
 {
-    <div class="text-center">
-        <p class="display-4 lead">В момента няма налични вериги заведения!</p>
-    </div>
+	<div class="text-center">
+		<p class="display-4 lead">В момента няма налични вериги заведения!</p>
+	</div>
 }
 else
 {
-    <div class="container">
-        <div class="row">
-            @foreach (var brand in Model)
-            {
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top" src="@brand.LogoUrl" alt="Лого">
-                        <div class="card-body">
-                            <h3 class="card-title text-center">@brand.BrandName</h3>
-                            <p class="card-text text-center">
-                                <a asp-controller="Brand" asp-action="Details" asp-route-id="@brand.Id" class="btn btn-primary btn-sm m-1">Повече подробности</a>
-                                <a href="@brand.WebsiteUrl" target="_blank" class="btn btn-primary btn-sm m-1">Линк към уебсайт</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+	<div class="mb-5"></div>
+	<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+		<div class="carousel-inner">
+			@for (int i = 0; i < brands.Count(); i++)
+			{
+				var house = brands[i];
+				<div class="carousel-item @(i == 0 ? "active" : string.Empty)">
+					<div class="card">
+						<img class="bd-placeholder-img card-img-top" src="@brands[i].LogoUrl" alt="Лого">
+						<div class="card-body">
+							<h3 class="card-title text-center">@brands[i].BrandName</h3>
+							<p class="card-text text-center">
+								<a asp-controller="Brand" asp-action="Details" asp-route-id="@brands[i].Id" class="btn btn-primary btn-sm m-1">Повече подробности</a>
+								<a href="@brands[i].WebsiteUrl" target="_blank" class="btn btn-primary btn-sm m-1">Линк към уебсайт</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+		<button class="carousel-control-prev btn-dark" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+		<button class="carousel-control-next btn-dark" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
+	</div>
+}
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
 }

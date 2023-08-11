@@ -2,7 +2,7 @@
 {
     public class BrandListTransferModel
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; } = null!;
         public string BrandName { get; set; } = null!;
         public string LogoUrl { get; set; } = null!;
     }
