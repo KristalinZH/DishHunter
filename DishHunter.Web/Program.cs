@@ -7,6 +7,7 @@ namespace DishHunter.Web
 	using Infrastructrure.Extensions;
 	using Infrastructrure.ModelBinders;
     using Microsoft.AspNetCore.Identity;
+	using Microsoft.AspNetCore.Mvc;
 
     public class Program
 	{
@@ -37,6 +38,15 @@ namespace DishHunter.Web
 			builder.Services.AddControllersWithViews();
 			builder.Services.AddHttpClient();
 			builder.Services.AddAplicationServices(typeof(IBrandService));
+			builder.Services.ConfigureApplicationCookie(options =>
+			{
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+			});
+			builder.Services.Configure<IISServerOptions>(opt =>
+			{
+				opt.AllowSynchronousIO = true; 
+			});
 			builder.Services
 				.AddControllersWithViews()
 				.AddMvcOptions(opt =>

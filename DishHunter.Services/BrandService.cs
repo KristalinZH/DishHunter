@@ -5,8 +5,6 @@
     using DishHunter.Data;
     using DishHunter.Data.Models.Restaurant;
     using Models.Brand;
-    using Models.Restaurant;
-    using Models.Menu;
     using Interfaces;
     using System.Collections.Generic;
 
@@ -111,6 +109,7 @@
         public async Task<IEnumerable<BrandListTransferModel>> GetOwnersBrandsByOwnerIdAsync(string ownerId)
             => await dbContext.Brands
                .Where(b => b.IsActive && b.RestaurantOwnerId.ToString() == ownerId)
+               .OrderBy(b=>b.BrandName)
                .Select(b => new BrandListTransferModel()
                {
                    Id = b.Id.ToString(),
@@ -139,9 +138,10 @@
         public async Task<IEnumerable<BrandSelectTransferModel>> GetBrandsForSelectByOwnerId(string restaurantOwnerId)
             => await dbContext.Brands
                 .Where(b => b.IsActive && b.RestaurantOwnerId.ToString() == restaurantOwnerId)
+                .OrderBy(b=>b.BrandName)
                 .Select(b => new BrandSelectTransferModel()
                 {
-                    Id = b.Id,
+                    Id = b.Id.ToString(),
                     BrandName = b.BrandName
                 }).ToArrayAsync();
 

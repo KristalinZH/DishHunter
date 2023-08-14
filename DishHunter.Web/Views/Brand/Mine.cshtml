@@ -21,9 +21,14 @@ else
                 
                 <img class="bd-placeholder-img m-2 col-md-2" src="@brand.LogoUrl" alt="Лого">
                 <h4 class="m-2 col-md-1">@brand.BrandName</h4>
-                <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-warning m-2 col-md-2">Редактирай</a>
-                <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-danger m-2 col-md-2">Изтрий</a>
-                <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-info m-2 col-md-2">Повече подробности</a>
+                <a asp-controller="Brand" asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-sm btn-warning m-2 col-md-2">Редактирай</a>
+                <form method="post" class="m-2 col-md-2" asp-controller="Brand" asp-action="Delete">
+                    <input type="hidden" name="id" value="@brand.Id">
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                    </div>
+                </form>
+                <a asp-controller="Brand" asp-action="Details" asp-route-id="@brand.Id" class="btn btn-sm btn-info m-2 col-md-2">Повече подробности</a>
             </li>
         }
     </ul>

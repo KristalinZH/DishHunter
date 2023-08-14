@@ -6,8 +6,9 @@
 	using ViewModels.Menu;
     using ViewModels.Brand;
 	using ViewModels.Restaurant;
+	using Infrastructrure.Extensions;
     using static Common.NotificationMessagesConstants;
-	using DishHunter.Web.Infrastructrure.Extensions;
+	using DishHunter.Services.Data;
 
 	public class BrandController : BaseController
     {
@@ -19,56 +20,101 @@
             ownerService = _ownerService;
 		}
         [HttpGet]
-        public async Task<IActionResult> Add()
+        public async Task<IActionResult> All()
         {
-            BrandFormViewModel brand = new BrandFormViewModel();
-            return View(brand);
-        }
-        [HttpPost]
-        public async Task<IActionResult>Add(BrandFormViewModel brand)
-        {
-            BrandPostTransferModel serviceModel = new BrandPostTransferModel()
-            {
-                BrandName = brand.BrandName,
-                LogoUrl = brand.LogoUrl,
-                WebsiteUrl = brand.WebsiteUrl,
-                Description = brand.Description
-            };
-            string brandId = string.Empty;
             try
             {
-                brandId = await brandService.CreateBrandAsync(string.Empty, serviceModel);               
+                var allBrands = (await brandService.GetAllBrandsAsCardsAsync())
+                    .Select(b => new BrandsCardViewModel()
+                    {
+                        Id = b.Id,
+                        BrandName = b.BrandName,
+                        LogoUrl = b.LogoUrl,
+                        WebsiteUrl = b.WebsiteUrl
+                    });
+                return View(allBrands);
             }
             catch (Exception)
             {
                 return GeneralError();
             }
-            return RedirectToAction("Details", "Brand", new { id = brandId });
+        }
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            try
+            {
+				bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+				if (!isUserOwner)
+				{
+					TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да създадете верига!";
+					return RedirectToAction("Become", "Owner");
+				}
+				BrandFormViewModel brand = new BrandFormViewModel();
+                return View(brand);
+            }
+            catch (Exception)
+            {
+                return GeneralError();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add(BrandFormViewModel brand)
+        {
+            try
+            {
+                bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+                if (!isUserOwner)
+                {
+                    TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да създадете верига!";
+                    return RedirectToAction("Become", "Owner");
+                }
+                BrandPostTransferModel serviceModel = new BrandPostTransferModel()
+                {
+                    BrandName = brand.BrandName,
+                    LogoUrl = brand.LogoUrl,
+                    WebsiteUrl = brand.WebsiteUrl,
+                    Description = brand.Description
+                };
+                string brandId = await brandService.CreateBrandAsync(string.Empty, serviceModel);
+                return RedirectToAction("Details", "Brand", new { id = brandId });
+            }
+            catch (Exception)
+            {
+                return GeneralError();
+            }
         }
         [HttpGet]
         public async Task<IActionResult>Details(string id)
         {
-            var brandDetails = await brandService.GetBrandDetailsByIdAsync(id);
-            BrandDetailsViewModel model = new BrandDetailsViewModel()
+            try
             {
-                BrandName = brandDetails.BrandName,
-                LogoUrl = brandDetails.LogoUrl,
-                Description = brandDetails.Description,
-                WebsiteUrl = brandDetails.WebsiteUrl,
-                Restaurants = brandDetails.Restaurants.Select(r => new RestaurantListViewModel()
+                var brandDetails = await brandService.GetBrandDetailsByIdAsync(id);
+                BrandDetailsViewModel model = new BrandDetailsViewModel()
                 {
-                    Id = r.Id,
-                    Name = r.Name,
-                    SettlementName = r.SettlementName
-                }),
-                Menus = brandDetails.Menus.Select(m => new MenuListViewModel()
-                {
-                    Id = m.Id,
-                    FoodType = m.FoodType,
-                    MenuType = m.MenuType
-                })
-            };
-			return View(model);
+                    BrandName = brandDetails.BrandName,
+                    LogoUrl = brandDetails.LogoUrl,
+                    Description = brandDetails.Description,
+                    WebsiteUrl = brandDetails.WebsiteUrl,
+                    Restaurants = brandDetails.Restaurants.Select(r => new RestaurantListViewModel()
+                    {
+                        Id = r.Id,
+                        Name = r.Name,
+                        SettlementName = r.SettlementName
+                    }),
+                    Menus = brandDetails.Menus.Select(m => new MenuListViewModel()
+                    {
+                        Id = m.Id,
+                        FoodType = m.FoodType,
+                        MenuType = m.MenuType
+                    })
+                };
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return GeneralError();
+            }		
         }
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
@@ -157,7 +203,7 @@
                 if (!isUserOwner)
                 {
                     TempData[ErrorMessage] = "Трябва да сте ресторантьор за да можете да видите тази страница!";
-                    return RedirectToAction("Become", "Brand");
+                    return RedirectToAction("Become", "Owner");
                 }
 				string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
                 IEnumerable<BrandListViewModel> ownerBrands = (await brandService
@@ -170,6 +216,38 @@
                     });
                 return View(ownerBrands);
 			}
+            catch (Exception)
+            {
+                return GeneralError();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                bool isBrandExisting = await brandService.ExistsByIdAsync(id);
+                if (!isBrandExisting)
+                {
+                    TempData[ErrorMessage] = "Търсеният от Вас бранд не съществува!";
+                    return RedirectToAction("All", "Brand");
+                }
+                bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+                if (!isUserOwner)
+                {
+                    TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да изтриете!";
+                    return RedirectToAction("Become", "Owner");
+                }
+                string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
+                bool isOwnerOwningBrand = await brandService.BrandOwnedByOwnerIdAndBrandIdAsync(id, ownerId!);
+                if (!isOwnerOwningBrand)
+                {
+                    TempData[ErrorMessage] = "Трябва да притежавате веригата за да имате право да я изтриете!";
+                    return RedirectToAction("Mine", "Brand");
+                }
+                await brandService.DeleteBrandByIdAsync(id);
+                return RedirectToAction("Mine", "Brand");
+            }
             catch (Exception)
             {
                 return GeneralError();

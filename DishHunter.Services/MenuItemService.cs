@@ -57,7 +57,7 @@
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteMenuItemsByMenuId(int menuId)
+        public async Task DeleteMenuItemsByMenuIdAsync(int menuId)
         {
             List<MenuItem> menuItemsToDelete = await dbContext.MenuItems
                 .Where(mi => mi.IsActive && mi.MenuId == menuId)
@@ -96,7 +96,20 @@
                 .Where(mi => mi.IsActive)
                 .AnyAsync(mi => mi.Id == menuItemId);
 
-        public async Task<DetailsMenuItemTransferModel> GetMenuItemDetailsByIdAsync(int menuItemId)
+        public async Task<IEnumerable<MenuItemsCardTransferModel>> GetAllMenuItemsAsCardsAsync()
+            => await dbContext.MenuItems
+            .Where(mi => mi.IsActive)
+            .Select(mi => new MenuItemsCardTransferModel()
+            {
+                Id=mi.Id,
+                Name=mi.Name,
+                Description=mi.Description,
+                Price=mi.Price,
+                ImageUrl=mi.ImageUrl,
+                FoodCategory=mi.FoodCategory
+            }).ToArrayAsync();
+
+		public async Task<DetailsMenuItemTransferModel> GetMenuItemDetailsByIdAsync(int menuItemId)
         {
             MenuItem menuItem = await dbContext.MenuItems
                 .Where(mi => mi.IsActive)
@@ -113,7 +126,7 @@
                 Brand = menuItem.Menu.Brand.BrandName
             };
         }
-        public async Task<MenuItemPostTransferModel> GetMenuItemForEditById(int menuItemUd)
+        public async Task<MenuItemPostTransferModel> GetMenuItemForEditByIdAsync(int menuItemUd)
         {
             MenuItem menuItem = await dbContext.MenuItems
                 .Where(mi => mi.IsActive)
@@ -138,5 +151,14 @@
                     Name = mi.Name,
                     FoodCategory = mi.FoodCategory
                 }).ToArrayAsync();
-    }
+
+		public async Task<bool> MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(int menuItemId, string ownerId)
+		{
+            MenuItem menuItem = await dbContext.MenuItems
+                .Where(mi => mi.IsActive)
+                .Include(mi=>mi.Menu.Brand)
+                .FirstAsync(mi => mi.Id == menuItemId);
+            return menuItem.Menu.Brand.RestaurantOwnerId.ToString() == ownerId;
+		}
+	}
 }

@@ -11,7 +11,6 @@
         public MenuPostTransferModel()
         {
             MenuItems = new HashSet<MenuItemExcelTransferModel>();
-            Brands = new HashSet<BrandSelectTransferModel>();
         }
         [Required]
         [StringLength(MenuTypeMaxLenght, MinimumLength = MenuTypeMinLenght, ErrorMessage = FieldLenghtMessage)]
@@ -22,8 +21,7 @@
         [Required]
         [StringLength(DescriptionMaxLenght, MinimumLength = DescriptionMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string Description { get; set; } = null!;
-        public Guid BrandId { get; set; }
-        public IEnumerable<BrandSelectTransferModel> Brands { get; set; }
+        public string BrandId { get; set; } = null!;
         public IEnumerable<MenuItemExcelTransferModel> MenuItems { get; set; }
     }
 }

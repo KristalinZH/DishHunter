@@ -50,11 +50,12 @@
                 MenuType = menu.MenuType,
                 FoodType = menu.FoodType,
                 Description = menu.Description,
-                BrandId = menu.BrandId,
+                BrandId = Guid.Parse(menu.BrandId)
             };
             await dbContext.Menus.AddAsync(menuToAdd);
             await dbContext.SaveChangesAsync();
-            await menuItemService.AddMenuItemsByMenuIdAsync(menu.MenuItems, menuToAdd.Id);
+            if (menu.MenuItems.Any())
+                await menuItemService.AddMenuItemsByMenuIdAsync(menu.MenuItems, menuToAdd.Id);
             return menuToAdd.Id;
         }
 
@@ -87,11 +88,16 @@
             menuForEdit.MenuType = menu.MenuType;
             menuForEdit.FoodType = menu.FoodType;
             menuForEdit.Description = menu.Description;
-            menuForEdit.BrandId = menu.BrandId;
+            menuForEdit.BrandId = Guid.Parse(menu.BrandId);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<DetailsMenuTransferModel> GetMenuDetailsByIdAsync(int menuId)
+        public async Task<bool> ExistsByIdAsync(int id)
+            => await dbContext.Menus
+                .Where(m => m.IsActive)
+                .AnyAsync(m => m.Id == id);
+
+		public async Task<DetailsMenuTransferModel> GetMenuDetailsByIdAsync(int menuId)
         {
             Menu menu = await dbContext.Menus
                .Where(m => m.IsActive)
@@ -116,7 +122,7 @@
                 MenuType = menuForEdit.MenuType,
                 FoodType = menuForEdit.FoodType,
                 Description = menuForEdit.Description,
-                BrandId = menuForEdit.BrandId,
+                BrandId = menuForEdit.BrandId.ToString(),
             };
         }
 
@@ -152,5 +158,14 @@
                     MenuType = m.MenuType,
                     FoodType=m.FoodType
                 }).ToArrayAsync();
-    }
+
+		public async Task<bool> MenuOwnedByOwnerByMenuIdAndOwnerId(int menuId, string restaurantOwnerId)
+		{
+            Menu menu = await dbContext.Menus
+                .Where(m => m.IsActive)
+                .Include(m=>m.Brand)
+                .FirstAsync(m => m.Id == menuId);
+            return menu.Brand.RestaurantOwnerId.ToString() == restaurantOwnerId;
+		}
+	}
 }

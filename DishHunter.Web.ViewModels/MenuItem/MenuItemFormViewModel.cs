@@ -1,25 +1,35 @@
-﻿namespace DishHunter.Services.Data.Models.MenuItem
+﻿namespace DishHunter.Web.ViewModels.MenuItem
 {
-    using DishHunter.Services.Data.Models.Menu;
     using System.ComponentModel.DataAnnotations;
+    using Menu;
     using static Common.EntityValidationConstants.MenuItem;
     using static Common.ValidationErrorMessages;
-    public class MenuItemPostTransferModel
+    public class MenuItemFormViewModel
     {
+        public MenuItemFormViewModel()
+        {
+            Menus = new HashSet<MenuSelectViewModel>();
+        }
         [Required]
         [StringLength(FoodCategoryMaxLenght, MinimumLength = FoodCategoryMinLenght, ErrorMessage = FieldLenghtMessage)]
+        [Display(Name="Тип")]
         public string FoodCategory { get; set; } = null!;
         [Required]
         [StringLength(NameMaxLenght, MinimumLength = NameMinLenght, ErrorMessage = FieldLenghtMessage)]
-        public string Name { get; set; } = null!;
+		[Display(Name = "Име")]
+		public string Name { get; set; } = null!;
         [Range(typeof(decimal), PriceMinValue, PriceMaxValue, ErrorMessage = PriceValueMessage)]
-        public decimal Price { get; set; }
+		[Display(Name = "Цена")]
+		public decimal Price { get; set; }
         [Required]
         [StringLength(DescriptionMaxLenght, MinimumLength = DescriptionMinLenght, ErrorMessage = FieldLenghtMessage)]
-        public string Description { get; set; } = null!;
+		[Display(Name = "Описание")]
+		public string Description { get; set; } = null!;
         [Required]
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]
-        public string ImageUrl { get; set; } = null!;
+		[Display(Name = "Линк към снимка")]
+		public string ImageUrl { get; set; } = null!;
         public int MenuId { get; set; }
+        public IEnumerable<MenuSelectViewModel> Menus { get; set; }
     }
 }

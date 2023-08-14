@@ -1,8 +1,6 @@
 ﻿namespace DishHunter.Services.Data.Models.Brand
 {
     using System.ComponentModel.DataAnnotations;
-    using Menu;
-    using Restaurant;
     using static Common.EntityValidationConstants.Brand;
     using static Common.ValidationErrorMessages;
     public class BrandPostTransferModel

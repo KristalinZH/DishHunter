@@ -3,6 +3,7 @@
     using System.IO;
     using System.Threading.Tasks;
     using System.Globalization;
+	using System.Text;
     using OfficeOpenXml;
     using Models.Excel;
     using Models.Menu;
@@ -13,6 +14,7 @@
 
     public class ExcelService : IExcelService
     {
+        private const char csvDelimeter = '~';
         public async Task<bool> IsExcelFileStructureValidByEntityAllowedColumnsAsync(Stream stream, int columnsPerEntity)
             => await Task.Run(() =>
                 {
@@ -42,15 +44,19 @@
             };
             List<MenuExcelTransferModel> menus =
                 new List<MenuExcelTransferModel>();
-            using (var package = new ExcelPackage(stream))
+			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+			using (var package = new ExcelPackage(stream))
             {
-                var worksheets = package.Workbook.Worksheets;
+				var format = new ExcelOutputTextFormat();
+				format.Delimiter = ',';
+				format.Encoding = Encoding.UTF8;
+				var worksheets = package.Workbook.Worksheets;
                 foreach (var ws in worksheets)
                 {
                     var tables = ws.Tables;
                     foreach (var t in tables)
                     {
-                        var rows = (await t.ToTextAsync())
+                        var rows = (await t.ToTextAsync(format))
                             .Split(Environment.NewLine)
                             .Skip(1);
                         string[] data = rows.First().Split(',', StringSplitOptions.RemoveEmptyEntries);
@@ -98,15 +104,19 @@
             };
             List<MenuItemExcelTransferModel> menuItems = 
                 new List<MenuItemExcelTransferModel>();
-            using (var package = new ExcelPackage(stream))
+			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+			using (var package = new ExcelPackage(stream))
             {
                 var worksheets = package.Workbook.Worksheets;
-                foreach(var ws in worksheets)
+				var format = new ExcelOutputTextFormat();
+				format.Delimiter = csvDelimeter;
+				format.Encoding = Encoding.UTF8;
+				foreach (var ws in worksheets)
                 {
                     var tables = ws.Tables;
-                    foreach(var t in tables)
-                    {
-                        var rows = (await t.ToTextAsync())
+                    foreach (var t in tables)
+                    {						
+						var rows = (await t.ToTextAsync(format))
                             .Split(Environment.NewLine)
                             .Skip(1);
                         MenuItemExtractResult currentTableResult = await ExtractMenuItemsFromCSVRows(rows.ToArray());
@@ -131,20 +141,24 @@
             };
             List<RestaurantExcelTransferModel> restaurants =
                 new List<RestaurantExcelTransferModel>();
-            using (var package = new ExcelPackage(stream))
+			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+			using (var package = new ExcelPackage(stream))
             {
                 var worksheets = package.Workbook.Worksheets;
-                foreach (var ws in worksheets)
+				var format = new ExcelOutputTextFormat();
+				format.Delimiter = csvDelimeter;
+				format.Encoding = Encoding.UTF8;
+				foreach (var ws in worksheets)
                 {
                     var tables = ws.Tables;
                     foreach (var t in tables)
                     {
-                        var rows = (await t.ToTextAsync())
+                        var rows = (await t.ToTextAsync(format))
                             .Split(Environment.NewLine)
                             .Skip(1);
                         foreach (var row in rows)
                         {
-                            string[] data = row.Split(',');
+                            string[] data = row.Split(csvDelimeter);
                             if (data.Any(el => string.IsNullOrEmpty(el) || string.IsNullOrWhiteSpace(el)))
                             {
                                 result.Message = MissingExcelData;
@@ -183,7 +197,8 @@
         }
 
         public async Task<MenuItemExtractResult> ExtractMenuItemsFromCSVRows(string[] csvRows)
-            => await Task.Run(() => {
+            => await Task.Run(() =>
+            {
                     MenuItemExtractResult result = new MenuItemExtractResult()
                     {
                         IsDataExtracted = false,
@@ -193,7 +208,7 @@
                                     new List<MenuItemExcelTransferModel>();
                     foreach (var row in csvRows)
                     {
-                        string[] data = row.Split(',');
+                        string[] data = row.Split(csvDelimeter);
                         if (data.Any(el => string.IsNullOrEmpty(el) || string.IsNullOrWhiteSpace(el)))
                         {
                             result.Message = MissingExcelData;

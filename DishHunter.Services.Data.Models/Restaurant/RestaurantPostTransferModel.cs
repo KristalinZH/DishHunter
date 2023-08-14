@@ -8,12 +8,6 @@
     using static Common.ValidationErrorMessages;
     public class RestaurantPostTransferModel
     {
-        public RestaurantPostTransferModel()
-        {
-            Brands = new HashSet<BrandListTransferModel>();
-            Settlements = new HashSet<SettlementSelectTransferModel>();
-            Categories = new HashSet<CategorySelectTransferModel>();
-        }
         [Required]
         [StringLength(NameMaxLenght, MinimumLength = NameMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string Name { get; set; } = null!;
@@ -28,10 +22,7 @@
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]
         public string ImageUrl { get; set; } = null!;
         public Guid BrandId { get; set; }
-        public IEnumerable<BrandListTransferModel> Brands { get; set; }
         public int CategoryId { get; set; }
-        public IEnumerable<CategorySelectTransferModel> Categories { get; set; }
         public int SettlementId { get; set; }
-        public IEnumerable<SettlementSelectTransferModel> Settlements { get; set; }
     }
 }

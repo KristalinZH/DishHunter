@@ -1,0 +1,39 @@
+﻿@model IEnumerable<MenuItemsCardViewModel>
+@{
+    ViewData["Title"] = "Артикули";
+}
+<h1 class="text-lg-center">@ViewData["Title"]</h1>
+<hr />
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <p class="display-4 lead">В момента няма налични артикули!</p>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var menuItem in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <h4 class="card-subtitle text-start m-2">@menuItem.FoodCategory</h4>
+                        <h3 class="card-title text-center">@menuItem.Name</h3>
+                        <img class="bd-placeholder-img card-img-top" src="@menuItem.ImageUrl" alt="Лого">
+                        <div class="card-body">
+                            <p class="card-text justify-content-center">
+                                @menuItem.Description
+                            </p>
+                            <a asp-controller="MenuItem" asp-action="Details" asp-route-id="@menuItem.Id" class="btn btn-primary btn-sm m-1">Повече подробности</a>                              
+                        </div>
+                        <h3 class="card-footer">@menuItem.Price лв.</h3>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

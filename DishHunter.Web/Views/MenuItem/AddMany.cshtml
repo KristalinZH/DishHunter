@@ -1,0 +1,23 @@
+﻿@model MenuItemExcelFormViewModel
+<div class="row">
+	<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+		<form method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label asp-for="MenuId"></label>
+				<select asp-for="MenuId" class="form-control">
+					@foreach (var menu in Model.Menus)
+					{
+						<option value="@menu.Id">@menu.MenuType</option>
+					}
+				</select>
+				<span asp-validation-for="MenuId" class="small text-danger"></span>
+			</div>
+			<div class="align-content-sm-start mt-2">
+				<input type="file" name="excelFile" value="Прикачи файл" />
+			</div>
+			<div class="text-center">
+				<input class="btn btn-primary mt-3" type="submit" value="Save" />
+			</div>
+		</form>
+	</div>
+</div>
