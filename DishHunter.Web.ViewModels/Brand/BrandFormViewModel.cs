@@ -11,7 +11,7 @@
         public string BrandName { get; set; } = null!;
         [Required]
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]
-		[Display(Name = "Линк към уебсайт")]
+		[Display(Name = "Линк към лого")]
 		public string LogoUrl { get; set; } = null!;
         [Required]
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]

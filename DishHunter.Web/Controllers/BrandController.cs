@@ -1,5 +1,6 @@
 ﻿namespace DishHunter.Web.Controllers
 {
+    using System.Net;
 	using Microsoft.AspNetCore.Mvc;
     using Services.Data.Interfaces;
     using Services.Data.Models.Brand;
@@ -8,7 +9,6 @@
 	using ViewModels.Restaurant;
 	using Infrastructrure.Extensions;
     using static Common.NotificationMessagesConstants;
-	using DishHunter.Services.Data;
 
 	public class BrandController : BaseController
     {
@@ -69,14 +69,15 @@
                     TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да създадете верига!";
                     return RedirectToAction("Become", "Owner");
                 }
+                string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
                 BrandPostTransferModel serviceModel = new BrandPostTransferModel()
                 {
-                    BrandName = brand.BrandName,
-                    LogoUrl = brand.LogoUrl,
-                    WebsiteUrl = brand.WebsiteUrl,
-                    Description = brand.Description
+                    BrandName = WebUtility.HtmlEncode(brand.BrandName),
+                    LogoUrl = WebUtility.HtmlEncode(brand.LogoUrl),
+                    WebsiteUrl = WebUtility.HtmlEncode(brand.WebsiteUrl),
+                    Description = WebUtility.HtmlEncode(brand.Description)
                 };
-                string brandId = await brandService.CreateBrandAsync(string.Empty, serviceModel);
+                string brandId = await brandService.CreateBrandAsync(ownerId!, serviceModel);
                 return RedirectToAction("Details", "Brand", new { id = brandId });
             }
             catch (Exception)
@@ -181,11 +182,11 @@
 				}
                 BrandPostTransferModel brandTransferModel = new BrandPostTransferModel()
                 {
-					BrandName = model.BrandName,
-					LogoUrl = model.LogoUrl,
-					WebsiteUrl = model.WebsiteUrl,
-					Description = model.Description
-				};
+                    BrandName = WebUtility.HtmlEncode(model.BrandName),
+                    LogoUrl = WebUtility.HtmlEncode(model.LogoUrl),
+                    WebsiteUrl = WebUtility.HtmlEncode(model.WebsiteUrl),
+                    Description = WebUtility.HtmlEncode(model.Description)
+                };
                 await brandService.EditBrandByIdAsync(id, brandTransferModel);
                 return RedirectToAction("Details", "Brand", new { id = id });
 			}

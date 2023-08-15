@@ -11,8 +11,9 @@
 	using DishHunter.Web.ViewModels.Brand;
     using static Common.NotificationMessagesConstants;
     using DishHunter.Web.ViewModels.Restaurant;
+    using System.Net;
 
-	public class MenuItemController : BaseController
+    public class MenuItemController : BaseController
     {
         private readonly IMenuItemService menuItemService;
 		private readonly IMenuService menuService;
@@ -94,11 +95,11 @@
 				}
                 MenuItemPostTransferModel menuItem = new MenuItemPostTransferModel()
                 {
-                    Name = model.Name,
-                    FoodCategory = model.FoodCategory,
-                    Description = model.Description,
+                    Name = WebUtility.HtmlEncode(model.Name),
+                    FoodCategory = WebUtility.HtmlEncode(model.FoodCategory),
+                    Description = WebUtility.HtmlEncode(model.Description),
                     Price = model.Price,
-                    ImageUrl = model.ImageUrl,
+                    ImageUrl = WebUtility.HtmlEncode(model.ImageUrl),
                     MenuId = model.MenuId                  
                 };
                 int menuItemId = await menuItemService.CreateMenuItemAsync(menuItem);
@@ -270,33 +271,33 @@
         {
             try
             {
-				bool isMenuItemExisting = await menuItemService.ExistsByIdAsync(id);
-				if (!isMenuItemExisting)
-				{
-					TempData[ErrorMessage] = "Търсеният от Вас артикул не съществува!";
-					return RedirectToAction("All", "MenuItem");
-				}
-				bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
-				if (!isUserOwner)
-				{
-					TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да редактирате!";
-					return RedirectToAction("Become", "Owner");
-				}
-				string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
-				bool isOwnerOwningMenuItem = await menuItemService
-					.MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(id, ownerId!);
-				if (!isOwnerOwningMenuItem)
-				{
-					TempData[ErrorMessage] = "Трябва да притежавате артикула за да имате право да го редактирате!";
-					return RedirectToAction("Mine", "MenuItem");
-				}
+                bool isMenuItemExisting = await menuItemService.ExistsByIdAsync(id);
+                if (!isMenuItemExisting)
+                {
+                    TempData[ErrorMessage] = "Търсеният от Вас артикул не съществува!";
+                    return RedirectToAction("All", "MenuItem");
+                }
+                bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+                if (!isUserOwner)
+                {
+                    TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да редактирате!";
+                    return RedirectToAction("Become", "Owner");
+                }
+                string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
+                bool isOwnerOwningMenuItem = await menuItemService
+                    .MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(id, ownerId!);
+                if (!isOwnerOwningMenuItem)
+                {
+                    TempData[ErrorMessage] = "Трябва да притежавате артикула за да имате право да го редактирате!";
+                    return RedirectToAction("Mine", "MenuItem");
+                }
                 MenuItemPostTransferModel menuItemToEdit = new MenuItemPostTransferModel()
                 {
-                    Name = model.Name,
+                    Name = WebUtility.HtmlEncode(model.Name),
                     Price = model.Price,
-                    FoodCategory = model.FoodCategory,
-                    Description = model.Description,
-                    ImageUrl = model.ImageUrl,
+                    FoodCategory = WebUtility.HtmlEncode(model.FoodCategory),
+                    Description = WebUtility.HtmlEncode(model.Description),
+                    ImageUrl = WebUtility.HtmlEncode(model.ImageUrl),
                     MenuId = model.MenuId
                 };
                 await menuItemService.EditMenuItemByIdAsync(id, menuItemToEdit);

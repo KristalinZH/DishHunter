@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using System.Globalization;
 	using System.Text;
+    using System.Net;
     using OfficeOpenXml;
     using Models.Excel;
     using Models.Menu;
@@ -48,7 +49,7 @@
 			using (var package = new ExcelPackage(stream))
             {
 				var format = new ExcelOutputTextFormat();
-				format.Delimiter = ',';
+				format.Delimiter = csvDelimeter;
 				format.Encoding = Encoding.UTF8;
 				var worksheets = package.Workbook.Worksheets;
                 foreach (var ws in worksheets)
@@ -59,15 +60,15 @@
                         var rows = (await t.ToTextAsync(format))
                             .Split(Environment.NewLine)
                             .Skip(1);
-                        string[] data = rows.First().Split(',', StringSplitOptions.RemoveEmptyEntries);
+                        string[] data = rows.First().Split(csvDelimeter, StringSplitOptions.RemoveEmptyEntries);
                         MenuExcelTransferModel menu;
                         try
                         {
                             menu = new MenuExcelTransferModel()
                             {
-                                MenuType = data[0],
-                                FoodType = data[1],
-                                Description = data[2]
+                                MenuType = WebUtility.HtmlEncode(data[0]),
+                                FoodType = WebUtility.HtmlEncode(data[1]),
+                                Description = WebUtility.HtmlEncode(data[2])
                             };
                         }
                         catch (Exception)
@@ -170,13 +171,13 @@
                             {
                                 restaurant = new RestaurantExcelTransferModel()
                                 {
-                                    Name = data[0],
-                                    Region = data[1],
-                                    SettlementName = data[2],
-                                    Address = data[3],
-                                    PhoneNumber = data[4],
-                                    CategoryName = data[5],
-                                    ImageUrl = data[6]
+                                    Name = WebUtility.HtmlEncode(data[0]),
+                                    Region = WebUtility.HtmlEncode(data[1]),
+                                    SettlementName = WebUtility.HtmlEncode(data[2]),
+                                    Address = WebUtility.HtmlEncode(data[3]),
+                                    PhoneNumber = WebUtility.HtmlEncode(data[4]),
+                                    CategoryName = WebUtility.HtmlEncode(data[5]),
+                                    ImageUrl = WebUtility.HtmlEncode(data[6])
                                 };
                             }
                             catch (Exception)
@@ -199,46 +200,46 @@
         public async Task<MenuItemExtractResult> ExtractMenuItemsFromCSVRows(string[] csvRows)
             => await Task.Run(() =>
             {
-                    MenuItemExtractResult result = new MenuItemExtractResult()
+                MenuItemExtractResult result = new MenuItemExtractResult()
+                {
+                    IsDataExtracted = false,
+                    Message = string.Empty
+                };
+                List<MenuItemExcelTransferModel> menuItems =
+                                new List<MenuItemExcelTransferModel>();
+                foreach (var row in csvRows)
+                {
+                    string[] data = row.Split(csvDelimeter);
+                    if (data.Any(el => string.IsNullOrEmpty(el) || string.IsNullOrWhiteSpace(el)))
                     {
-                        IsDataExtracted = false,
-                        Message = string.Empty
-                    };
-                    List<MenuItemExcelTransferModel> menuItems =
-                                    new List<MenuItemExcelTransferModel>();
-                    foreach (var row in csvRows)
-                    {
-                        string[] data = row.Split(csvDelimeter);
-                        if (data.Any(el => string.IsNullOrEmpty(el) || string.IsNullOrWhiteSpace(el)))
-                        {
-                            result.Message = MissingExcelData;
-                            result.MenuItems = null;
-                            return result;
-                        }
-                        data[2] = data[2].Replace(",", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-                        data[2] = data[2].Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-                        try
-                        {
-                            menuItems.Add(new MenuItemExcelTransferModel()
-                            {
-                                FoodCategory = data[0],
-                                Name = data[1],
-                                Price = Convert.ToDecimal(data[2]),
-                                Description = data[3],
-                                ImageUrl = data[4]
-                            });
-                        }
-                        catch (Exception)
-                        {
-                            result.Message = WrongExcelData;
-                            result.MenuItems = null;
-                            return result;
-                        }
+                        result.Message = MissingExcelData;
+                        result.MenuItems = null;
+                        return result;
                     }
-                    result.IsDataExtracted = true;
-                    result.Message = SuccessfulyExtractedExcelData;
-                    result.MenuItems = menuItems;
-                    return result;
+                    data[2] = data[2].Replace(",", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                    data[2] = data[2].Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                    try
+                    {
+                        menuItems.Add(new MenuItemExcelTransferModel()
+                        {
+                            FoodCategory = WebUtility.HtmlEncode(data[0]),
+                            Name = WebUtility.HtmlEncode(data[1]),
+                            Price = Convert.ToDecimal(WebUtility.HtmlEncode(data[2])),
+                            Description = WebUtility.HtmlEncode(data[3]),
+                            ImageUrl = WebUtility.HtmlEncode(data[4])
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        result.Message = WrongExcelData;
+                        result.MenuItems = null;
+                        return result;
+                    }
+                }
+                result.IsDataExtracted = true;
+                result.Message = SuccessfulyExtractedExcelData;
+                result.MenuItems = menuItems;
+                return result;
             });
     }
 }
