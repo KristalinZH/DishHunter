@@ -20,7 +20,7 @@ else
             <li class="list-group-item d-flex align-items-center">
                 
                 <img class="bd-placeholder-img m-2 col-md-2" src="@brand.LogoUrl" alt="Лого">
-                <h4 class="m-2 col-md-1">@brand.BrandName</h4>
+                <h4 class="m-2 col-md-1 text-center">@brand.BrandName</h4>
                 <a asp-controller="Brand" asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-sm btn-warning m-2 col-md-2">Редактирай</a>
                 <form method="post" class="m-2 col-md-2" asp-controller="Brand" asp-action="Delete">
                     <input type="hidden" name="id" value="@brand.Id">

@@ -1,6 +1,6 @@
-﻿namespace DishHunter.Services.Data.Models.MenuItem
+﻿namespace DishHunter.Web.ViewModels.MenuItem
 {
-    public class MenuItemListTransferModel
+    public class MenuItemListViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;

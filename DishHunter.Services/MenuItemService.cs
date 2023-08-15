@@ -152,7 +152,19 @@
                     FoodCategory = mi.FoodCategory
                 }).ToArrayAsync();
 
-		public async Task<bool> MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(int menuItemId, string ownerId)
+        public async Task<IEnumerable<MenuItemListTransferModel>> GetOwnersMenuItemsByOwnerIdAsync(string ownerId)
+            => await dbContext.MenuItems
+                .Include(mi => mi.Menu.Brand)
+                .Where(mi => mi.IsActive && mi.Menu.Brand.RestaurantOwnerId.ToString() == ownerId)
+                .Select(mi => new MenuItemListTransferModel()
+                {
+                    Id = mi.Id,
+                    FoodCategory = mi.FoodCategory,
+                    Name = mi.Name,
+                    ImageUrl = mi.ImageUrl
+                })
+                .ToArrayAsync();   
+        public async Task<bool> MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(int menuItemId, string ownerId)
 		{
             MenuItem menuItem = await dbContext.MenuItems
                 .Where(mi => mi.IsActive)

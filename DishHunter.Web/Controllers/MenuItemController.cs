@@ -10,6 +10,7 @@
 	using DishHunter.Services.Data;
 	using DishHunter.Web.ViewModels.Brand;
     using static Common.NotificationMessagesConstants;
+    using DishHunter.Web.ViewModels.Restaurant;
 
 	public class MenuItemController : BaseController
     {
@@ -418,6 +419,34 @@
 				return GeneralError();
 			}
 		}
+        [HttpGet]
+        public async Task<IActionResult> Mine()
+        {
+            try
+            {
+                bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+                if (!isUserOwner)
+                {
+                    TempData[ErrorMessage] = "Трябва да сте ресторантьор за да можете да видите тази страница!";
+                    return RedirectToAction("Become", "Owner");
+                }
+                string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
+                IEnumerable<MenuItemListViewModel> ownerMenuItems = (await menuItemService
+                    .GetOwnersMenuItemsByOwnerIdAsync(ownerId!))
+                    .Select(tm => new MenuItemListViewModel()
+                    {
+                        Id = tm.Id,
+                        Name = tm.Name,
+                        FoodCategory = tm.FoodCategory,
+                        ImageUrl = tm.ImageUrl
+                    });
+                return View(ownerMenuItems);
+            }
+            catch (Exception)
+            {
+                return GeneralError();
+            }
+        }        
 		private async Task<bool> IsExcelFile(IFormFile file)
 		{
 			return await Task.Run(() =>

@@ -1,0 +1,27 @@
+﻿@model MenuItemDetailsViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+<h1 class="display-4 text-center fw-bold fst-italic">@ViewData["Title"]</h1>
+<hr />
+<div class="container">
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <img src="@Model.ImageUrl" alt="Лого" class="card-img-top">
+                <div class="card-body">
+                    <h3 class="text-sm-start">Категория: @Model.FoodCategory</h3>
+                    <h3 class="text-sm-start">Верига: @Model.Brand</h3>
+                    <h3 class="text-sm-start">Меню: @Model.Menu</h3>
+                    <p class=" h4 card-text justify-content-md-between">Описание: @Model.Description</p>
+                </div>
+                <div class="card-footer">
+                    <h4>@Model.Price лв.</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

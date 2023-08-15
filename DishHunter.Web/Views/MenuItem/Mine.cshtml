@@ -1,0 +1,36 @@
+﻿@model IEnumerable<MenuItemListViewModel>
+@{
+    ViewData["Title"] = "Моите артикули";
+}
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+@if (!Model.Any())
+{
+    <h2 class="text-lg-center">Не сте създали артикул все още!</h2>
+    <p class="text-center">
+        Създайте своя първи артикул!
+        <a asp-controller="MenuItem" asp-action="Add" class="btn btn-primary btn-sm m-1">Създай</a>
+    </p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var menuItem in Model)
+        {
+            <li class="list-group-item d-flex align-items-center">
+
+                <img class="bd-placeholder-img m-2 col-md-2" src="@menuItem.ImageUrl" alt="Снимка">
+                <h4 class="m-2 col-md-1 text-center">@menuItem.Name</h4>
+                <h4 class="m-2 col-md-1 text-center">@menuItem.FoodCategory</h4>
+                <a asp-controller="MenuItem" asp-action="Edit" asp-route-id="@menuItem.Id" class="btn btn-sm btn-warning m-2 col-md-2">Редактирай</a>
+                <form method="post" class="m-2 col-md-2" asp-controller="MenuItem" asp-action="Delete">
+                    <input type="hidden" name="id" value="@menuItem.Id">
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                    </div>
+                </form>
+                <a asp-controller="MenuItem" asp-action="Details" asp-route-id="@menuItem.Id" class="btn btn-sm btn-info m-2 col-md-2">Повече подробности</a>
+            </li>
+        }
+    </ul>
+}
