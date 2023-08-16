@@ -107,7 +107,7 @@
                 ImageUrl=restaurant.ImageUrl,
                 CategoryId =restaurant.CategoryId,
                 SettlementId=restaurant.SettlementId,
-                BrandId=restaurant.BrandId,
+                BrandId=Guid.Parse(restaurant.BrandId),
                 Longitude= geocodingResult.Longitude!.Value,
                 Latitude=geocodingResult.Latitude!.Value
             };
@@ -167,13 +167,47 @@
             restaurantForEdit.PhoneNumber = restaurant.PhoneNumber;
             restaurantForEdit.ImageUrl = restaurant.ImageUrl;
             restaurantForEdit.SettlementId = restaurant.SettlementId;
-            restaurantForEdit.BrandId = restaurant.BrandId;
+            restaurantForEdit.BrandId = Guid.Parse(restaurant.BrandId);
             await dbContext.SaveChangesAsync();
             result.IsRestaurantAdded = true;
             result.Message = SuccessfullyEditedRestaurant;
             result.RestaurantId = restaurantId;
             return result;
         }
+
+        public async Task<bool> ExistsByIdAsync(string restaurantId)
+            => await dbContext.Restaurants
+            .Where(r => r.IsActive)
+            .AnyAsync(r => r.Id.ToString() == restaurantId);
+
+        public async Task<IEnumerable<RestaurantCardTransferModel>> GetAllRestaurantsAsCardsAsync()
+            => await dbContext.Restaurants
+            .Where(r => r.IsActive)
+            .Include(r=>r.Brand)
+            .Include(r=>r.Settlement)
+            .OrderBy(r=>r.Name)
+            .Select(r => new RestaurantCardTransferModel()
+            {
+                Id=r.Id.ToString(),
+                Name=r.Name,
+                ImageUrl=r.ImageUrl,
+                Brand=r.Brand.BrandName,
+                Region=r.Settlement.Region,
+                Settlement=r.Settlement.SettlementName
+            }).ToArrayAsync();
+
+        public async Task<IEnumerable<RestaurantListTranferModel>> GetOwnerRestaurantsByOnwerIdAsync(string ownerId)
+            => await dbContext.Restaurants
+                .Include(r => r.Brand)
+                .Include(r => r.Settlement)
+                .Where(r => r.IsActive && r.Brand.RestaurantOwnerId.ToString() == ownerId)
+                .Select(r => new RestaurantListTranferModel()
+                {
+                    Id = r.Id.ToString(),
+                    Name = r.Name,
+                    SettlementName = r.Settlement.SettlementName
+                }).ToArrayAsync();  
+
         public async Task<DetailsRestaurantTransferModel> GetRestaurantDetailsByIdAsync(string restaurantId)
         {
             Restaurant restaurant = await dbContext.Restaurants
@@ -207,7 +241,7 @@
                 Address = restaurant.Address,
                 PhoneNumber = restaurant.PhoneNumber,
                 ImageUrl = restaurant.ImageUrl,
-                BrandId = restaurant.BrandId,
+                BrandId = restaurant.BrandId.ToString(),
                 CategoryId = restaurant.CategoryId,
                 SettlementId = restaurant.SettlementId
             };
@@ -215,13 +249,23 @@
         public async Task<IEnumerable<RestaurantListTranferModel>> GetRestaurantsByBrandIdAsync(string brandId)
             => await dbContext.Restaurants
                 .Where(r => r.IsActive && r.BrandId.ToString() == brandId)
-                .Include(r=>r.Settlement)
-                .Select(r=>new RestaurantListTranferModel()
+                .Include(r => r.Settlement)
+                .OrderBy(r => r.Name)
+                .Select(r => new RestaurantListTranferModel()
                 {
-                    Id=r.Id.ToString(),
-                    Name=r.Name,
-                    SettlementName=r.Settlement.SettlementName
+                    Id = r.Id.ToString(),
+                    Name = r.Name,
+                    SettlementName = r.Settlement.SettlementName
                 })
                 .ToListAsync();
+
+        public async Task<bool> RestaurantOwnedByOwnerByRestaurantIdAndOwnerId(string restaurantId, string ownerId)
+        {
+            Restaurant restaurant = await dbContext.Restaurants
+                .Where(r => r.IsActive)
+                .Include(r => r.Brand)
+                .FirstAsync(r => r.Id.ToString() == restaurantId);
+            return restaurant.Brand.RestaurantOwnerId.ToString() == ownerId;
+        }
     }
 }

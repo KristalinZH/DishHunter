@@ -12,9 +12,9 @@
         Task<IEnumerable<MenuListTrasnferModel>> GetMenusByBrandIdAsync(string brandId);
         Task<DetailsMenuTransferModel> GetMenuDetailsByIdAsync(int menuId);
         Task<IEnumerable<MenuSelectTransferModel>> GetMenusForSelectByOwnerIdAsync(string restaurantOwnerId);
-        Task<IEnumerable<MenuListTrasnferModel>> GetOwnerMenusByOwnerIdAsync(string restaurantOwnerId);
+        Task<IEnumerable<MenuDetailedListTransferModel>> GetOwnerMenusByOwnerIdAsync(string restaurantOwnerId);
         Task<bool> ExistsByIdAsync(int id);
-        Task<bool> MenuOwnedByOwnerByMenuIdAndOwnerId(int menuId, string restaurantOwnerId);
+        Task<bool> MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(int menuId, string restaurantOwnerId);
 
 	}
 }

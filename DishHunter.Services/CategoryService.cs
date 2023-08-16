@@ -62,6 +62,11 @@
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<bool> ExistsByIdAsync(int categoryId)
+            => await dbContext.Categories
+            .Where(c => c.IsActive)
+            .AnyAsync(c => c.Id == categoryId);
+
         public async Task<CategoryPostTransferModel> GetCategoryForEditByIdAsync(int categoryId)
         {
             Category category = await dbContext.Categories

@@ -11,10 +11,10 @@
         Task<IEnumerable<MenuItemListTransferModel>> GetMenuItemsByMenuIdAsync(int menuId);
         Task<DetailsMenuItemTransferModel> GetMenuItemDetailsByIdAsync(int menuItemId);
         Task<bool> ExistsByIdAsync(int menuItemId);
-        Task DeleteMenuItemById(int menuItemId);
+        Task DeleteMenuItemByIdAsync(int menuItemId);
         Task DeleteMenuItemsByMenusIdRangeAsync(List<int> menus);
         Task DeleteMenuItemsByMenuIdAsync(int menuId);
-        Task<bool> MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(int menuItemId, string ownerId);
+        Task<bool> MenuItemOwnedByOwnerByMenuItemIdAndOwnerIdAsync(int menuItemId, string ownerId);
         Task<IEnumerable<MenuItemsCardTransferModel>> GetAllMenuItemsAsCardsAsync();
         Task<IEnumerable<MenuItemListTransferModel>> GetOwnersMenuItemsByOwnerIdAsync(string ownerId);
     }

@@ -2,9 +2,9 @@
 {
     using Models.Menu;
 
-    public class MenuExctractResult
+    public class MenuExtractResult
     {
-        public MenuExctractResult()
+        public MenuExtractResult()
         {
             Menus = new HashSet<MenuExcelTransferModel>();
         }

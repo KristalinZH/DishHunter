@@ -36,9 +36,9 @@
                         return true;
                     }
                 });
-        public async Task<MenuExctractResult> ExtractMenuDataFromExcel(Stream stream)
+        public async Task<MenuExtractResult> ExtractMenuDataFromExcel(Stream stream)
         {
-            MenuExctractResult result = new MenuExctractResult()
+            MenuExtractResult result = new MenuExtractResult()
             {
                 IsDataExtracted = false,
                 Message = string.Empty

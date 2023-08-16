@@ -152,5 +152,10 @@
 				.FirstAsync(b => b.Id.ToString() == brandId);
             return brand.RestaurantOwnerId.ToString() == restaurantOwnerId;
 		}
-	}
+
+        public async Task<bool> AnyBrandOwnedByOwnerByOwnerIdAsync(string restaurantOwnerId)
+            => await dbContext.Brands
+            .Where(b => b.IsActive)
+            .AnyAsync(b => b.RestaurantOwnerId.ToString() == restaurantOwnerId);
+    }
 }

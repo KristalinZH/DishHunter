@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
     using static Common.RolesConstants;
     [Authorize(Roles =AdminRoleName)]
-    public class CategoryController : BaseController
+    public class CategoryController : Controller
     {
         public IActionResult Index()
         {

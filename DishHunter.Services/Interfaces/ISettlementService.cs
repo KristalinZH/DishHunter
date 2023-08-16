@@ -11,5 +11,6 @@
         Task<SettlementPostTransferModel> GetSettlementForEditByIdAsync(int settlementId);
         Task EditSettlementByIdAsync(int settlementId, SettlementPostTransferModel settlement);
         Task DeleteSettlementByIdAsync(int settlementId);
+        Task<bool> ExistsByIdAsync(int settlementId);
     }
 }

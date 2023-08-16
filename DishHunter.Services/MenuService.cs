@@ -147,19 +147,22 @@
                     MenuType = m.MenuType
                 }).ToArrayAsync();
 
-        public async Task<IEnumerable<MenuListTrasnferModel>> GetOwnerMenusByOwnerIdAsync(string restaurantOwnerId)
+        public async Task<IEnumerable<MenuDetailedListTransferModel>> GetOwnerMenusByOwnerIdAsync(string restaurantOwnerId)
         => await dbContext.Menus
                 .Where(m => m.IsActive)
                 .Include(m => m.Brand)
+                .Include(m=>m.MenuItems)
                 .Where(m => m.Brand.RestaurantOwnerId.ToString() == restaurantOwnerId)
-                .Select(m => new MenuListTrasnferModel()
+                .Select(m => new MenuDetailedListTransferModel()
                 {
                     Id = m.Id,
                     MenuType = m.MenuType,
-                    FoodType=m.FoodType
+                    FoodType=m.FoodType,
+                    Brand=m.Brand.BrandName,
+                    CountItems=m.MenuItems.Count()
                 }).ToArrayAsync();
 
-		public async Task<bool> MenuOwnedByOwnerByMenuIdAndOwnerId(int menuId, string restaurantOwnerId)
+		public async Task<bool> MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(int menuId, string restaurantOwnerId)
 		{
             Menu menu = await dbContext.Menus
                 .Where(m => m.IsActive)

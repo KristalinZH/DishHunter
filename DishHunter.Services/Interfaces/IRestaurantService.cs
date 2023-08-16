@@ -12,5 +12,10 @@
         Task<StatusRestaurantTransferModel> EditRestaurantByIdAsync(string restaurantId, RestaurantPostTransferModel restaurant);
         Task DeleteRestaurantByIdAsync(string restaurantId);
         Task<DetailsRestaurantTransferModel> GetRestaurantDetailsByIdAsync(string restaurantId);
+        Task<bool> ExistsByIdAsync(string restaurantId);
+        Task<bool> RestaurantOwnedByOwnerByRestaurantIdAndOwnerId(string restaurantId, string ownerId);
+        Task<IEnumerable<RestaurantCardTransferModel>> GetAllRestaurantsAsCardsAsync();
+        Task<IEnumerable<RestaurantListTranferModel>> GetOwnerRestaurantsByOnwerIdAsync(string ownerId);
+
     }
 }

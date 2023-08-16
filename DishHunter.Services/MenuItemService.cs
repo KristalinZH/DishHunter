@@ -50,7 +50,7 @@
             return menuItemToAdd.Id;
         }
 
-        public async Task DeleteMenuItemById(int menuItemId)
+        public async Task DeleteMenuItemByIdAsync(int menuItemId)
         {
             MenuItem menuItemForDelete = await dbContext.MenuItems.FirstAsync(mi => mi.Id == menuItemId);
             menuItemForDelete.IsActive = false;
@@ -164,7 +164,7 @@
                     ImageUrl = mi.ImageUrl
                 })
                 .ToArrayAsync();   
-        public async Task<bool> MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(int menuItemId, string ownerId)
+        public async Task<bool> MenuItemOwnedByOwnerByMenuItemIdAndOwnerIdAsync(int menuItemId, string ownerId)
 		{
             MenuItem menuItem = await dbContext.MenuItems
                 .Where(mi => mi.IsActive)

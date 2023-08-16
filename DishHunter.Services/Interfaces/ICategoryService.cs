@@ -9,5 +9,6 @@
         Task<CategoryPostTransferModel> GetCategoryForEditByIdAsync(int categoryId);
         Task EditCategoryByIdAsync(int categoryId, CategoryPostTransferModel category);
         Task DeleteCategoryByIdAsync(int categoryId);
+        Task<bool> ExistsByIdAsync(int categoryId);
     }
 }

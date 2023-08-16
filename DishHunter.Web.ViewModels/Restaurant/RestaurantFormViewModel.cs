@@ -1,10 +1,19 @@
-﻿namespace DishHunter.Services.Data.Models.Restaurant
+﻿namespace DishHunter.Web.ViewModels.Restaurant
 {
     using System.ComponentModel.DataAnnotations;
+    using Brand;
+    using Category;
+    using Settlement;
     using static Common.EntityValidationConstants.Restaurant;
     using static Common.ValidationErrorMessages;
-    public class RestaurantPostTransferModel
+    public class RestaurantFormViewModel
     {
+        public RestaurantFormViewModel()
+        {
+            Brands = new HashSet<BrandSelectViewModel>();
+            Categories = new HashSet<CategorySelectViewModel>();
+            Settlements = new HashSet<SettlementSelectViewModel>();
+        }
         [Required]
         [StringLength(NameMaxLenght, MinimumLength = NameMinLenght, ErrorMessage = FieldLenghtMessage)]
         public string Name { get; set; } = null!;
@@ -19,7 +28,10 @@
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]
         public string ImageUrl { get; set; } = null!;
         public string BrandId { get; set; } = null!;
+        public IEnumerable<BrandSelectViewModel> Brands { get; set; }
         public int CategoryId { get; set; }
+        public IEnumerable<CategorySelectViewModel> Categories { get; set; }
         public int SettlementId { get; set; }
+        public IEnumerable<SettlementSelectViewModel> Settlements { get; set; }
     }
 }

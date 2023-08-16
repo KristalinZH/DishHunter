@@ -92,5 +92,10 @@
             settlementToDelete.IsActive = false;
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsByIdAsync(int settlementId)
+            => await dbContext.Settlements
+            .Where(s => s.IsActive)
+            .AnyAsync(s => s.Id == settlementId);
     }
 }

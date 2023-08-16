@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
     using static Common.RolesConstants;
     [Authorize(Roles = AdminRoleName)]
-    public class SettlementController : BaseController
+    public class SettlementController : Controller
     {
         public IActionResult Index()
         {

@@ -1,19 +1,16 @@
 ﻿namespace DishHunter.Web.Controllers
 {
+    using System.Net;
 	using Microsoft.AspNetCore.Mvc;
 	using Services.Data.Interfaces;
+	using Services.Data.Models.MenuItem;
+	using Services.Data.Models.Excel;
 	using Infrastructrure.Extensions;
 	using ViewModels.MenuItem;
 	using ViewModels.Menu;
-	using DishHunter.Services.Data.Models.MenuItem;
-	using DishHunter.Services.Data.Models.Excel;
-	using DishHunter.Services.Data;
-	using DishHunter.Web.ViewModels.Brand;
     using static Common.NotificationMessagesConstants;
-    using DishHunter.Web.ViewModels.Restaurant;
-    using System.Net;
 
-    public class MenuItemController : BaseController
+    public class MenuItemController : ExcelController
     {
         private readonly IMenuItemService menuItemService;
 		private readonly IMenuService menuService;
@@ -78,7 +75,7 @@
                     ModelState.AddModelError(nameof(model.MenuId),"Избраното от Вас меню не съществува!");
                 }
                 bool isOwnerOwningThisMenu = await menuService
-                    .MenuOwnedByOwnerByMenuIdAndOwnerId(model.MenuId, ownerId!);
+                    .MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(model.MenuId, ownerId!);
                 if (!isOwnerOwningThisMenu)
                 {
 					ModelState.AddModelError(nameof(model.MenuId), "Не притежавате това меню и не може да добавите артикул в него!");
@@ -152,7 +149,7 @@
 				bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
 				if (!isUserOwner)
 				{
-					TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да добавите артикул!";
+					TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да добавите артикули!";
 					return RedirectToAction("Become", "Owner");
 				}
 				string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
@@ -162,7 +159,7 @@
 					ModelState.AddModelError(nameof(model.MenuId), "Избраното от Вас меню не съществува!");
 				}
 				bool isOwnerOwningThisMenu = await menuService
-					.MenuOwnedByOwnerByMenuIdAndOwnerId(model.MenuId, ownerId!);
+					.MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(model.MenuId, ownerId!);
 				if (!isOwnerOwningThisMenu)
 				{
 					ModelState.AddModelError(nameof(model.MenuId), "Не притежавате това меню и не може да добавите артикул в него!");
@@ -231,18 +228,13 @@
 				}
 				string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
 				bool isOwnerOwningMenuItem = await menuItemService
-                    .MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(id, ownerId!);
+                    .MenuItemOwnedByOwnerByMenuItemIdAndOwnerIdAsync(id, ownerId!);
 				if (!isOwnerOwningMenuItem)
 				{
 					TempData[ErrorMessage] = "Трябва да притежавате артикула за да имате право да го редактирате!";
 					return RedirectToAction("Mine", "MenuItem");
 				}
 				var ownerMenus = await menuService.GetMenusForSelectByOwnerIdAsync(ownerId!);
-				if (!ownerMenus.Any())
-				{
-					TempData[ErrorMessage] = "Трябва да сте създали меню, за да можете да добавите артикул!";
-					return RedirectToAction("AddSingle", "Menu");
-				}
 				MenuItemPostTransferModel menuItemTransferModel = await menuItemService
                     .GetMenuItemForEditByIdAsync(id);
                 MenuItemFormViewModel menuItemToEdit = new MenuItemFormViewModel()
@@ -285,7 +277,7 @@
                 }
                 string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
                 bool isOwnerOwningMenuItem = await menuItemService
-                    .MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(id, ownerId!);
+                    .MenuItemOwnedByOwnerByMenuItemIdAndOwnerIdAsync(id, ownerId!);
                 if (!isOwnerOwningMenuItem)
                 {
                     TempData[ErrorMessage] = "Трябва да притежавате артикула за да имате право да го редактирате!";
@@ -351,13 +343,13 @@
 					return RedirectToAction("Become", "Owner");
 				}
 				string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
-				bool isOwnerOwningMenuItem = await menuItemService.MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(id, ownerId!);
+				bool isOwnerOwningMenuItem = await menuItemService.MenuItemOwnedByOwnerByMenuItemIdAndOwnerIdAsync(id, ownerId!);
 				if (!isOwnerOwningMenuItem)
 				{
 					TempData[ErrorMessage] = "Трябва да притежавате веригата за да имате право да я изтриете!";
 					return RedirectToAction("Mine", "MenuItem");
 				}
-				await menuItemService.DeleteMenuItemById(id);
+				await menuItemService.DeleteMenuItemByIdAsync(id);
 				return RedirectToAction("Mine", "MenuItem");
 			}
             catch (Exception)
@@ -384,7 +376,7 @@
 				}
 				string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
 				bool isOwnerOwningMenu = await menuItemService
-                    .MenuItemOwnedByOwnerByMenuItemIdAndOwnerId(menuId, ownerId!);
+                    .MenuItemOwnedByOwnerByMenuItemIdAndOwnerIdAsync(menuId, ownerId!);
 				if (!isOwnerOwningMenu)
 				{
                     TempData[ErrorMessage] = "Трябва да притежавате менюто за да имате право да изтриете в артикулите в него!";
@@ -448,15 +440,5 @@
                 return GeneralError();
             }
         }        
-		private async Task<bool> IsExcelFile(IFormFile file)
-		{
-			return await Task.Run(() =>
-			{
-				return file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-				|| file.ContentType == "application/vnd.ms-excel"
-				|| Path.GetExtension(file.FileName).Equals(".xls", StringComparison.OrdinalIgnoreCase)
-				|| Path.GetExtension(file.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase);
-			});
-		}
 	}
 }
