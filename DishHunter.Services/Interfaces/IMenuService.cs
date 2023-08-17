@@ -15,6 +15,8 @@
         Task<IEnumerable<MenuDetailedListTransferModel>> GetOwnerMenusByOwnerIdAsync(string restaurantOwnerId);
         Task<bool> ExistsByIdAsync(int id);
         Task<bool> MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(int menuId, string restaurantOwnerId);
+        Task<bool> AnyMenuOwnedByOwnerByOwnerIdAsync(string restaurantOwnerId);
 
-	}
+
+    }
 }

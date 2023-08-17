@@ -43,6 +43,11 @@
             return SuccessfullyAddedMenus;
         }
 
+        public async Task<bool> AnyMenuOwnedByOwnerByOwnerIdAsync(string restaurantOwnerId)
+            => await dbContext.Menus
+                .Include(m => m.Brand)
+                .AnyAsync(m => m.IsActive && m.Brand.RestaurantOwnerId.ToString() == restaurantOwnerId);
+
         public async Task<int> CreateMenuAsync(MenuPostTransferModel menu)
         {
             Menu menuToAdd = new Menu()

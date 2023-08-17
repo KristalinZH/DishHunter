@@ -7,15 +7,11 @@
 	using Services.Data.Models.Excel;
 	using Services.Data.Models.Menu;
 	using Infrastructrure.Extensions;
+    using Infrastructrure.Helpers;
 	using ViewModels.Menu;
 	using ViewModels.Brand;
     using ViewModels.MenuItem;
 	using static Common.NotificationMessagesConstants;
-    using DishHunter.Services.Data;
-    using DishHunter.Web.ViewModels.Category;
-    using DishHunter.Web.ViewModels.Restaurant;
-    using DishHunter.Web.ViewModels.Settlement;
-    using DishHunter.Services.Data.Models.Restaurant;
 
     public class MenuController : ExcelController
     {
@@ -161,9 +157,9 @@
                 return GeneralError();
             }
 		}
-		[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> AddMany(MenuExcelFormViewModel model, IFormFile excelFile)
-		{
+        {
             try
             {
                 bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
@@ -176,50 +172,69 @@
                 bool isBrandExisting = await brandService.ExistsByIdAsync(model.BrandId);
                 if (!isBrandExisting)
                 {
-                    ModelState.AddModelError(nameof(model.BrandId), "Избраната от Вас верига не съществува!");
+                    TempData[ErrorMessage] = "Избраната от Вас верига не съществува!";
+                    var ownerBrands = await brandService.GetBrandsForSelectByOwnerId(ownerId!);
+                    model.Brands = ownerBrands.Select(b => new BrandSelectViewModel()
+                    {
+                        Id = b.Id,
+                        BrandName = b.BrandName
+                    });
+                    return View(model);
                 }
                 bool isOwnerOwningThisBrand = await brandService
                     .BrandOwnedByOwnerIdAndBrandIdAsync(model.BrandId, ownerId!);
                 if (!isOwnerOwningThisBrand)
                 {
-                    ModelState.AddModelError(nameof(model.BrandId), "Не притежавате тази верига и не може да добавите менюта към нея!");
+                    TempData[ErrorMessage] = "Не притежавате тази верига и не може да добавите менюта към нея!";
+                    var ownerBrands = await brandService.GetBrandsForSelectByOwnerId(ownerId!);
+                    model.Brands = ownerBrands.Select(b => new BrandSelectViewModel()
+                    {
+                        Id = b.Id,
+                        BrandName = b.BrandName
+                    });
+                    return View(model);
                 }
-                bool isFileValid = true;
                 if (excelFile == null)
                 {
                     TempData[ErrorMessage] = "Не сте прикачили файл!";
-                    isFileValid = false;
-                }
-                if (isFileValid && !(await IsExcelFile(excelFile!)))
-                {
-                    TempData[ErrorMessage] = "Невалиден файлов формат!";
-                    isFileValid = false;
-                }
-                List<MenuExcelTransferModel> excelData = new List<MenuExcelTransferModel>();
-                if (isFileValid)
-                {
-                    using (var stream = excelFile!.OpenReadStream())
-                    {
-                        MenuExtractResult extractionResult =
-                            await excelService.ExtractMenuDataFromExcel(stream);
-                        if (!extractionResult.IsDataExtracted)
-                        {
-                            TempData[WarningMessage] = extractionResult.Message;
-                            isFileValid = false;
-                        }
-                        excelData = extractionResult.Menus!.ToList();
-                    }
-                }
-                if (!isFileValid || !ModelState.IsValid)
-                {
                     var ownerBrands = await brandService.GetBrandsForSelectByOwnerId(ownerId!);
-					model.Brands = ownerBrands.Select(b => new BrandSelectViewModel()
-					{
-						Id = b.Id,
-						BrandName = b.BrandName
-					});
+                    model.Brands = ownerBrands.Select(b => new BrandSelectViewModel()
+                    {
+                        Id = b.Id,
+                        BrandName = b.BrandName
+                    });
                     return View(model);
                 }
+                if (!(await IsExcelFile(excelFile!)))
+                {
+                    TempData[ErrorMessage] = "Невалиден файлов формат!";
+                    var ownerBrands = await brandService.GetBrandsForSelectByOwnerId(ownerId!);
+                    model.Brands = ownerBrands.Select(b => new BrandSelectViewModel()
+                    {
+                        Id = b.Id,
+                        BrandName = b.BrandName
+                    });
+                    return View(model);
+                }
+                List<MenuExcelTransferModel> excelData = new List<MenuExcelTransferModel>();
+                using (var stream = excelFile!.OpenReadStream())
+                {
+                    MenuExtractResult extractionResult =
+                        await excelService.ExtractMenuDataFromExcel(stream);
+                    if (!extractionResult.IsDataExtracted)
+                    {
+                        TempData[WarningMessage] = extractionResult.Message;
+                        var ownerBrands = await brandService.GetBrandsForSelectByOwnerId(ownerId!);
+                        model.Brands = ownerBrands.Select(b => new BrandSelectViewModel()
+                        {
+                            Id = b.Id,
+                            BrandName = b.BrandName
+                        });
+                        return View(model);
+                    }
+                    excelData = extractionResult.Menus!.ToList();
+                }
+
                 string message = await menuService.AddMenusByBrandIdAsync(excelData, model.BrandId);
                 TempData[SuccessMessage] = message;
                 return RedirectToAction("Details", "Brand", new { id = model.BrandId });
@@ -228,48 +243,23 @@
             {
                 return GeneralError();
             }
-		}
+        }
 		[HttpGet]
         public async Task<IActionResult>Edit(int id)
 		{
             try
             {
-                bool isMenuExisting = await menuService.ExistsByIdAsync(id);
-                if (!isMenuExisting)
+                ActionHelper helper = await DeleteEditHelper(id.ToString());
+                if (!helper.IsAllowed)
                 {
-                    TempData[ErrorMessage] = "Търсеното от Вас меню не съществува!";
-                    return RedirectToAction("All", "Menu");
-                }
-                bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
-                if (!isUserOwner)
-                {
-                    TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да редактирате!";
-                    return RedirectToAction("Become", "Owner");
+                    TempData[ErrorMessage] = helper.Message;
+                    return RedirectToAction(helper.ActionName, helper.ControllerName);
                 }
                 string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
-                bool isOwnerOwningMenu = await menuService
-                    .MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(id, ownerId!);
-                if (!isOwnerOwningMenu)
-                {
-                    TempData[ErrorMessage] = "Трябва да притежавате менюто за да имате право да го редактирате!";
-                    return RedirectToAction("Mine", "Menu");
-                }
-                var ownerBrands = await brandService.GetBrandsForSelectByOwnerId(ownerId!);
 				MenuPostTransferModel menuTransferModel = await menuService
 					.GetMenuForEditByIdAsync(id);
-				MenuFormViewModel model = new MenuFormViewModel()
-				{
-					MenuType = menuTransferModel.MenuType,
-					FoodType = menuTransferModel.FoodType,
-					Description = menuTransferModel.Description,
-					BrandId = menuTransferModel.BrandId,
-					Brands = ownerBrands.Select(tm => new BrandSelectViewModel()
-					{
-						Id = tm.Id,
-						BrandName = tm.BrandName
-					})
-				};
-				return View(model);
+                MenuFormViewModel viewModel = await GetViewModel(ownerId!, menuTransferModel);
+				return View(viewModel);
             }
             catch (Exception)
             {
@@ -281,33 +271,29 @@
 		{
             try
             {
-                bool isMenuExisting = await menuService.ExistsByIdAsync(id);
-                if (!isMenuExisting)
+                ActionHelper helper = await DeleteEditHelper(id.ToString());
+                if (!helper.IsAllowed)
                 {
-                    TempData[ErrorMessage] = "Търсеното от Вас меню не съществува!";
-                    return RedirectToAction("All", "Menu");
-                }
-                bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
-                if (!isUserOwner)
-                {
-                    TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да редактирате!";
-                    return RedirectToAction("Become", "Owner");
+                    TempData[ErrorMessage] = helper.Message;
+                    return RedirectToAction(helper.ActionName, helper.ControllerName);
                 }
                 string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
-                bool isOwnerOwningMenu = await menuService
-                    .MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(id, ownerId!);
-                if (!isOwnerOwningMenu)
+                bool isBrandExisting = await brandService.ExistsByIdAsync(model.BrandId);
+                if (!isBrandExisting)
                 {
-                    TempData[ErrorMessage] = "Трябва да притежавате менюто за да имате право да го редактирате!";
-                    return RedirectToAction("Mine", "Menu");
+                    TempData[ErrorMessage] = "Избраната от Вас верига не съществува!";
+                    MenuFormViewModel newModel = await GetViewModel(ownerId!, model);
+                    return View(newModel);
                 }
-				MenuPostTransferModel menuToEdit = new MenuPostTransferModel()
-				{
-					MenuType= WebUtility.HtmlEncode(model.MenuType),
-					FoodType= WebUtility.HtmlEncode(model.FoodType),
-					Description= WebUtility.HtmlEncode(model.Description),
-					BrandId=model.BrandId
-				};
+                bool isOwnerOwningThisBrand = await brandService
+                    .BrandOwnedByOwnerIdAndBrandIdAsync(model.BrandId, ownerId!);
+                if (!isOwnerOwningThisBrand)
+                {
+                    TempData[ErrorMessage] = "Не притежавате тази верига и не може да добавите меню към нея!";
+                    MenuFormViewModel newModel = await GetViewModel(ownerId!, model);
+                    return View(newModel);
+                }
+                MenuPostTransferModel menuToEdit = await GetTransferModel(model);
 				await menuService.EditMenuByIdAsync(id, menuToEdit);
 				return RedirectToAction("Details", "Menu", new { id = id });
             }
@@ -321,26 +307,13 @@
 		{
             try
             {
-                bool isMenuExisting = await menuService.ExistsByIdAsync(id);
-                if (!isMenuExisting)
+                ActionHelper helper = await DeleteEditHelper(id.ToString());
+                if (!helper.IsAllowed)
                 {
-                    TempData[ErrorMessage] = "Търсеното от Вас меню не съществува!";
-                    return RedirectToAction("All", "Menu");
+                    TempData[ErrorMessage] = helper.Message;
+                    return RedirectToAction(helper.ActionName, helper.ControllerName);
                 }
-                bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
-                if (!isUserOwner)
-                {
-                    TempData[ErrorMessage] = "Трябва да сте ресторантьор за да имате право да изтриете меню!";
-                    return RedirectToAction("Become", "Owner");
-                }
-                string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
-                bool isOwnerOwningMenu = await menuService.MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(id, ownerId!);
-                if (!isOwnerOwningMenu)
-                {
-                    TempData[ErrorMessage] = "Трябва да притежавате менюто за да имате право да го изтриете!";
-                    return RedirectToAction("Mine", "Menu");
-                }
-				await menuService.DeleteMenuByIdAsync(id);
+                await menuService.DeleteMenuByIdAsync(id);
                 return RedirectToAction("Mine", "Menu");
             }
             catch (Exception)
@@ -465,6 +438,23 @@
                  });
             return menu;
         }
+        private async Task<MenuFormViewModel> GetViewModel(string ownerId, MenuPostTransferModel model)
+        {
+            MenuFormViewModel menu = new MenuFormViewModel()
+            {
+                MenuType = model.MenuType,
+                FoodType = model.FoodType,
+                Description = model.Description,
+                BrandId = model.BrandId
+            };
+            menu.Brands = (await brandService.GetOwnersBrandsByOwnerIdAsync(ownerId))
+                 .Select(b => new BrandSelectViewModel()
+                 {
+                     Id = b.Id,
+                     BrandName = b.BrandName
+                 });          
+            return menu;
+        }
         private async Task<MenuPostTransferModel> GetTransferModel(MenuFormViewModel model)
         {
             return await Task.Run(() =>
@@ -478,6 +468,47 @@
 				};
                 return menu;
             });
+        }
+        protected override async Task<ActionHelper> DeleteEditHelper(string id)
+        {
+            int idToInd = int.Parse(id);
+            ActionHelper helper = new ActionHelper()
+            {
+                IsAllowed = true,
+                Message = null,
+                ActionName = null,
+                ControllerName = null
+            };
+            bool isMenuExisting = await menuService.ExistsByIdAsync(idToInd);
+            if (!isMenuExisting)
+            {
+                helper.IsAllowed = false;
+                helper.Message = "Търсеното от Вас меню не съществува!";
+                helper.ActionName = "All";
+                helper.ControllerName = "Menu";
+                return helper;
+            }
+            bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+            if (!isUserOwner)
+            {
+                helper.IsAllowed = false;
+                helper.Message = "Трябва да сте ресторантьор за да имате право да извършите това действие!";
+                helper.ActionName = "Become";
+                helper.ControllerName = "Owner";
+                return helper;
+            }
+            string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
+            bool isOwnerOwningMenu = await menuService
+                .MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(idToInd, ownerId!);
+            if (!isOwnerOwningMenu)
+            {
+                helper.IsAllowed = false;
+                helper.Message = "Трябва да притежавате менюто за да имате право да извършите това действие върху него!";
+                helper.ActionName = "Mine";
+                helper.ControllerName = "Menu";
+                return helper;
+            }
+            return helper;
         }
     }
 }
