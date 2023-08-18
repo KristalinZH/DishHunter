@@ -1,0 +1,10 @@
+﻿@model RestaurantFormViewModel
+@{
+	ViewData["Title"] = "Редактирай ресторант";
+}
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+<partial name="_RestaurantFormPartial" model="@Model" />
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
+}

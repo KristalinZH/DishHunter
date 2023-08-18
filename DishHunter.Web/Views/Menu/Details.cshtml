@@ -1,0 +1,68 @@
+﻿@model MenuDetailsViewModel
+@{
+    ViewData["Title"] = Model.MenuType;
+}
+<h1 class="display-4 text-center fw-bold fst-italic">@ViewData["Title"]</h1>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body ">
+                    <h4 class="card-subtitle text-start m-2">@Model.FoodType</h4>
+                    <h3 class="card-title text-center">@Model.MenuType</h3>
+                    <div class="card-text m-2 ">
+                        <h4 class="text-center">Верига: @Model.Brand</h4>
+                        <p class="text-start">Описание: @Model.Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Артикули</h5>
+                    @if (!Model.MenuItems.Any())
+                    {
+                        <h5 class="card-text text-lg-center text-danger">Няма налични артикули</h5>
+                    }
+                    else
+                    {
+                        <ul class="list-group">
+                            @foreach (var menuItem in Model.MenuItems)
+                            {
+                                <li class="list-group-item d-flex align-content-between">
+                                    <img class="bd-placeholder-img m-2 col-md-2" src="@menuItem.ImageUrl" alt="Снимка">
+                                    <h4 class="m-2 col-md-2 text-center">@menuItem.Name</h4>
+                                    <h4 class="m-2 col-md-2 text-center">@menuItem.FoodCategory</h4>
+                                    <a asp-controller="MenuItem" asp-action="Edit" asp-route-id="@menuItem.Id" class="btn btn-warning m-1 text-center">Редактирай</a>
+                                    <form method="post" class="m-2 " asp-controller="MenuItem" asp-action="DeleteSingle">
+                                        <input type="hidden" name="id" value="@menuItem.Id">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                                        </div>
+                                    </form>
+                                    <a asp-controller="MenuItem" asp-action="Details" asp-route-id="@menuItem.Id" class="btn btn-info m-1 text-center">Повече подробности</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+                @if (!Model.MenuItems.Any())
+                {
+                    <div class="card-footer">
+                        <form method="post" class="m-2 col-md-2" asp-controller="Brand" asp-action="Delete">
+                            <input type="hidden" name="id" value="@Model.Id">
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                            </div>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

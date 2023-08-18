@@ -1,0 +1,39 @@
+﻿@model IEnumerable<RestaurantDetailedListViewModel>
+@{
+    ViewData["Title"] = "Моите ресторанти";
+}
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+@if (!Model.Any())
+{
+    <h2 class="text-lg-center">Не сте създали ресторант все още!</h2>
+    <p class="text-center">
+        Създайте своя първи ресторант!
+        <a asp-controller="Restaurant" asp-action="AddSingle" class="btn btn-primary btn-sm m-1">Създай</a>
+    </p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var restaurant in Model)
+        {
+            <li class="list-group-item d-flex align-items-center">
+
+                <img class="bd-placeholder-img m-2 col-sm-2" src="@restaurant.ImageUrl" alt="Снимка">
+                <h5 class="m-2 col-sm-1 text-center">@restaurant.Name</h5>
+                <h5 class="m-2 col-sm-1 text-center">@restaurant.Address</h5>
+                <h5 class="m-2 col-sm-1 text-center">@restaurant.Settlement</h5>
+                <h5 class="m-2 col-sm-1 text-center">@restaurant.Region</h5>
+                <h5 class="m-2 col-sm-1 text-center">@restaurant.Brand</h5>
+                <a asp-controller="Restaurant" asp-action="Edit" asp-route-id="@restaurant.Id" class="btn btn-sm btn-warning m-2">Редактирай</a>
+                <form method="post" class="m-2" asp-controller="Restaurant" asp-action="DeleteSingle">
+                    <input type="hidden" name="id" value="@restaurant.Id">
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                    </div>
+                </form>
+                <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@restaurant.Id" class="btn btn-sm btn-info">Повече подробности</a>
+            </li>
+        }
+    </ul>
+}

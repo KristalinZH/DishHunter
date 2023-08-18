@@ -11,7 +11,7 @@
         public RestaurantFormViewModel()
         {
             Brands = new HashSet<BrandSelectViewModel>();
-            Categories = new HashSet<CategorySelectViewModel>();
+            Categories = new HashSet<CategoryViewModel>();
             Settlements = new HashSet<SettlementSelectViewModel>();
         }
         [Required]
@@ -30,7 +30,7 @@
         public string BrandId { get; set; } = null!;
         public IEnumerable<BrandSelectViewModel> Brands { get; set; }
         public int CategoryId { get; set; }
-        public IEnumerable<CategorySelectViewModel> Categories { get; set; }
+        public IEnumerable<CategoryViewModel> Categories { get; set; }
         public int SettlementId { get; set; }
         public IEnumerable<SettlementSelectViewModel> Settlements { get; set; }
     }

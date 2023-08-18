@@ -1,0 +1,38 @@
+﻿@model IEnumerable<RestaurantCardViewModel>
+@{
+    ViewData["Title"] = "Вериги заведения";
+}
+<h1 class="text-lg-center">@ViewData["Title"]</h1>
+<hr />
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <p class="display-4 lead">В момента няма налични ресторанти!</p>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var restaurant in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <h3 class="card-title text-center">@restaurant.Name</h3>
+                        <img class="bd-placeholder-img card-img-top" src="@restaurant.ImageUrl" alt="Лого">
+                        <div class="card-body">
+                            <h4 class="text-sm-start">Населено място: @restaurant.Settlement</h4>
+                            <h4 class="text-sm-start">Област: @restaurant.Region</h4>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@restaurant.Id" class="btn btn-primary btn-sm m-1">Повече подробности</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

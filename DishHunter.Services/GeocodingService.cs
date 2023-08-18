@@ -38,6 +38,8 @@
                 });
                 if (coordinates == null)
                     return result;
+                if (!coordinates.Any())
+                    return result;
                 if (coordinates.Length > 1)
                 {
                     result.Message = MultipleAddressesFound;

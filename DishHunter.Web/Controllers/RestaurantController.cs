@@ -141,7 +141,15 @@
                     TempData[ErrorMessage] = "Трябва да сте създали верига, за да можете да добавите ресторант!";
                     return RedirectToAction("Add", "Brand");
                 }
-                RestaurantFormViewModel restaurant = await GetViewModel(ownerId!);
+                RestaurantExcelFormViewModel restaurant = new RestaurantExcelFormViewModel()
+                {
+                    Brands = (await brandService.GetOwnersBrandsByOwnerIdAsync(ownerId!))
+                    .Select(b => new BrandSelectViewModel()
+                    {
+                        Id = b.Id,
+                        BrandName = b.BrandName
+                    })
+                };
                 return View(restaurant);
             }
             catch (Exception)
@@ -315,7 +323,7 @@
                     return View(newModel);
                 }
                 RestaurantPostTransferModel restaurant = await GetTransferModel(model);
-                var status = await restaurantService.CreateRestaurantAsync(restaurant);
+                var status = await restaurantService.EditRestaurantByIdAsync(id, restaurant);
                 if (!status.IsRestaurantAdded)
                 {
                     TempData[ErrorMessage] = status.Message;
@@ -342,7 +350,7 @@
                     return RedirectToAction(helper.ActionName, helper.ControllerName);
                 }
                 await restaurantService.DeleteRestaurantByIdAsync(id);
-                return RedirectToAction("Mine", "Menu");
+                return RedirectToAction("Mine", "Restaurant");
             }
             catch (Exception)
             {
@@ -397,12 +405,12 @@
                     Category=transferModel.Category,
                     Address=transferModel.Address,
                     Settlement=transferModel.Settlement,
-                    Region=transferModel.Region,
+                    Region = transferModel.Region.Split('.')[1],
                     Brand=transferModel.Brand,
                     Latitude=transferModel.Latitude,
                     Longitude=transferModel.Longitude
                 };
-                return View();
+                return View(viewModel);
             }
             catch (Exception)
             {
@@ -423,7 +431,7 @@
                         ImageUrl=r.ImageUrl,
                         Brand=r.Brand,
                         Settlement=r.Settlement,
-                        Region=r.Settlement
+                        Region = r.Region.Split('.')[1]
                     });
                 return View(restaurants);
             }
@@ -446,13 +454,17 @@
                 string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
                 var ownerRestaurants = (await restaurantService
                     .GetOwnerRestaurantsByOnwerIdAsync(ownerId!))
-                    .Select(tm => new RestaurantListViewModel()
+                    .Select(tm => new RestaurantDetailedListViewModel()
                     {
                         Id = tm.Id,
                         Name = tm.Name,
-                        SettlementName = tm.SettlementName
+                        Address = tm.Address,
+                        ImageUrl=tm.ImageUrl,
+                        Brand=tm.Brand,
+                        Region=tm.Region,
+                        Settlement=tm.Settlement
                     });
-                return View();
+                return View(ownerRestaurants);
             }
             catch (Exception)
             {
@@ -469,7 +481,7 @@
                     BrandName = b.BrandName
                 });
             restaurant.Categories = (await categoryService.AllCategoriesAsync())
-                .Select(c => new CategorySelectViewModel()
+                .Select(c => new CategoryViewModel()
                 {
                     Id = c.Id,
                     CategoryName = c.CategoryName
@@ -499,7 +511,7 @@
                     BrandName = b.BrandName
                 });
             restaurant.Categories = (await categoryService.AllCategoriesAsync())
-                .Select(c => new CategorySelectViewModel()
+                .Select(c => new CategoryViewModel()
                 {
                     Id = c.Id,
                     CategoryName = c.CategoryName
@@ -532,7 +544,7 @@
                     BrandName = b.BrandName
                 });
             restaurant.Categories = (await categoryService.AllCategoriesAsync())
-                .Select(c => new CategorySelectViewModel()
+                .Select(c => new CategoryViewModel()
                 {
                     Id = c.Id,
                     CategoryName = c.CategoryName

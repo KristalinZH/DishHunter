@@ -70,7 +70,7 @@
         public async Task DeleteMenuItemsByMenusIdRangeAsync(List<int> menus)
         {
             List<MenuItem> menuItemsToDelete = await dbContext.MenuItems
-                .Where(mi => mi.IsActive && menus.Contains(mi.Id))
+                .Where(mi => mi.IsActive && menus.Contains(mi.MenuId))
                 .ToListAsync();
             foreach (var mi in menuItemsToDelete)
                 mi.IsActive = false;
@@ -149,7 +149,8 @@
                 {
                     Id = mi.Id,
                     Name = mi.Name,
-                    FoodCategory = mi.FoodCategory
+                    FoodCategory = mi.FoodCategory,
+                    ImageUrl=mi.ImageUrl
                 }).ToArrayAsync();
 
         public async Task<IEnumerable<MenuItemListTransferModel>> GetOwnersMenuItemsByOwnerIdAsync(string ownerId)

@@ -1,4 +1,4 @@
-﻿@model MenuItemExcelFormViewModel
+﻿@model RestaurantExcelFormViewModel
 @{
 	ViewData["Title"] = "Добави артикули с excel";
 }
@@ -8,14 +8,14 @@
 	<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
 		<form method="post" enctype="multipart/form-data">
 			<div class="form-group">
-				<label asp-for="MenuId"></label>
-				<select asp-for="MenuId" class="form-control">
-					@foreach (var menu in Model.Menus)
+				<label asp-for="BrandId"></label>
+				<select asp-for="BrandId" class="form-control">
+					@foreach (var brand in Model.Brands)
 					{
-						<option value="@menu.Id">@menu.MenuType</option>
+						<option value="@brand.Id">@brand.BrandName</option>
 					}
 				</select>
-				<span asp-validation-for="MenuId" class="small text-danger"></span>
+				<span asp-validation-for="BrandId" class="small text-danger"></span>
 			</div>
 			<div class="align-content-sm-start mt-2">
 				<input type="file" name="excelFile" value="Прикачи файл" />

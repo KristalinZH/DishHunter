@@ -23,7 +23,7 @@ else
                 <h4 class="m-2 col-md-1 text-center">@menuItem.Name</h4>
                 <h4 class="m-2 col-md-1 text-center">@menuItem.FoodCategory</h4>
                 <a asp-controller="MenuItem" asp-action="Edit" asp-route-id="@menuItem.Id" class="btn btn-sm btn-warning m-2 col-md-2">Редактирай</a>
-                <form method="post" class="m-2 col-md-2" asp-controller="MenuItem" asp-action="Delete">
+                <form method="post" class="m-2 col-md-2" asp-controller="MenuItem" asp-action="DeleteSingle">
                     <input type="hidden" name="id" value="@menuItem.Id">
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>

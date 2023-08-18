@@ -11,7 +11,7 @@
             <div class="card">
                 <div class="card-body d-flex">
                     <div class="align-content-start">
-                        <img src="@Model.LogoUrl" alt="Лого">
+                        <img src="@Model.LogoUrl" style="height:300px;width:400px;"alt="Лого">
                     </div>
                     <div class="card-text m-2 flex-fill overflow-auto">
                         <h3 class="text-center">Описание</h3>
@@ -42,15 +42,31 @@
                             {
                                 <li class="list-group-item d-flex align-content-between">
                                     <p class="m-1">@menu.MenuType - @menu.FoodType</p>
-                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-warning m-1">Редактирай</a>
-                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-danger m-1">Изтрий</a>
-                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-info m-1">Повече подробности</a>
+                                    <a asp-controller="Menu" asp-action="Edit" asp-route-id="@menu.Id" class="btn btn-sm btn-warning m-1">Редактирай</a>
+                                    <form method="post" class="m-2 col-md-2" asp-controller="Menu" asp-action="DeleteSingle">
+                                        <input type="hidden" name="id" value="@menu.Id">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                                        </div>
+                                    </form>
+                                    <a asp-controller="Menu" asp-action="Details" asp-route-id="@menu.Id" class="btn btn-sm btn-info m-1">Повече подробности</a>
                                 </li>
                             }
                         </ul>
                     }
                 </div>
             </div>
+            @if (Model.Menus.Any())
+            {
+                <div class="card-footer">
+                    <form method="post" class="m-2 col-md-2" asp-controller="Menu" asp-action="DeleteMany">
+                        <input type="hidden" name="id" value="@Model.Id">
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий всички</button>
+                        </div>
+                    </form>
+                </div>
+            }
         </div>
         <div class="col-md-6">
             <div class="card">
@@ -67,15 +83,31 @@
                             {
                                 <li class="list-group-item d-flex align-content-between">
                                     <p class="m-1">@restaurant.Name - @restaurant.SettlementName</p>
-                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-warning m-1">Редактирай</a>
-                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-danger m-1">Изтрий</a>
-                                    <a asp-controller="" asp-action="" asp-route-id="" class="btn btn-sm btn-info m-1">Повече подробности</a>
+                                    <a asp-controller="Restaurant" asp-action="Edit" asp-route-id="@restaurant.Id" class="btn btn-sm btn-warning m-1">Редактирай</a>
+                                    <form method="post" class="m-2 col-md-2" asp-controller="Restaurant" asp-action="DeleteSingle">
+                                        <input type="hidden" name="id" value="@restaurant.Id">
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                                        </div>
+                                    </form>
+                                    <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@restaurant.Id" class="btn btn-sm btn-info m-1">Повече подробности</a>
                                 </li>
                             }
                         </ul>
                     }
                 </div>
             </div>
+            @if (Model.Restaurants.Any())
+            {
+                <div class="card-footer">
+                    <form method="post" class="m-2 col-md-2" asp-controller="Restaurant" asp-action="DeleteMany">
+                        <input type="hidden" name="id" value="@Model.Id">
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий всички</button>
+                        </div>
+                    </form>
+                </div>
+            }
         </div>
     </div>
 </div>

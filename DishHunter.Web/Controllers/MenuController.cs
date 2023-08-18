@@ -322,11 +322,11 @@
             }
         }
 		[HttpPost]
-		public async Task<IActionResult> DeleteMany(string brandId)
+		public async Task<IActionResult> DeleteMany(string id)
 		{
             try
             {
-                bool isBrandExisting = await brandService.ExistsByIdAsync(brandId);
+                bool isBrandExisting = await brandService.ExistsByIdAsync(id);
                 if (!isBrandExisting)
                 {
                     TempData[ErrorMessage] = "Търсената от Вас верига не съществува!";
@@ -340,14 +340,14 @@
                 }
                 string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
                 bool isOwnerOwningBrand = await brandService
-                    .BrandOwnedByOwnerIdAndBrandIdAsync(brandId, ownerId!);
+                    .BrandOwnedByOwnerIdAndBrandIdAsync(id, ownerId!);
                 if (!isOwnerOwningBrand)
                 {
                     TempData[ErrorMessage] = "Трябва да притежавате веригата за да имате право да изтриете менютата в нея!";
                     return RedirectToAction("Mine", "Brand");
                 }
-                await menuService.DeleteMenusByBrandIdAsync(brandId);
-                return RedirectToAction("Details", "Brand", new { id = brandId }); 
+                await menuService.DeleteMenusByBrandIdAsync(id);
+                return RedirectToAction("Details", "Brand", new { id = id }); 
             }
             catch (Exception)
             {
@@ -362,6 +362,7 @@
 				DetailsMenuTransferModel tm = await menuService.GetMenuDetailsByIdAsync(id);
 				MenuDetailsViewModel model = new MenuDetailsViewModel()
 				{
+                    Id=id,
 					MenuType = tm.MenuType,
 					FoodType = tm.FoodType,
 					Description = tm.Description,

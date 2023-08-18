@@ -93,6 +93,7 @@
                 var brandDetails = await brandService.GetBrandDetailsByIdAsync(id);
                 BrandDetailsViewModel model = new BrandDetailsViewModel()
                 {
+                    Id=id,
                     BrandName = brandDetails.BrandName,
                     LogoUrl = brandDetails.LogoUrl,
                     Description = brandDetails.Description,

@@ -58,7 +58,7 @@
 			public const int NameMinLenght = 3;
 			public const int AddressMaxLenght = 50;
 			public const int AddressMinLenght = 7;
-			public const int PhoneMaxLenght = 11;
+			public const int PhoneMaxLenght = 15;
 			public const int PhoneMinLenght = 3;
 			public const int UrlMaxLenght = 2048;
 		}

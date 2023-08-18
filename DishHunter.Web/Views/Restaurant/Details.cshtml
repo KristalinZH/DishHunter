@@ -1,0 +1,50 @@
+﻿@model RestaurantDetailsViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<h1 class="display-4 text-center fw-bold fst-italic">@ViewData["Title"]</h1>
+<hr />
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="@Model.ImageUrl" alt="Лого" class="card-img-top">
+                <div class="card-body">
+                    <h4 class="text-sm-start">Верига: @Model.Brand</h4>
+                    <h4 class="text-sm-start">Категория: @Model.Category</h4>
+                    <h4 class="text-sm-start">Телефон: @Model.PhoneNumber</h4>
+                    <h4 class="text-sm-start">Адрес: @Model.Address</h4>
+                    <h4 class="text-sm-start">Населено място: @Model.Settlement</h4>
+                    <h4 class="text-sm-start">Област: @Model.Region</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div id="map" style="height:100%"></div>
+        </div> 
+    </div>
+</div>
+<script>
+    var defaultCoords = [42.7339, 25.4858];
+    var restaurantCoords = [@Model.Latitude, @Model.Longitude];
+    var isDefault=false;
+    var zoom=17;
+    if (restaurantCoords[0] === 0 && restaurantCoords[1] === 0) {
+        restaurantCoords = defaultCoords;
+        zoom=7;
+        isDefault=true;
+    }
+    var map = L.map('map').setView(restaurantCoords, zoom);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    if (!isDefault){
+        L.marker(restaurantCoords).addTo(map)
+            .bindPopup('@Model.Name')
+            .openPopup();
+    }
+</script>

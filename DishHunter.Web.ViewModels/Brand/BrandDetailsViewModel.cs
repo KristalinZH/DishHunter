@@ -10,7 +10,8 @@
             Restaurants = new HashSet<RestaurantListViewModel>();
 			Menus = new HashSet<MenuListViewModel>();
 		}
-		public string BrandName { get; set; } = null!;
+		public string Id { get; set; } = null!;
+        public string BrandName { get; set; } = null!;
 		public string LogoUrl { get; set; } = null!;
 		public string WebsiteUrl { get; set; } = null!;
 		public string Description { get; set; } = null!;

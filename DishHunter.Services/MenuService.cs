@@ -21,25 +21,23 @@
 
         public async Task<string> AddMenusByBrandIdAsync(IEnumerable<MenuExcelTransferModel> menus, string brandId)
         {
-            List<Menu> menusToAdd = menus
-                .Select(m => new Menu()
+            var menusToAdd = menus.Select(m => new
+            {
+                Menu = new Menu()
                 {
                     MenuType = m.MenuType,
                     FoodType = m.FoodType,
                     Description = m.Description,
-                    BrandId = Guid.Parse(brandId),
-                    MenuItems = m.MenuItems.Select(mi => new MenuItem()
-                    {
-                        FoodCategory = mi.FoodCategory,
-                        Name = mi.Name,
-                        Price = mi.Price,
-                        Description = mi.Description,
-                        ImageUrl = mi.ImageUrl
-                    })
-                })
-                .ToList();
-            await dbContext.Menus.AddRangeAsync(menusToAdd);
+                    BrandId = Guid.Parse(brandId)
+                },
+                MenuItems = m.MenuItems
+            }).ToList();
+            await dbContext.Menus.AddRangeAsync(menusToAdd.Select(m => m.Menu));
             await dbContext.SaveChangesAsync();
+            foreach (var el in menusToAdd)
+            {
+                await menuItemService.AddMenuItemsByMenuIdAsync(el.MenuItems, el.Menu.Id);
+            }
             return SuccessfullyAddedMenus;
         }
 
@@ -68,8 +66,11 @@
         {
             Menu menu = await dbContext.Menus
                 .Where(m => m.IsActive)
+                .Include(m=>m.MenuItems)
                 .FirstAsync(m => m.Id == menuId);
             menu.IsActive = false;
+            foreach (var mi in menu.MenuItems)
+                mi.IsActive = false;
             await dbContext.SaveChangesAsync();
         }
 
@@ -113,7 +114,8 @@
                 MenuType = menu.MenuType,
                 FoodType = menu.FoodType,
                 Description = menu.Description,
-                Brand = menu.Brand.BrandName
+                Brand = menu.Brand.BrandName,
+                MenuItems=await menuItemService.GetMenuItemsByMenuIdAsync(menuId)
             };
         }
 

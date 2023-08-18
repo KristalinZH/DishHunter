@@ -74,8 +74,15 @@
                     Longitude=geocodingResult.Longitude!.Value
                 });
             }
-            await dbContext.Restaurants.AddRangeAsync(restaurantsToAdd);
-            await dbContext.SaveChangesAsync();
+            try
+            {
+                await dbContext.Restaurants.AddRangeAsync(restaurantsToAdd);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                string da = ex.Message;
+            }
             result.AreRestaurantsAddedSuccessfully = true;
             result.Message = SuccessfullyAddedRestaurantsFromExcel;
             return result;
@@ -196,16 +203,20 @@
                 Settlement=r.Settlement.SettlementName
             }).ToArrayAsync();
 
-        public async Task<IEnumerable<RestaurantListTranferModel>> GetOwnerRestaurantsByOnwerIdAsync(string ownerId)
+        public async Task<IEnumerable<RestaurantDetailedTransferModel>> GetOwnerRestaurantsByOnwerIdAsync(string ownerId)
             => await dbContext.Restaurants
                 .Include(r => r.Brand)
                 .Include(r => r.Settlement)
                 .Where(r => r.IsActive && r.Brand.RestaurantOwnerId.ToString() == ownerId)
-                .Select(r => new RestaurantListTranferModel()
+                .Select(r => new RestaurantDetailedTransferModel()
                 {
                     Id = r.Id.ToString(),
                     Name = r.Name,
-                    SettlementName = r.Settlement.SettlementName
+                    ImageUrl=r.ImageUrl,
+                    Address=r.Address,
+                    Settlement = r.Settlement.SettlementName,
+                    Region=r.Settlement.Region,
+                    Brand=r.Brand.BrandName
                 }).ToArrayAsync();  
 
         public async Task<DetailsRestaurantTransferModel> GetRestaurantDetailsByIdAsync(string restaurantId)
@@ -258,7 +269,6 @@
                     SettlementName = r.Settlement.SettlementName
                 })
                 .ToListAsync();
-
         public async Task<bool> RestaurantOwnedByOwnerByRestaurantIdAndOwnerId(string restaurantId, string ownerId)
         {
             Restaurant restaurant = await dbContext.Restaurants

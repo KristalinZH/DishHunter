@@ -15,7 +15,7 @@
         Task<bool> ExistsByIdAsync(string restaurantId);
         Task<bool> RestaurantOwnedByOwnerByRestaurantIdAndOwnerId(string restaurantId, string ownerId);
         Task<IEnumerable<RestaurantCardTransferModel>> GetAllRestaurantsAsCardsAsync();
-        Task<IEnumerable<RestaurantListTranferModel>> GetOwnerRestaurantsByOnwerIdAsync(string ownerId);
+        Task<IEnumerable<RestaurantDetailedTransferModel>> GetOwnerRestaurantsByOnwerIdAsync(string ownerId);
 
     }
 }

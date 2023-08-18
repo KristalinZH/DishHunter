@@ -17,14 +17,19 @@
         }
 
         public async Task<IEnumerable<SettlementSelectTransferModel>> AllSettlementsAsync()
-            => await dbContext.Settlements
+        {
+            var settlements = await dbContext.Settlements
                     .Where(s => s.IsActive)
                     .Select(s => new SettlementSelectTransferModel()
                     {
                         Id = s.Id,
                         SettlementName = s.SettlementName,
                         Region = s.Region
-                    }).ToArrayAsync();
+                    })
+                    .ToArrayAsync();
+            settlements = settlements.OrderBy(s => s.SettlementName.Split('.')[1]).ToArray();
+            return settlements;
+        }
 
         public async Task<int?> SettlementExistsByNameAndRegionAsync(string name, string region)
         {
@@ -33,7 +38,8 @@
             Settlement? settlement = await dbContext
                 .Settlements
                 .Where(s => s.IsActive)
-                .FirstOrDefaultAsync(s => s.SettlementName == name && s.Region == region);
+                .FirstOrDefaultAsync(s => EF.Functions.Like(s.SettlementName, nameWildcard)
+                && EF.Functions.Like(s.Region, regionWildCard));
             if (settlement == null)
                 return null;
             return settlement.Id;

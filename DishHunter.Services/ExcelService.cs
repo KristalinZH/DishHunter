@@ -11,6 +11,7 @@
     using Models.MenuItem;
     using Models.Restaurant;
     using Interfaces;
+    using ExcelDataValidators;
     using static Common.NotificationMessagesConstants;
 
     public class ExcelService : IExcelService
@@ -70,6 +71,12 @@
                                 FoodType = WebUtility.HtmlEncode(data[1]),
                                 Description = WebUtility.HtmlEncode(data[2])
                             };
+                            if (!MenuValidator.IsMenuValid(menu))
+                            {
+                                result.Message = MissingExcelData;
+                                result.Menus = null;
+                                return result;
+                            }
                         }
                         catch (Exception)
                         {
@@ -179,6 +186,12 @@
                                     CategoryName = WebUtility.HtmlEncode(data[5]),
                                     ImageUrl = WebUtility.HtmlEncode(data[6])
                                 };
+                                if (!RestaurantValidator.IsRestaurantDataValid(restaurant))
+                                {
+                                    result.Message = WrongExcelData;
+                                    result.Restaurants = null;
+                                    return result;
+                                }
                             }
                             catch (Exception)
                             {
@@ -220,14 +233,21 @@
                     data[2] = data[2].Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
                     try
                     {
-                        menuItems.Add(new MenuItemExcelTransferModel()
+                        MenuItemExcelTransferModel mi = new MenuItemExcelTransferModel() 
                         {
                             FoodCategory = WebUtility.HtmlEncode(data[0]),
                             Name = WebUtility.HtmlEncode(data[1]),
                             Price = Convert.ToDecimal(WebUtility.HtmlEncode(data[2])),
                             Description = WebUtility.HtmlEncode(data[3]),
                             ImageUrl = WebUtility.HtmlEncode(data[4])
-                        });
+                        };
+                        if (!MenuItemValidator.IsMenuItemValid(mi))
+                        {
+                            result.Message = WrongExcelData;
+                            result.MenuItems = null;
+                            return result;
+                        }
+                        menuItems.Add(mi);
                     }
                     catch (Exception)
                     {
