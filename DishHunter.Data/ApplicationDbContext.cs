@@ -6,11 +6,16 @@
 	using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 	using Models.Account;
 	using Models.Restaurant;
+    using DishHunter.Data.Configurations;
 
-	public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 	{
-		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-			: base(options) { }
+		private bool _seedDb;
+		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, bool seedDb = true)
+			: base(options)
+		{
+			_seedDb = seedDb;
+		}
 		public DbSet<RestaurantOwner> RestaurantOwners { get; set; } = null!;
 		public DbSet<Brand> Brands { get; set; } = null!;
 		public DbSet<Restaurant> Restaurants { get; set; } = null!;
@@ -20,9 +25,19 @@
 		public DbSet<MenuItem> MenuItems { get; set; } = null!;
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
-			Assembly configAssembly = Assembly.GetAssembly(typeof(ApplicationDbContext))
-				?? Assembly.GetExecutingAssembly();
-			builder.ApplyConfigurationsFromAssembly(configAssembly);
+			builder.ApplyConfiguration(new BrandEntityConfiguration());
+			builder.ApplyConfiguration(new CategoryEntityConfiguration());
+			builder.ApplyConfiguration(new MenuEntityConfiguration());
+			builder.ApplyConfiguration(new MenuItemEntityConfigration());
+			builder.ApplyConfiguration(new RestaurantEntityConfiguration());
+			builder.ApplyConfiguration(new RestaurantOwnerEntityConfiguration());
+			builder.ApplyConfiguration(new SettlementEntityConfiguration());
+			if (_seedDb)
+			{
+				builder.ApplyConfiguration(new CategorySeedConfiguration());
+				builder.ApplyConfiguration(new SettlementSeedConfiguration());
+				builder.ApplyConfiguration(new RolesSeedConfiguration());
+			}
 			base.OnModelCreating(builder);
 		}
 

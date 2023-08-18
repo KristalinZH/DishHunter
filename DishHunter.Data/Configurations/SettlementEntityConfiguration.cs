@@ -17,17 +17,6 @@
                 .HasMany(s => s.Restaurants)
                 .WithOne(r => r.Settlement)
                 .OnDelete(DeleteBehavior.Restrict);
-            builder
-                .HasData(ExtractSettlements());
-        }
-        private Settlement[] ExtractSettlements()
-        {
-            string pathToTheResourceFile = Path.GetFullPath(@$"{Directory.GetCurrentDirectory()}\..\DishHunter.Data\SeedingResources\Settlements.json");
-            string json = File.ReadAllText(pathToTheResourceFile);
-            Settlement[] settlements = JsonConvert.DeserializeObject<Settlement[]>(json)!;
-            for (int i = 0; i < settlements.Length; i++)
-                settlements[i].Id = i + 1;
-            return settlements;
         }
     }
 }

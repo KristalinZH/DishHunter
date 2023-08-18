@@ -38,21 +38,24 @@
         [HttpPost]
         public async Task<IActionResult> Become(RestaurantOwnerFormViewModel ownerModel)
         {
-            string userId = User.GetId()!;
             try
             {
+                string userId = User.GetId()!;
                 bool isOwnerAlready = await ownerService.OwnerExistsByUserIdAsync(userId);
                 if (isOwnerAlready)
                 {
                     TempData[ErrorMessage] = "Вие вече сте ресторантьор!";
                     return RedirectToAction("Index", "Home");
                 }
+                if (!ModelState.IsValid)
+                    return View(ownerModel);
                 bool isPhoneExistring = await ownerService.OwnerExistsByPhoneNumberAsync(ownerModel.PhoneNumber);
                 if (isPhoneExistring)
-                    ModelState.AddModelError(nameof(ownerModel.PhoneNumber),"Този телефонен номер е вече регистриран в системата! Моля използвайте друг!");
-                if(!ModelState.IsValid)
-					return View(ownerModel);
-				RestaurantOwnerPostTransferModel ownerTransferModel = new RestaurantOwnerPostTransferModel()
+                {
+                    TempData[ErrorMessage] = "Този телефонен номер е вече регистриран в системата! Моля използвайте друг!";
+                    return View(ownerModel);
+                }
+                RestaurantOwnerPostTransferModel ownerTransferModel = new RestaurantOwnerPostTransferModel()
                 {
                     PhoneNumber = ownerModel.PhoneNumber
                 };

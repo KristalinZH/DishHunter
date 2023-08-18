@@ -35,7 +35,7 @@
                 Message = string.Empty
             };
             List<Restaurant> restaurantsToAdd = new List<Restaurant>();
-            foreach(var excelRestaurant in restaurants)
+            foreach (var excelRestaurant in restaurants)
             {
                 int? categoryId = await categoryService
                     .CategoryExistsByNameAsync(excelRestaurant.CategoryName);
@@ -63,26 +63,19 @@
                 }
                 restaurantsToAdd.Add(new Restaurant()
                 {
-                    Name=excelRestaurant.Name,
-                    Address=excelRestaurant.Address,
-                    PhoneNumber=excelRestaurant.PhoneNumber,
-                    ImageUrl=excelRestaurant.ImageUrl,      
-                    BrandId=Guid.Parse(brandId),
-                    CategoryId=categoryId.Value,
-                    SettlementId=settlementId.Value,
-                    Latitude=geocodingResult.Latitude!.Value,
-                    Longitude=geocodingResult.Longitude!.Value
+                    Name = excelRestaurant.Name,
+                    Address = excelRestaurant.Address,
+                    PhoneNumber = excelRestaurant.PhoneNumber,
+                    ImageUrl = excelRestaurant.ImageUrl,
+                    BrandId = Guid.Parse(brandId),
+                    CategoryId = categoryId.Value,
+                    SettlementId = settlementId.Value,
+                    Latitude = geocodingResult.Latitude!.Value,
+                    Longitude = geocodingResult.Longitude!.Value
                 });
             }
-            try
-            {
-                await dbContext.Restaurants.AddRangeAsync(restaurantsToAdd);
-                await dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                string da = ex.Message;
-            }
+            await dbContext.Restaurants.AddRangeAsync(restaurantsToAdd);
+            await dbContext.SaveChangesAsync();
             result.AreRestaurantsAddedSuccessfully = true;
             result.Message = SuccessfullyAddedRestaurantsFromExcel;
             return result;
@@ -153,7 +146,7 @@
             Restaurant restaurantForEdit = await dbContext.Restaurants
                 .Where(r => r.IsActive)
                 .FirstAsync(r => r.Id.ToString() == restaurantId);
-            if (restaurantForEdit.Address != restaurant.Address)
+            if (restaurantForEdit.Address != restaurant.Address || restaurantForEdit.SettlementId!=restaurant.SettlementId)
             {
                 GeoSettlementTransferModel settlement = await settlementService
                 .GeoSettlementInfoByIdAsync(restaurant.SettlementId);

@@ -22,8 +22,10 @@
             user.PhoneNumber = owner.PhoneNumber;
             RestaurantOwner ownerToAdd = new RestaurantOwner()
             {
+                Id=Guid.NewGuid(),
                 UserId = Guid.Parse(userId)
             };
+            user.RestaurantOwnerId = ownerToAdd.Id;
             await dbContext.RestaurantOwners.AddAsync(ownerToAdd);
             await dbContext.SaveChangesAsync();
         }
