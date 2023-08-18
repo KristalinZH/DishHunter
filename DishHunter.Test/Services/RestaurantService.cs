@@ -252,5 +252,17 @@
             bool res = await restaurantService.RestaurantOwnedByOwnerByRestaurantIdAndOwnerId(rId, ownerId);
             Assert.That(res, Is.EqualTo(false));
         }
+
+        [Test]
+        public async Task DeleteRestaurantsByBrandsIdsRangeResult()
+        {
+            List<Guid> ids = new List<Guid>()
+            {
+                Guid.Parse("15d93c12-9a8c-40ce-a6ae-b4d7c980d707")
+            };
+            await restaurantService.DeleteRestaurantsByBrandsIdsRangeAsync(ids);
+            var result = await restaurantService.GetAllRestaurantsAsCardsAsync();
+            Assert.That(result.Count(), Is.EqualTo(0));
+        }
     }
 }

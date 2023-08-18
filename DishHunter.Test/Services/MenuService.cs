@@ -175,5 +175,17 @@
             var result = await menuService.MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(menuId, ownerId);
             Assert.That(result, Is.EqualTo(false));
         }
+
+        [Test]
+        public async Task DeleteMenusByBrandBrandsIdRangeResult()
+        {
+            List<Guid> ids = new List<Guid>()
+            {
+                Guid.Parse("15d93c12-9a8c-40ce-a6ae-b4d7c980d707")
+            };
+            await menuService.DeleteMenusByBrandBrandsIdRangeAsync(ids);
+            var result = await menuService.GetMenusByBrandIdAsync(ids[0].ToString());
+            Assert.That(result.Count(), Is.EqualTo(0));
+        }
     }
 }

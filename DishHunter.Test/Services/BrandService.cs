@@ -1,10 +1,12 @@
 ﻿namespace DishHunter.Test.Services
 {
     using BaseTest;
+    using DishHunter.Services.Data;
     using DishHunter.Services.Data.Models.Brand;
+    using Microsoft.EntityFrameworkCore;
 
     [TestFixture]
-    internal class BrandService: BaseTestClass
+    internal class BrandService : BaseTestClass
     {
         [Test]
         public async Task CreateBrandAsync_ShouldReturnBrandId()
@@ -82,7 +84,7 @@
         {
             string brandId = "15d93c12-9a8c-40ce-a6ae-b4d7c980d707";
             await brandService.DeleteBrandByIdAsync(brandId);
-            bool result= await brandService.ExistsByIdAsync(brandId);
+            bool result = await brandService.ExistsByIdAsync(brandId);
             Assert.That(result, Is.EqualTo(false));
         }
 
@@ -144,6 +146,15 @@
             string ownerId = "2618f422-fb08-42a7-bd9c-ffc4d311822c";
             bool result = await brandService.AnyBrandOwnedByOwnerByOwnerIdAsync(ownerId);
             Assert.That(result, Is.EqualTo(false));
+        }
+        //public async Task DeleteBrandsByOwnerIdAsync(string ownerId)
+        [Test]
+        public async Task DeleteBrandsByOwnerIdResult()
+        {
+            string ownerId = "2618f422-fb08-42a7-bd9c-ffc4d311822a";
+            await brandService.DeleteBrandsByOwnerIdAsync(ownerId);
+            var brands = await brandService.GetAllBrandsAsCardsAsync();
+            Assert.That(brands.Count(), Is.EqualTo(1));
         }
     }
 }
