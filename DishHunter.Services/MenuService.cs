@@ -74,6 +74,18 @@
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteMenusByBrandBrandsIdRangeAsync(List<Guid> brands)
+        {
+            List<Menu> menusToDelete = await dbContext.Menus
+               .Where(m => m.IsActive && brands.Contains(m.BrandId))
+               .ToListAsync();
+            List<int> menuItemsToDelete = menusToDelete.Select(m => m.Id).ToList();
+            await menuItemService.DeleteMenuItemsByMenusIdRangeAsync(menuItemsToDelete);
+            foreach (var m in menusToDelete)
+                m.IsActive = false;            
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task DeleteMenusByBrandIdAsync(string brandId)
         {
             List<Menu> menusToDelete = await dbContext.Menus

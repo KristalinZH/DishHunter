@@ -3,7 +3,9 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
     using Services.Data.Interfaces;
+	using Infrastructrure.Extensions;
     using ViewModels.Brand;
+
 	[AllowAnonymous]
 	public class HomeController : BaseController
     {
@@ -16,6 +18,10 @@
 
 		public async Task<IActionResult> Index()
 		{
+			if (User.IsAdmin())
+			{
+				return RedirectToAction("Index", "Home", new { area = "Administration" });
+			}
 			IEnumerable<BrandsCardViewModel> brands = (await brandService
 				.GetTop3BrandsAsCardsAsync())
 				.Select(tm => new BrandsCardViewModel()

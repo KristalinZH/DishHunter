@@ -3,8 +3,7 @@
 
     using BaseTest;
     using DishHunter.Services.Data.Models.Restaurant;
-    using DishHunter.Services.Data.Models.RestaurantOwner;
-    using Microsoft.EntityFrameworkCore;
+
 
     [TestFixture]
     internal class RestaurantService:BaseTestClass

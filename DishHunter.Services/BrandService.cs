@@ -157,5 +157,18 @@
             => await dbContext.Brands
             .Where(b => b.IsActive)
             .AnyAsync(b => b.RestaurantOwnerId.ToString() == restaurantOwnerId);
+
+        public async Task DeleteBrandsByOwnerIdAsync(string ownerId)
+        {
+            var brands = await dbContext.Brands
+                .Where(b => b.IsActive && b.RestaurantOwnerId.ToString() == ownerId)
+                .ToArrayAsync();
+            var brandIds = brands.Select(b => b.Id).ToList();
+            await menuService.DeleteMenusByBrandBrandsIdRangeAsync(brandIds);
+            await restaurantService.DeleteRestaurantsByBrandsIdsRangeAsync(brandIds);
+            foreach (var b in brands)
+                b.IsActive = false;
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

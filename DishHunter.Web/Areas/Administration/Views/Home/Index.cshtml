@@ -1,0 +1,26 @@
+﻿@{
+	ViewData["Title"] = "Home Page";
+}
+<div class="mt-4 p-5 bg-light text-center">
+	<h2 class="display-4">Здравей, администраторе!</h2>
+	<p class="lead mb-1 mt-3">
+		Това е твоята страница администраторска страница!
+		Ти можеш да да видиш всеки един потребител в сайта, да го напрвиш админ, или да го изтриеш!
+	</p>
+	<p class="lead mt-1">
+		Също така единствено ти можеш да добавяш, изтриваш или променяш категорий или населени места!
+	</p>
+	<hr class="my-4">
+	<a asp-area="" asp-controller="Category" asp-action="All"
+	   class="btn btn-primary btn-lg">Всички категории</a>
+	<a asp-area="" asp-controller="Category" asp-action="Add"
+	   class="btn btn-primary btn-lg">Добави категория</a>
+	<span> | </span>
+	<a asp-area="Administration" asp-controller="Admin" asp-action="AllUsers"
+	   class="btn btn-primary btn-lg">Всички потребители</a>
+	<span> | </span>
+	<a asp-area="" asp-controller="Settlement" asp-action="All"
+	   class="btn btn-primary btn-lg">Всички населени места</a>
+	<a asp-area="" asp-controller="Settlement" asp-action="Add"
+	   class="btn btn-primary btn-lg">Добави населено място</a>
+</div>

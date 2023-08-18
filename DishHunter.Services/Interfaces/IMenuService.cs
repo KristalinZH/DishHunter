@@ -16,6 +16,7 @@
         Task<bool> ExistsByIdAsync(int id);
         Task<bool> MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(int menuId, string restaurantOwnerId);
         Task<bool> AnyMenuOwnedByOwnerByOwnerIdAsync(string restaurantOwnerId);
+        Task DeleteMenusByBrandBrandsIdRangeAsync(List<Guid> brands);
 
 
     }

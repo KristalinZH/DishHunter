@@ -1,0 +1,27 @@
+﻿@model IEnumerable<UserListViewModel>
+@{
+    ViewData["Title"] = "Всички потребители";
+}
+<h1 class="text-lg-center">@ViewData["Title"]</h1>
+<hr />
+<ul class="list-group">
+    @foreach (var user in Model)
+    {
+        <li class="list-group-item d-flex align-items-center">       
+            <h4 class="m-2 col-md-1 text-center">@user.UserName</h4>
+            <h4 class="m-2 col-md-1 text-center">@user.UserType</h4>
+            <form method="post" class="m-2 col-md-2" asp-area="Administration" asp-controller="Admin" asp-action="MakeAdmin">
+                <input type="hidden" name="id" value="@user.Id">
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-sm btn-warning" style="width:100%">Направи администратор</button>
+                </div>
+            </form>
+            <form method="post" class="m-2 col-md-2" asp-area="Administration" asp-controller="Admin" asp-action="Delete">
+                <input type="hidden" name="id" value="@user.Id">
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                </div>
+            </form>
+        </li>
+    }
+</ul>

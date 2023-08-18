@@ -16,6 +16,7 @@
         Task<bool> RestaurantOwnedByOwnerByRestaurantIdAndOwnerId(string restaurantId, string ownerId);
         Task<IEnumerable<RestaurantCardTransferModel>> GetAllRestaurantsAsCardsAsync();
         Task<IEnumerable<RestaurantDetailedTransferModel>> GetOwnerRestaurantsByOnwerIdAsync(string ownerId);
+        Task DeleteRestaurantsByBrandsIdsRangeAsync(List<Guid> brands);
 
     }
 }

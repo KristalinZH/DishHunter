@@ -17,5 +17,6 @@
         Task<IEnumerable<BrandSelectTransferModel>> GetBrandsForSelectByOwnerId(string restaurantOwnerId);
         Task<bool> BrandOwnedByOwnerIdAndBrandIdAsync(string brandId, string restaurantOwnerId);
         Task<bool> AnyBrandOwnedByOwnerByOwnerIdAsync(string restaurantOwnerId);
+        Task DeleteBrandsByOwnerIdAsync(string ownerId);
     }
 }

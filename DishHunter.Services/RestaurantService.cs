@@ -10,6 +10,7 @@
     using Models.Geocoding;
     using Interfaces;
     using static Common.NotificationMessagesConstants;
+    using System.Linq;
 
     public class RestaurantService : IRestaurantService
     {
@@ -135,6 +136,18 @@
                 r.IsActive = false;
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteRestaurantsByBrandsIdsRangeAsync(List<Guid> brands)
+        {
+            List<Restaurant> restaurantsToDelete = await dbContext.Restaurants
+               .Where(r => r.IsActive && brands.Contains(r.BrandId))
+               .ToListAsync();
+           
+            foreach (var r in restaurantsToDelete)
+                r.IsActive = false;
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<StatusRestaurantTransferModel> EditRestaurantByIdAsync(string restaurantId, RestaurantPostTransferModel restaurant)
         {
             StatusRestaurantTransferModel result = new StatusRestaurantTransferModel()

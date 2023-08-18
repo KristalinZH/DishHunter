@@ -18,13 +18,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.15" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DishHunter.Services\DishHunter.Services.Data.csproj" />
     <ProjectReference Include="..\DishHunter.Web.Infrastructrure\DishHunter.Web.Infrastructrure.csproj" />
     <ProjectReference Include="..\DishHunter.Web.ViewModels\DishHunter.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Administration\ViewModels\" />
   </ItemGroup>
 
 </Project>

@@ -37,6 +37,9 @@
 				builder.ApplyConfiguration(new CategorySeedConfiguration());
 				builder.ApplyConfiguration(new SettlementSeedConfiguration());
 				builder.ApplyConfiguration(new RolesSeedConfiguration());
+				builder.ApplyConfiguration(new UserConfiguration());
+                builder.ApplyConfiguration(new RestaurantOwnerSeedConfiguration());
+                builder.ApplyConfiguration(new AdminConfiguration());
 			}
 			base.OnModelCreating(builder);
 		}
