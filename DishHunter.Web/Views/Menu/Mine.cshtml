@@ -18,18 +18,18 @@ else
         @foreach (var menu in Model)
         {
             <li class="list-group-item d-flex align-items-center">              
-                <h4 class="m-2 col-md-1 text-center">@menu.MenuType</h4>
-                <h4 class="m-2 col-md-1 text-center">@menu.FoodType</h4>
-                <h4 class="m-2 col-md-1 text-center">@menu.Brand</h4>
-                <h4 class="m-2 col-md-1 text-center">Брой артикули: @menu.CountItems</h4>
-                <a asp-controller="Menu" asp-action="Edit" asp-route-id="@menu.Id" class="btn btn-sm btn-warning m-2 col-md-2">Редактирай</a>
-                <form method="post" class="m-2 col-md-2" asp-controller="Menu" asp-action="Delete">
+                <h4 class="m-2 col-md-2 text-center">@menu.MenuType</h4>
+                <h4 class="m-2 col-md-2 text-center">@menu.FoodType</h4>
+                <h4 class="m-2 col-md-2 text-center">@menu.Brand</h4>
+                <h4 class="m-2 col-md-2 text-center">Брой артикули: @menu.CountItems</h4>
+                <a asp-controller="Menu" asp-action="Edit" asp-route-id="@menu.Id" class="btn btn-sm btn-warning m-2">Редактирай</a>
+                <form method="post" class="m-2" asp-controller="Menu" asp-action="Delete">
                     <input type="hidden" name="id" value="@menu.Id">
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
                     </div>
                 </form>
-                <a asp-controller="Menu" asp-action="Details" asp-route-id="@menu.Id" class="btn btn-sm btn-info m-2 col-md-2">Повече подробности</a>
+                <a asp-controller="Menu" asp-action="Details" asp-route-id="@menu.Id" class="btn btn-sm btn-info m-2 ">Повече подробности</a>
             </li>
         }
     </ul>

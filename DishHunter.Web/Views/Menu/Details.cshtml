@@ -48,10 +48,10 @@
                         </ul>
                     }
                 </div>
-                @if (!Model.MenuItems.Any())
+                @if (Model.MenuItems.Any())
                 {
                     <div class="card-footer">
-                        <form method="post" class="m-2 col-md-2" asp-controller="Brand" asp-action="Delete">
+                        <form method="post" class="m-2 col-md-2" asp-controller="MenuItem" asp-action="DeleteMany">
                             <input type="hidden" name="id" value="@Model.Id">
                             <div class="d-flex justify-content-center">
                                 <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>

@@ -64,7 +64,7 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account
             [Required]
             [DataType(DataType.Text)]
             [StringLength(UserNameMaxLenght, MinimumLength = UserNameMinLenght)]
-            [Display(Name = "User Name")]
+            [Display(Name = "Потребителско име")]
             public string UserName { get; set; }
 
             /// <summary>

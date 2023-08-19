@@ -1,4 +1,12 @@
 ﻿@using static DishHunter.Common.GeneralApplicationConstants;
+@using DishHunter.Services.Data.Interfaces;
+@using DishHunter.Web.Infrastructrure.Extensions;
+@inject IRestaurantOwnerService ownerService;
+@inject IAdminService adminService;
+@{
+    bool isOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+    bool isUserAdmin = await adminService.IsUserAdminByUserId(User.GetId()!);
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,16 +26,64 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DishHunter</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Owner" asp-action="Become">Страни ресторантьор</a>
-                        </li>*@
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Всички
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Brand" asp-action="All">Вериги</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Restaurant" asp-action="All">Ресторанти</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="MenuItem" asp-action="All">Артикули</a></li>
+                                    @if (isUserAdmin)
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="All">Категории</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Settlement" asp-action="All">Населени места</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Добави
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Brand" asp-action="Add">Верига</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Restaurant" asp-action="AddSingle">Ресторант</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Restaurant" asp-action="AddMany">Много ресторанти</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Menu" asp-action="AddSingle">Меню</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Menu" asp-action="AddMany">Много менюта</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="MenuItem" asp-action="AddSingle">Артикул</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="MenuItem" asp-action="AddMany">Много артикули</a></li>
+                                </ul>
+                            </li>
+                            @if (isOwner)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Моите
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Brand" asp-action="Mine">Вериги</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Restaurant" asp-action="Mine">Ресторанти</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Menu" asp-action="Mine">Менюта</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="MenuItem" asp-action="Mine">Артикули</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
                     </ul>
+                    @if ((User?.Identity?.IsAuthenticated ?? false) && !isOwner && !isUserAdmin)
+                    {
+                        <div class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Owner" asp-action="Become">Стани ресторантьор</a>
+                        </div>
+                    }
                     <partial name="_LoginPartial" />
                 </div>
             </div>

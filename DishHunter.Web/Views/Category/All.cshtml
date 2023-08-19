@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CategoryViewModel>
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <p class="display-4 lead">Не са добавени категории!</p>
+    </div>
+}
+else
+{
+    <div class="container">
+        <ul class="list-group">
+            @foreach (var c in Model)
+            {
+                <li class="list-group-item d-flex align-items-center">
+                    <h3 class="col-md-2">@c.CategoryName</h3>
+                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@c.Id"class="btn btn-warning btn-sm">Редактирай</a>
+                    <form method="post" class="m-2" asp-controller="Category" asp-action="Delete">
+                        <input type="hidden" name="id" value="@c.Id">
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                        </div>
+                    </form>
+                </li>
+            }
+        </ul>
+    </div>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

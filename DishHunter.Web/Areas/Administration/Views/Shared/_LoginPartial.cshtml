@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using DishHunter.Services.Data.Interfaces
+@using DishHunter.Web.Infrastructrure.Extensions
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IRestaurantOwnerService ownerService
+@{
+	bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+}
+<ul class="navbar-nav">
+	<li class="nav-item">
+		<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Настройки</a>
+	</li>
+	<li class="nav-item">
+		<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+			<button type="submit" class="nav-link btn btn-link text-dark">Излез</button>
+		</form>
+	</li>
+</ul>

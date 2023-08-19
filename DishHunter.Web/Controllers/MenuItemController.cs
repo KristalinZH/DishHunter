@@ -322,11 +322,11 @@
             }
         }
         [HttpPost]
-        public async Task<IActionResult>DeleteMany(int menuId)
+        public async Task<IActionResult>DeleteMany(int id)
         {
 			try
 			{
-				bool isMenuExisting = await menuService.ExistsByIdAsync(menuId);
+				bool isMenuExisting = await menuService.ExistsByIdAsync(id);
 				if (!isMenuExisting)
 				{
 					TempData[ErrorMessage] = "Търсеното от Вас меню не съществува!";
@@ -339,15 +339,15 @@
 					return RedirectToAction("Become", "Owner");
 				}
 				string? ownerId = await ownerService.GetOwnerIdByUserId(User.GetId()!);
-				bool isOwnerOwningMenu = await menuItemService
-                    .MenuItemOwnedByOwnerByMenuItemIdAndOwnerIdAsync(menuId, ownerId!);
+				bool isOwnerOwningMenu = await menuService
+                    .MenuOwnedByOwnerByMenuIdAndOwnerIdAsync(id, ownerId!);
 				if (!isOwnerOwningMenu)
 				{
                     TempData[ErrorMessage] = "Трябва да притежавате менюто за да имате право да изтриете в артикулите в него!";
 					return RedirectToAction("Mine", "Menu");
 				}
-                await menuItemService.DeleteMenuItemsByMenuIdAsync(menuId);
-                return RedirectToAction("Details", "Menu", new { id = menuId });
+                await menuItemService.DeleteMenuItemsByMenuIdAsync(id);
+                return RedirectToAction("Details", "Menu", new { id = id });
 			}
 			catch (Exception)
 			{

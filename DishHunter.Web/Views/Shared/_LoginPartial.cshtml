@@ -4,13 +4,15 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @inject IRestaurantOwnerService ownerService
+@inject IAdminService adminService
 @{
 	bool isUserOwner = await ownerService.OwnerExistsByUserIdAsync(User.GetId()!);
+	bool isUserAdmin = await adminService.UserExistsByIdAsync(User.GetId()!);
 }
 <ul class="navbar-nav">
 	@if (SignInManager.IsSignedIn(User))
 	{
-		if (!isUserOwner)
+		if (!isUserOwner && !isUserAdmin)
 		{
 			<li class="nav-item">
 				<a class="nav-link text-dark" asp-area="" asp-controller="Owner" asp-action="Become">Стани ресторантьор</a>

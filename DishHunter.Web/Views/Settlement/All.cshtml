@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SettlementSelectViewModel>
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <p class="display-4 lead">Не са населени места категории!</p>
+    </div>
+}
+else
+{
+    <div class="container">
+        <ul class="list-group">
+            @foreach (var s in Model)
+            {
+                <li class="list-group-item d-flex align-items-center">
+                    <h3 class="col-md-2 m-4">@s.SettlementName</h3>
+                    <h3 class="col-md-2 m-4">@s.Region</h3>
+                    <a asp-controller="Settlement" asp-action="Edit" asp-route-id="@s.Id" class="btn btn-warning btn-sm m-4">Редактирай</a>
+                    <form method="post" class="m-4" asp-controller="Category" asp-action="Delete">
+                        <input type="hidden" name="id" value="@s.Id">
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                        </div>
+                    </form>
+                </li>
+            }
+        </ul>
+    </div>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

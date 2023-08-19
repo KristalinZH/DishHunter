@@ -74,17 +74,17 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account
             [Required]
             [DataType(DataType.Text)]
             [StringLength(UserNameMaxLenght, MinimumLength = UserNameMinLenght)]
-            [Display(Name = "User Name")]
+            [Display(Name = "Потребителско име")]
             public string UserName { get; set; }
             [Required]
             [DataType(DataType.Text)]
             [StringLength(FirstNameMaxLenght,MinimumLength =FirstNameMinLenght)]
-            [Display(Name ="First Name")]
+            [Display(Name ="Име")]
             public string FirstName { get; set; }
             [Required]
             [DataType(DataType.Text)]
             [StringLength(LastNameMaxLenght, MinimumLength = LastNameMinLenght)]
-            [Display(Name = "Last Name")]
+            [Display(Name = "Фамилия")]
             public string LastName { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -92,7 +92,7 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Имейл")]
             public string Email { get; set; }
 
             /// <summary>
@@ -100,9 +100,9 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(PasswordMaxLenght, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",MinimumLength =4)]
+            [StringLength(PasswordMaxLenght, ErrorMessage = "{0} трябва да е поне {2} и максимум {1} символа.",MinimumLength =4)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
             /// <summary>
@@ -110,8 +110,8 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Потвърди паролата")]
+            [Compare("Password", ErrorMessage = "Паролите не съвпадат")]
             public string ConfirmPassword { get; set; }
         }
 
