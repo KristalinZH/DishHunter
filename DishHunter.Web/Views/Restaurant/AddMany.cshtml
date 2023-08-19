@@ -1,6 +1,11 @@
 ﻿@model RestaurantExcelFormViewModel
+@using DishHunter.Services.Data.Interfaces;
+@inject ICategoryService categoryService;
 @{
 	ViewData["Title"] = "Добави артикули с excel";
+	var allCategories = (await categoryService.AllCategoriesAsync())
+		.Select(c => c.CategoryName)
+		.ToArray();
 }
 <h2 class="text-center">@ViewData["Title"]</h2>
 <hr />
@@ -25,4 +30,26 @@
 			</div>
 		</form>
 	</div>
+	<h3 class="text-md-center text-danger">Внимание!</h3>
+	<p class="text-md-center text-danger">
+		За да прикачите успешно Вашите менюта с артикулите им е нужно да спазвате следната структура
+		на excel файла:
+		<br />
+		1)Размерът на таблицата е 7 колони и колко са Ви необходими редове
+		<br />
+		2) На всеки редове първо е името на артикула, след това областта, име на селището, адрес, телефон, категория и линк към снимка.
+		<br />
+		Възможни категории:
+		<ul class="text-center" style="list-style: none;">
+			@foreach (var c in allCategories)
+			{
+				<li class="text-danger">@c</li>
+			}
+		</ul>
+		<br />
+		<h5 class="text-danger text-center">3)Адресът може да съдържа само имена на улици и номера! Ако не бъде открита геолокацията на посочения от Вас адрес, няма да бъде добавен ресторант</h5>
+		
+		<br />
+		<h5 class="text-danger text-center">4) Всички данни трябва да са във текстов формат. При неправилно въведени данни не гарантираме, че ще бъдат оправени и качени правилно!</h5>
+	</p>
 </div>

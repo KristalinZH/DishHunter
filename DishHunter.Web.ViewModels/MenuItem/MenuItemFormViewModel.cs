@@ -29,6 +29,7 @@
         [MaxLength(UrlMaxLenght, ErrorMessage = UrlLenghtMessage)]
 		[Display(Name = "Линк към снимка")]
 		public string ImageUrl { get; set; } = null!;
+        [Display(Name = "Меню")]
         public int MenuId { get; set; }
         public IEnumerable<MenuSelectViewModel> Menus { get; set; }
     }

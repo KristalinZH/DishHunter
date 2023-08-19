@@ -47,6 +47,7 @@ namespace DishHunter.Web.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name ="Парола")]
             public string Password { get; set; }
         }
 
