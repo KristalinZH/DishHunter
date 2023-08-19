@@ -11,13 +11,22 @@
             builder
                 .HasData(SeedOwner());
         }
-        private RestaurantOwner SeedOwner()
+        private IEnumerable<RestaurantOwner> SeedOwner()
         {
-            return new RestaurantOwner()
+            return new List<RestaurantOwner>()
             {
-                Id= Guid.Parse("10a2102e-f116-4b81-b0a0-32b0d1022cb9"),
-                UserId= Guid.Parse("aadb31cc-2d98-4864-84f7-127ea6097123"),
-                IsActive =true
+                new RestaurantOwner()
+                {
+                    Id= Guid.Parse("62152f86-525b-454f-92c8-108cea75c239"),
+                    UserId= Guid.Parse("b49d1805-e143-47ed-9b72-7761e20d6c88"),
+                    IsActive =true
+                },
+                new RestaurantOwner()
+                {
+                    Id= Guid.Parse("62152f86-525b-454f-92c8-108cea75c240"),
+                    UserId= Guid.Parse("9e9d933d-973a-433a-ada2-19e4a7d4a509"),
+                    IsActive =true
+                }
             };
         }
     }

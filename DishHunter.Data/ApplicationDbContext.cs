@@ -40,7 +40,11 @@
 				builder.ApplyConfiguration(new UserConfiguration());
                 builder.ApplyConfiguration(new RestaurantOwnerSeedConfiguration());
                 builder.ApplyConfiguration(new AdminConfiguration());
-			}
+				builder.ApplyConfiguration(new BrandSeedConfiguration());
+                builder.ApplyConfiguration(new RestaurantSeedConfuration());
+                builder.ApplyConfiguration(new MenuSeedConfiguration());
+                builder.ApplyConfiguration(new MenuItemSeedConfiguration());
+            }
 			base.OnModelCreating(builder);
 		}
 

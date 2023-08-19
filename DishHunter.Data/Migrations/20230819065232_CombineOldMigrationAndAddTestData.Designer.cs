@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DishHunter.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230818083244_fixRestaurantPhoneMaxLenght")]
-    partial class fixRestaurantPhoneMaxLenght
+    [Migration("20230819065232_CombineOldMigrationAndAddTestData")]
+    partial class CombineOldMigrationAndAddTestData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,6 +106,85 @@ namespace DishHunter.Data.Migrations
                         .HasFilter("[RestaurantOwnerId] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d5b353de-0b76-4168-ba6f-bcfcdb7e3029"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cdb03d71-9a23-4c3f-b3fa-7953053c993b",
+                            Email = "admin@email.com",
+                            EmailConfirmed = false,
+                            FirstName = "Administrator",
+                            LastName = "Administrator",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EMAIL.COM",
+                            NormalizedUserName = "ADMINISTRATOR",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN2vCxeJbziGYO0UuaaydM1+4hGGPd3RcI5/pencgozGUjkveUYXMX4U32yqunfVzg==",
+                            PhoneNumber = "+359883333444",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "eaad52a0-d9d3-4880-bec0-6af9cf670abf",
+                            TwoFactorEnabled = false,
+                            UserName = "Administrator"
+                        },
+                        new
+                        {
+                            Id = new Guid("b49d1805-e143-47ed-9b72-7761e20d6c88"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "87d30734-08db-4e5c-a0a0-3863d9ce4f44",
+                            Email = "pesho@email.com",
+                            EmailConfirmed = false,
+                            FirstName = "Pesho",
+                            LastName = "Peshov",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PESHO@EMAIL.COM",
+                            NormalizedUserName = "PESHOTHEOWNER",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPoOWePcGDBvO+VQ1o+kb0Ky2DG1+KVeKFHFnmyyd8nTbJAH83ZN1J0b08PA0vubIA==",
+                            PhoneNumber = "+359884444333",
+                            PhoneNumberConfirmed = false,
+                            RestaurantOwnerId = new Guid("62152f86-525b-454f-92c8-108cea75c239"),
+                            SecurityStamp = "624a8235-441e-46c4-80fb-c7a27c081ebe",
+                            TwoFactorEnabled = false,
+                            UserName = "PeshoTheOwner"
+                        },
+                        new
+                        {
+                            Id = new Guid("9e9d933d-973a-433a-ada2-19e4a7d4a509"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "9ca1dbd5-98a7-439e-99cd-2bb49f63a4da",
+                            Email = "ivan@email.com",
+                            EmailConfirmed = false,
+                            FirstName = "Ivan",
+                            LastName = "Ivanov",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "IVAN@EMAIL.COM",
+                            NormalizedUserName = "IVANTHEOWNER",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGixZ7lWPEDqCZWRmoSZcpaNqx/5vLRAQivJZy9Ohdzu3eEDFh2+IGPQ8SbiJRSOVA==",
+                            PhoneNumber = "+359884444333",
+                            PhoneNumberConfirmed = false,
+                            RestaurantOwnerId = new Guid("62152f86-525b-454f-92c8-108cea75c240"),
+                            SecurityStamp = "d5a30d9d-498f-470e-b912-ae70ede92502",
+                            TwoFactorEnabled = false,
+                            UserName = "IvanTheOwner"
+                        },
+                        new
+                        {
+                            Id = new Guid("8a4d1997-8ace-42ba-aac5-1fe005eabd99"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "60d7c3c6-7a14-436f-9649-91511f802076",
+                            Email = "misho@email.com",
+                            EmailConfirmed = false,
+                            FirstName = "Misho",
+                            LastName = "Mishov",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MISHO@EMAIL.COM",
+                            NormalizedUserName = "MISHOTHEUSER",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOc/TXIp39g1hBAzFBnXFAmfdGtAqCT7fG7vNozx8a9vj1jlTGwZIAWS6r1RlBEPXA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "d0906cc3-c708-4525-8553-773b401457a4",
+                            TwoFactorEnabled = false,
+                            UserName = "MishoTheUser"
+                        });
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Account.RestaurantOwner", b =>
@@ -125,6 +204,20 @@ namespace DishHunter.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RestaurantOwners");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("62152f86-525b-454f-92c8-108cea75c239"),
+                            IsActive = true,
+                            UserId = new Guid("aadb31cc-2d98-4864-84f7-127ea6097123")
+                        },
+                        new
+                        {
+                            Id = new Guid("62152f86-525b-454f-92c8-108cea75c240"),
+                            IsActive = true,
+                            UserId = new Guid("aadb31cc-2d98-4864-84f7-127ea609712a")
+                        });
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Brand", b =>
@@ -166,6 +259,28 @@ namespace DishHunter.Data.Migrations
                     b.HasIndex("RestaurantOwnerId");
 
                     b.ToTable("Brands");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7f69f846-bc9c-4058-9c84-36ce93e7933d"),
+                            BrandName = "Happy",
+                            Description = "Описанието на Happy",
+                            IsActive = true,
+                            LogoUrl = "https://happy.bg/assets/images/logo_pink_alt.svg",
+                            RestaurantOwnerId = new Guid("62152f86-525b-454f-92c8-108cea75c239"),
+                            WebsiteUrl = "https://happy.bg/"
+                        },
+                        new
+                        {
+                            Id = new Guid("b49ffdc5-5442-4c7e-8733-741e2763ed5d"),
+                            BrandName = "Dominos",
+                            Description = "Описанието на Dominos",
+                            IsActive = true,
+                            LogoUrl = "https://i.pinimg.com/736x/1b/ee/08/1bee08aa56544de70e0c6bffe4a944a4.jpg",
+                            RestaurantOwnerId = new Guid("62152f86-525b-454f-92c8-108cea75c240"),
+                            WebsiteUrl = "https://www.dominos.bg/"
+                        });
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Category", b =>
@@ -265,6 +380,26 @@ namespace DishHunter.Data.Migrations
                     b.HasIndex("BrandId");
 
                     b.ToTable("Menus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BrandId = new Guid("7f69f846-bc9c-4058-9c84-36ce93e7933d"),
+                            Description = "Описание на меню",
+                            FoodType = "Интернационална",
+                            IsActive = true,
+                            MenuType = "Основно"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BrandId = new Guid("b49ffdc5-5442-4c7e-8733-741e2763ed5d"),
+                            Description = "Описание на меню",
+                            FoodType = "Италианска",
+                            IsActive = true,
+                            MenuType = "Пици"
+                        });
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.MenuItem", b =>
@@ -317,6 +452,56 @@ namespace DishHunter.Data.Migrations
                     b.HasIndex("MenuId");
 
                     b.ToTable("MenuItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Описание на бургер",
+                            FoodCategory = "Бургер",
+                            ImageUrl = "https://dostavka.happy.bg/remote/files/images/40855/fit_600_376.png?rev=1663753137",
+                            IsActive = true,
+                            MenuId = 1,
+                            Name = "Бургер Crazy Me",
+                            Price = 15.99m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Описание на бургер",
+                            FoodCategory = "Бургер",
+                            ImageUrl = "https://dostavka.happy.bg/remote/files/images/173243/fit_600_376.png?rev=1687678926",
+                            IsActive = true,
+                            MenuId = 1,
+                            Name = "Бургер Джак Даниелс",
+                            Price = 16.99m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Описание на пица",
+                            FoodCategory = "Пица",
+                            ImageUrl = "https://gotvach.bg/files/1200x800/piza-tuna-domashna.webp",
+                            IsActive = true,
+                            MenuId = 2,
+                            Name = "Бърбън пица",
+                            Price = 17.99m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Описание на пица",
+                            FoodCategory = "Пица",
+                            ImageUrl = "https://gotvach.bg/files/1200x800/pizza-margheritta1.webp",
+                            IsActive = true,
+                            MenuId = 2,
+                            Name = "Пица Маргарита",
+                            Price = 11.99m
+                        });
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Restaurant", b =>
@@ -376,6 +561,36 @@ namespace DishHunter.Data.Migrations
                     b.HasIndex("SettlementId");
 
                     b.ToTable("Restaurants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f7aa574f-0eb5-4256-8754-a9b9c6fb1fd8"),
+                            Address = "ж.к. Лазур 41",
+                            BrandId = new Guid("7f69f846-bc9c-4058-9c84-36ce93e7933d"),
+                            CategoryId = 1,
+                            ImageUrl = "https://rezzo.bg/files/images/9484/fit_431_304.jpg",
+                            IsActive = true,
+                            Latitude = 42.5067369m,
+                            Longitude = 27.4778636m,
+                            Name = "Happy Бургас",
+                            PhoneNumber = "+3591112222",
+                            SettlementId = 552
+                        },
+                        new
+                        {
+                            Id = new Guid("f7aa574f-0eb5-4256-8754-a9b9c6fb1fd9"),
+                            Address = "Александър Стамболийски",
+                            BrandId = new Guid("b49ffdc5-5442-4c7e-8733-741e2763ed5d"),
+                            CategoryId = 1,
+                            ImageUrl = "https://imgrabo.com/pics/guide/900x600/20210311142613_91734.jpeg",
+                            IsActive = true,
+                            Latitude = 42.7071623m,
+                            Longitude = 23.1469427m,
+                            Name = "Доминос София",
+                            PhoneNumber = "+3592221111",
+                            SettlementId = 4368
+                        });
                 });
 
             modelBuilder.Entity("DishHunter.Data.Models.Restaurant.Settlement", b =>
@@ -37134,6 +37349,13 @@ namespace DishHunter.Data.Migrations
                             IsActive = false,
                             Region = "обл.Пазарджик",
                             SettlementName = "с.Свети Константин"
+                        },
+                        new
+                        {
+                            Id = 5248,
+                            IsActive = true,
+                            Region = "mANGALOVO",
+                            SettlementName = "Asparuhovo"
                         });
                 });
 
@@ -37167,15 +37389,15 @@ namespace DishHunter.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7c7d3451-767b-419b-96ec-5df673cb54f1"),
-                            ConcurrencyStamp = "e93f37e2-044c-4235-8574-c9c5bd77d2fb",
+                            Id = new Guid("f39b8190-06f0-46ff-b35f-9e9d6703c5d2"),
+                            ConcurrencyStamp = "104ebff7-19be-4375-aeb0-c416fe69e500",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = new Guid("c68aee11-94a0-4ce9-b090-e17777852cce"),
-                            ConcurrencyStamp = "ebe7b523-78e2-4ce3-89eb-763ef1148484",
+                            Id = new Guid("c421e5d4-85c6-4173-a17b-23c735028160"),
+                            ConcurrencyStamp = "03fd43f9-efe3-41e7-9a19-e87f416b23d4",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -37265,6 +37487,28 @@ namespace DishHunter.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("d5b353de-0b76-4168-ba6f-bcfcdb7e3029"),
+                            RoleId = new Guid("f39b8190-06f0-46ff-b35f-9e9d6703c5d2")
+                        },
+                        new
+                        {
+                            UserId = new Guid("b49d1805-e143-47ed-9b72-7761e20d6c88"),
+                            RoleId = new Guid("c421e5d4-85c6-4173-a17b-23c735028160")
+                        },
+                        new
+                        {
+                            UserId = new Guid("9e9d933d-973a-433a-ada2-19e4a7d4a509"),
+                            RoleId = new Guid("c421e5d4-85c6-4173-a17b-23c735028160")
+                        },
+                        new
+                        {
+                            UserId = new Guid("8a4d1997-8ace-42ba-aac5-1fe005eabd99"),
+                            RoleId = new Guid("c421e5d4-85c6-4173-a17b-23c735028160")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
