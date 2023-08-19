@@ -15,7 +15,7 @@ else
                     <h3 class="col-md-2 m-4">@s.SettlementName</h3>
                     <h3 class="col-md-2 m-4">@s.Region</h3>
                     <a asp-controller="Settlement" asp-action="Edit" asp-route-id="@s.Id" class="btn btn-warning btn-sm m-4">Редактирай</a>
-                    <form method="post" class="m-4" asp-controller="Category" asp-action="Delete">
+                    <form method="post" class="m-4" asp-controller="Settlement" asp-action="Delete">
                         <input type="hidden" name="id" value="@s.Id">
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>

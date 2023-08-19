@@ -24,6 +24,15 @@
                     </p>
                 </div>
             </div>
+            <div class="d-flex">
+                <a asp-controller="Brand" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm m-2 col-md-2">Редактирай</a>
+                <form method="post" class="m-2 col-md-2" asp-controller="Brand" asp-action="Delete">
+                    <input type="hidden" name="id" value="@Model.Id">
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div class="row">

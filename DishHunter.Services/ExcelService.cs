@@ -47,6 +47,7 @@
             List<MenuExcelTransferModel> menus =
                 new List<MenuExcelTransferModel>();
 			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            bool isThereTable = false;
 			using (var package = new ExcelPackage(stream))
             {
 				var format = new ExcelOutputTextFormat();
@@ -58,6 +59,7 @@
                     var tables = ws.Tables;
                     foreach (var t in tables)
                     {
+                        isThereTable = true;
                         var rows = (await t.ToTextAsync(format))
                             .Split(Environment.NewLine)
                             .Skip(1);
@@ -97,6 +99,12 @@
                     }
                 }
             }
+            if (!isThereTable)
+            {
+                result.Message = MissingExcelData;
+                result.Menus = null;
+                return result;
+            }
             result.IsDataExtracted = true;
             result.Message = SuccessfulyExtractedExcelData;
             result.Menus = menus;
@@ -113,17 +121,19 @@
             List<MenuItemExcelTransferModel> menuItems = 
                 new List<MenuItemExcelTransferModel>();
 			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-			using (var package = new ExcelPackage(stream))
+            bool isThereTable = false;
+            using (var package = new ExcelPackage(stream))
             {
                 var worksheets = package.Workbook.Worksheets;
 				var format = new ExcelOutputTextFormat();
 				format.Delimiter = csvDelimeter;
-				format.Encoding = Encoding.UTF8;
+				format.Encoding = Encoding.UTF8;              
 				foreach (var ws in worksheets)
                 {
-                    var tables = ws.Tables;
+                    var tables = ws.Tables;                 
                     foreach (var t in tables)
-                    {						
+                    {
+                        isThereTable = true;
 						var rows = (await t.ToTextAsync(format))
                             .Split(Environment.NewLine)
                             .Skip(1);
@@ -133,6 +143,12 @@
                         menuItems.AddRange(currentTableResult.MenuItems!);
                     }
                 }
+            }
+            if (!isThereTable)
+            {
+                result.Message = MissingExcelData;
+                result.MenuItems = null;
+                return result;
             }
             result.IsDataExtracted = true;
             result.Message = SuccessfulyExtractedExcelData;
@@ -150,17 +166,20 @@
             List<RestaurantExcelTransferModel> restaurants =
                 new List<RestaurantExcelTransferModel>();
 			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-			using (var package = new ExcelPackage(stream))
+            bool isThereTable = false;
+            using (var package = new ExcelPackage(stream))
             {
                 var worksheets = package.Workbook.Worksheets;
 				var format = new ExcelOutputTextFormat();
 				format.Delimiter = csvDelimeter;
 				format.Encoding = Encoding.UTF8;
+
 				foreach (var ws in worksheets)
                 {
                     var tables = ws.Tables;
                     foreach (var t in tables)
                     {
+                        isThereTable = true;
                         var rows = (await t.ToTextAsync(format))
                             .Split(Environment.NewLine)
                             .Skip(1);
@@ -203,6 +222,12 @@
                         }
                     }
                 }
+            }
+            if (!isThereTable)
+            {
+                result.Message = MissingExcelData;
+                result.Restaurants = null;
+                return result;
             }
             result.IsDataExtracted = true;
             result.Message = SuccessfulyExtractedExcelData;

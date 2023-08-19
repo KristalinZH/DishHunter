@@ -6,7 +6,7 @@
 <hr />
 @if (!Model.Any())
 {
-    <h2 class="text-lg-center">Не сте създали верига все още!</h2>
+    <h2 class="text-lg-center">Не сте създали меню все още!</h2>
     <p class="text-center">
         Създайте своето първо меню!
         <a asp-controller="Menu" asp-action="AddSingle" class="btn btn-primary btn-sm m-1">Създай</a>
@@ -23,7 +23,7 @@ else
                 <h4 class="m-2 col-md-2 text-center">@menu.Brand</h4>
                 <h4 class="m-2 col-md-2 text-center">Брой артикули: @menu.CountItems</h4>
                 <a asp-controller="Menu" asp-action="Edit" asp-route-id="@menu.Id" class="btn btn-sm btn-warning m-2">Редактирай</a>
-                <form method="post" class="m-2" asp-controller="Menu" asp-action="Delete">
+                <form method="post" class="m-2" asp-controller="Menu" asp-action="DeleteSingle">
                     <input type="hidden" name="id" value="@menu.Id">
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-sm btn-danger" style="width:100%">Изтрий</button>

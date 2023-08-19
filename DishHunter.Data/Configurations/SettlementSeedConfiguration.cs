@@ -12,14 +12,6 @@
         {
             builder
                 .HasData(ExtractSettlements());
-            Settlement settlement = new Settlement()
-            {
-                Id = 5248,
-                Region = "mANGALOVO",
-                SettlementName = "Asparuhovo",
-                IsActive = true
-            };
-            builder.HasData(settlement);
         }
         private Settlement[] ExtractSettlements()
         {
