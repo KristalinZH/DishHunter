@@ -15,7 +15,7 @@
         Task DeleteMenuItemsByMenusIdRangeAsync(List<int> menus);
         Task DeleteMenuItemsByMenuIdAsync(int menuId);
         Task<bool> MenuItemOwnedByOwnerByMenuItemIdAndOwnerIdAsync(int menuItemId, string ownerId);
-        Task<IEnumerable<MenuItemsCardTransferModel>> GetAllMenuItemsAsCardsAsync();
+        Task<MenuItemQueryTransferModel> GetAllMenuItemsAsCardsAsync(MenuItemQueryTransferModel query);
         Task<IEnumerable<MenuItemListTransferModel>> GetOwnersMenuItemsByOwnerIdAsync(string ownerId);
     }
 }

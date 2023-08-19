@@ -127,8 +127,13 @@
         {
             string restaurantId = "3a77e8ec-2d43-4eff-9f3a-822a2d7b8be3";
             await restaurantService.DeleteRestaurantByIdAsync(restaurantId);
-            var r = await restaurantService.GetAllRestaurantsAsCardsAsync();
-            Assert.That(r.Count(), Is.EqualTo(1));
+            var query = new RestaurantQueryTransferModel()
+            {
+                SearchRegion = null,
+                SearchSettlement = null
+            };
+            query = await restaurantService.GetAllRestaurantsAsCardsAsync(query);
+            Assert.That(query.Restaurants.Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -136,8 +141,13 @@
         {
             string brandId = "15d93c12-9a8c-40ce-a6ae-b4d7c980d707";
             await restaurantService.DeleteRestaurantsByBrandIdAsync(brandId);
-            var r = await restaurantService.GetAllRestaurantsAsCardsAsync();
-            Assert.That(r.Count(), Is.EqualTo(0));
+            var query = new RestaurantQueryTransferModel()
+            {
+                SearchRegion = null,
+                SearchSettlement = null
+            };
+            query = await restaurantService.GetAllRestaurantsAsCardsAsync(query);
+            Assert.That(query.Restaurants.Count(), Is.EqualTo(0));
         }
 
         [Test]
@@ -186,8 +196,13 @@
         [Test]
         public async Task GetAllRestaurantsAsCardsResult()
         {
-            var r = await restaurantService.GetAllRestaurantsAsCardsAsync();
-            Assert.That(r.Count(), Is.EqualTo(2));
+            var query = new RestaurantQueryTransferModel()
+            {
+                SearchRegion = null,
+                SearchSettlement = null
+            };
+            query = await restaurantService.GetAllRestaurantsAsCardsAsync(query);
+            Assert.That(query.Restaurants.Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -261,8 +276,13 @@
                 Guid.Parse("15d93c12-9a8c-40ce-a6ae-b4d7c980d707")
             };
             await restaurantService.DeleteRestaurantsByBrandsIdsRangeAsync(ids);
-            var result = await restaurantService.GetAllRestaurantsAsCardsAsync();
-            Assert.That(result.Count(), Is.EqualTo(0));
+            var query = new RestaurantQueryTransferModel()
+            {
+                SearchRegion = null,
+                SearchSettlement = null
+            };
+            query = await restaurantService.GetAllRestaurantsAsCardsAsync(query);
+            Assert.That(query.Restaurants.Count(), Is.EqualTo(0));
         }
     }
 }

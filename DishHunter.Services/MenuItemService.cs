@@ -6,6 +6,7 @@
     using DishHunter.Data;
     using DishHunter.Data.Models.Restaurant;
     using Models.MenuItem;
+    using Models.Enums;
     using Interfaces;
     using static Common.NotificationMessagesConstants;
 
@@ -96,20 +97,40 @@
                 .Where(mi => mi.IsActive)
                 .AnyAsync(mi => mi.Id == menuItemId);
 
-        public async Task<IEnumerable<MenuItemsCardTransferModel>> GetAllMenuItemsAsCardsAsync()
-            => await dbContext.MenuItems
-            .Where(mi => mi.IsActive)
-            .Select(mi => new MenuItemsCardTransferModel()
+        public async Task<MenuItemQueryTransferModel> GetAllMenuItemsAsCardsAsync(MenuItemQueryTransferModel query)
+        {
+            IQueryable<MenuItem> menuItemQuery = dbContext.MenuItems.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(query.SearchItem))
             {
-                Id=mi.Id,
-                Name=mi.Name,
-                Description=mi.Description,
-                Price=mi.Price,
-                ImageUrl=mi.ImageUrl,
-                FoodCategory=mi.FoodCategory
-            }).ToArrayAsync();
+                string wildCard = $"%{query.SearchItem.ToLower()}%";
+                menuItemQuery = menuItemQuery.Where(mi => EF.Functions.Like(mi.Name, wildCard));
+            }
+            menuItemQuery = query.Sorting switch
+            {
+                MenuItemSorting.Oldest => menuItemQuery.OrderBy(h => h.CreatedOn),
+                MenuItemSorting.Newest => menuItemQuery.OrderByDescending(h => h.CreatedOn),
+                MenuItemSorting.PriceAscending => menuItemQuery.OrderBy(h => h.Price),
+                MenuItemSorting.PriceDescendin => menuItemQuery.OrderByDescending(h => h.Price),
+                _ => menuItemQuery
+            };
+            var menuItems=await menuItemQuery
+                .Where(mi => mi.IsActive)
+                .Select(mi => new MenuItemsCardTransferModel()
+                {
+                    Id = mi.Id,
+                    Name = mi.Name,
+                    Description = mi.Description,
+                    Price = mi.Price,
+                    ImageUrl = mi.ImageUrl,
+                    FoodCategory = mi.FoodCategory
+                }).ToArrayAsync();
+            return new MenuItemQueryTransferModel()
+            {
+                MenuItems = menuItems
+            };
+        }
 
-		public async Task<DetailsMenuItemTransferModel> GetMenuItemDetailsByIdAsync(int menuItemId)
+        public async Task<DetailsMenuItemTransferModel> GetMenuItemDetailsByIdAsync(int menuItemId)
         {
             MenuItem menuItem = await dbContext.MenuItems
                 .Where(mi => mi.IsActive)

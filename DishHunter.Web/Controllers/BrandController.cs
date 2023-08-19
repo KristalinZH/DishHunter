@@ -20,19 +20,33 @@
             ownerService = _ownerService;
 		}
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery]BrandQueryViewModel query)
         {
             try
             {
-                var allBrands = (await brandService.GetAllBrandsAsCardsAsync())
-                    .Select(b => new BrandsCardViewModel()
+                var toTmQuery = new BrandQueryTransferModel()
+                {
+                    SearchString = query.SearchString,
+                    Brands = query.Brands.Select(b => new BrandsCardTransferModel()
                     {
                         Id = b.Id,
                         BrandName = b.BrandName,
                         LogoUrl = b.LogoUrl,
                         WebsiteUrl = b.WebsiteUrl
-                    });
-                return View(allBrands);
+                    })
+                };
+                var newQuery = await brandService.GetAllBrandsAsCardsAsync(toTmQuery);
+                var newViewQuery = new BrandQueryViewModel()
+                {
+                    Brands = newQuery.Brands.Select(b => new BrandsCardViewModel()
+                    {
+                        Id = b.Id,
+                        BrandName = b.BrandName,
+                        LogoUrl = b.LogoUrl,
+                        WebsiteUrl = b.WebsiteUrl
+                    })
+                };
+                return View(newViewQuery);
             }
             catch (Exception)
             {

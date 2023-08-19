@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DishHuner.Common\DishHunter.Common.csproj" />
+    <ProjectReference Include="..\DishHunter.Services.Data.Models\DishHunter.Services.Data.Models.csproj" />
   </ItemGroup>
 
 </Project>

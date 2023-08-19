@@ -1,10 +1,23 @@
-﻿@model IEnumerable<BrandsCardViewModel>
+﻿@model BrandQueryViewModel
 @{
     ViewData["Title"] = "Вериги заведения";
 }
 <h1 class="text-lg-center">@ViewData["Title"]</h1>
 <hr />
-@if (!Model.Any())
+<form method="get">
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label asp-for="SearchString">Търси по име</label>
+            <input asp-for="SearchString" class="form-control" placeholder="...">
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mt-4 p-2">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+@if (!Model.Brands.Any())
 {
     <div class="text-center">
         <p class="display-4 lead">В момента няма налични вериги заведения!</p>
@@ -14,7 +27,7 @@ else
 {
     <div class="container">
         <div class="row">
-            @foreach (var brand in Model)
+            @foreach (var brand in Model.Brands)
             {
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">

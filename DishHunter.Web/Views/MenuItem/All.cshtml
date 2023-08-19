@@ -1,10 +1,35 @@
-﻿@model IEnumerable<MenuItemsCardViewModel>
+﻿@model MenuItemQueryViewModel
 @{
     ViewData["Title"] = "Артикули";
 }
 <h1 class="text-lg-center">@ViewData["Title"]</h1>
 <hr />
-@if (!Model.Any())
+<form method="get">
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label asp-for="SearchItem">Търси по име</label>
+            <input asp-for="SearchItem" class="form-control" placeholder="...">
+        </div>
+        <div class="form-group col-md-3">
+            <div class="form-group">
+                <label asp-for="Sorting">Сортитай по: </label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="1">Най-стари</option>
+                    <option value="2">Най-нови</option>
+                    <option value="3">Цена възходящо</option>
+                    <option value="4">Цена низходящо</option>
+                    <option value="5">Не сортирай</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mt-4 p-2">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+@if (!Model.MenuItems.Any())
 {
     <div class="text-center">
         <p class="display-4 lead">В момента няма налични артикули!</p>
@@ -14,7 +39,7 @@ else
 {
     <div class="container">
         <div class="row">
-            @foreach (var menuItem in Model)
+            @foreach (var menuItem in Model.MenuItems)
             {
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">

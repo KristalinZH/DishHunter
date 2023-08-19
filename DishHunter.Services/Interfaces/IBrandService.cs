@@ -7,7 +7,7 @@
         Task<string> CreateBrandAsync(string restaurantOwnerId, BrandPostTransferModel brandModel);
         Task<bool> ExistsByIdAsync(string brandId);
         Task<string> GetBrandOwnerIdAsync(string brandId);
-        Task<IEnumerable<BrandsCardTransferModel>> GetAllBrandsAsCardsAsync();
+        Task<BrandQueryTransferModel> GetAllBrandsAsCardsAsync(BrandQueryTransferModel query);
 		Task<IEnumerable<BrandsCardTransferModel>> GetTop3BrandsAsCardsAsync();
 		Task<BrandPostTransferModel> GetBrandForEditByIdAsync(string brandId);
         Task EditBrandByIdAsync(string brandId, BrandPostTransferModel brand);

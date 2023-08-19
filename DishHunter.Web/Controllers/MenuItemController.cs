@@ -352,21 +352,38 @@
 			}
 		}
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery]MenuItemQueryViewModel query)
         {
 			try
 			{
-				var allMenuItems = (await menuItemService.GetAllMenuItemsAsCardsAsync())
-					.Select(b => new MenuItemsCardViewModel()
-					{
-						Id = b.Id,
-						Name=b.Name,
-                        Price=b.Price,
-                        FoodCategory=b.FoodCategory,
-                        Description=b.Description,
-                        ImageUrl=b.ImageUrl
-					});
-				return View(allMenuItems);
+                var toTmQuery = new MenuItemQueryTransferModel()
+                {
+                    SearchItem = query.SearchItem,
+                    Sorting = query.Sorting,
+                    MenuItems = query.MenuItems.Select(b => new MenuItemsCardTransferModel()
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        Price = b.Price,
+                        FoodCategory = b.FoodCategory,
+                        Description = b.Description,
+                        ImageUrl = b.ImageUrl
+                    })
+                };
+                var newQuery = await menuItemService.GetAllMenuItemsAsCardsAsync(toTmQuery);
+                var newViewQuery = new MenuItemQueryViewModel()
+                {
+                    MenuItems = newQuery.MenuItems.Select(b => new MenuItemsCardViewModel()
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        Price = b.Price,
+                        FoodCategory = b.FoodCategory,
+                        Description = b.Description,
+                        ImageUrl = b.ImageUrl
+                    })
+                };
+				return View(newViewQuery);
 			}
 			catch (Exception)
 			{

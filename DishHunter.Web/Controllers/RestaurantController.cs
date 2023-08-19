@@ -12,6 +12,7 @@
     using ViewModels.Category;
     using ViewModels.Settlement;
     using static Common.NotificationMessagesConstants;
+    using DishHunter.Services.Data.Models.MenuItem;
 
     public class RestaurantController : ExcelController
     {
@@ -418,22 +419,38 @@
             }
         }
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery]RestaurantQueryViewModel query)
         {
             try
             {
-                var restaurants = (await restaurantService
-                    .GetAllRestaurantsAsCardsAsync())
-                    .Select(r => new RestaurantCardViewModel()
+                var toTmQuery = new RestaurantQueryTransferModel()
+                {
+                    SearchRegion = query.SearchRegion,
+                    SearchSettlement = query.SearchSettlement,
+                    Restaurants = query.Restaurants.Select(r => new RestaurantCardTransferModel()
                     {
-                        Id=r.Id,
-                        Name=r.Name,
-                        ImageUrl=r.ImageUrl,
-                        Brand=r.Brand,
-                        Settlement=r.Settlement,
+                        Id = r.Id,
+                        Name = r.Name,
+                        ImageUrl = r.ImageUrl,
+                        Brand = r.Brand,
+                        Settlement = r.Settlement,
+                        Region = r.Region
+                    })
+                };
+                var newQuery = await restaurantService.GetAllRestaurantsAsCardsAsync(toTmQuery);
+                var newViewQuery = new RestaurantQueryViewModel()
+                {
+                    Restaurants = newQuery.Restaurants.Select(r => new RestaurantCardViewModel()
+                    {
+                        Id = r.Id,
+                        Name = r.Name,
+                        ImageUrl = r.ImageUrl,
+                        Brand = r.Brand,
+                        Settlement = r.Settlement,
                         Region = r.Region.Split('.')[1]
-                    });
-                return View(restaurants);
+                    })
+                };
+                return View(newViewQuery);
             }
             catch (Exception)
             {

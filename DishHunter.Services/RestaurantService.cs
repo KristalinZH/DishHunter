@@ -193,21 +193,38 @@
             .Where(r => r.IsActive)
             .AnyAsync(r => r.Id.ToString() == restaurantId);
 
-        public async Task<IEnumerable<RestaurantCardTransferModel>> GetAllRestaurantsAsCardsAsync()
-            => await dbContext.Restaurants
-            .Where(r => r.IsActive)
-            .Include(r=>r.Brand)
-            .Include(r=>r.Settlement)
-            .OrderBy(r=>r.Name)
-            .Select(r => new RestaurantCardTransferModel()
+        public async Task<RestaurantQueryTransferModel> GetAllRestaurantsAsCardsAsync(RestaurantQueryTransferModel query)
+        {
+            IQueryable<Restaurant> restaurantQuery = dbContext.Restaurants.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(query.SearchRegion))
             {
-                Id=r.Id.ToString(),
-                Name=r.Name,
-                ImageUrl=r.ImageUrl,
-                Brand=r.Brand.BrandName,
-                Region=r.Settlement.Region,
-                Settlement=r.Settlement.SettlementName
-            }).ToArrayAsync();
+                string wildCard = $"%{query.SearchRegion.ToLower()}%";
+                restaurantQuery = restaurantQuery.Where(r => EF.Functions.Like(r.Settlement.Region, wildCard));
+            }
+            if (!string.IsNullOrWhiteSpace(query.SearchSettlement))
+            {
+                string wildCard = $"%{query.SearchSettlement.ToLower()}%";
+                restaurantQuery = restaurantQuery.Where(r => EF.Functions.Like(r.Settlement.SettlementName, wildCard));
+            }
+            var restaurants = await restaurantQuery
+                .Where(r => r.IsActive)
+                .Include(r => r.Brand)
+                .Include(r => r.Settlement)
+                .OrderBy(r => r.Name)
+                .Select(r => new RestaurantCardTransferModel()
+                {
+                    Id = r.Id.ToString(),
+                    Name = r.Name,
+                    ImageUrl = r.ImageUrl,
+                    Brand = r.Brand.BrandName,
+                    Region = r.Settlement.Region,
+                    Settlement = r.Settlement.SettlementName
+                }).ToArrayAsync();
+            return new RestaurantQueryTransferModel()
+            {
+                Restaurants = restaurants
+            };         
+        }
 
         public async Task<IEnumerable<RestaurantDetailedTransferModel>> GetOwnerRestaurantsByOnwerIdAsync(string ownerId)
             => await dbContext.Restaurants

@@ -5,6 +5,7 @@
     using DishHunter.Data;
     using DishHunter.Data.Models.Restaurant;
     using Models.Brand;
+    using Models.Enums;
     using Interfaces;
     using System.Collections.Generic;
 
@@ -47,18 +48,30 @@
                 .FirstAsync(b => b.Id.ToString() == brandId);
             return brand.RestaurantOwnerId.ToString();
         }
-        public async Task<IEnumerable<BrandsCardTransferModel>> GetAllBrandsAsCardsAsync()
-            => await dbContext.Brands
+        public async Task<BrandQueryTransferModel> GetAllBrandsAsCardsAsync(BrandQueryTransferModel query)
+        {
+            IQueryable<Brand> brandsQuery = dbContext.Brands.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(query.SearchString))
+            {
+                string wildCard = $"%{query.SearchString.ToLower()}%";
+                brandsQuery = brandsQuery.Where(b => EF.Functions.Like(b.BrandName, wildCard));
+            }
+            var brands = await brandsQuery
                 .Where(b => b.IsActive)
-                .OrderBy(b=>b.BrandName)
+                .OrderBy(b => b.BrandName)
                 .Select(b => new BrandsCardTransferModel()
                 {
-                    Id=b.Id.ToString(),
+                    Id = b.Id.ToString(),
                     BrandName = b.BrandName,
                     LogoUrl = b.LogoUrl,
                     WebsiteUrl = b.WebsiteUrl
                 })
                 .ToArrayAsync();
+            return new BrandQueryTransferModel()
+            {
+                Brands = brands
+            };
+        }
         public async Task<IEnumerable<BrandsCardTransferModel>> GetTop3BrandsAsCardsAsync() 
             => await dbContext.Brands
 				.Where(b => b.IsActive)

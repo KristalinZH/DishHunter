@@ -49,8 +49,12 @@
         [Test]
         public async Task GetAllBrandsResult()
         {
-            var brands = await brandService.GetAllBrandsAsCardsAsync();
-            Assert.That(brands.Count(), Is.EqualTo(5));
+            var query = new BrandQueryTransferModel()
+            {
+                SearchString = null
+            };
+            query = await brandService.GetAllBrandsAsCardsAsync(query);
+            Assert.That(query.Brands.Count(), Is.EqualTo(5));
         }
         [Test]
         public async Task GetTop3BrandsResult()
@@ -147,14 +151,18 @@
             bool result = await brandService.AnyBrandOwnedByOwnerByOwnerIdAsync(ownerId);
             Assert.That(result, Is.EqualTo(false));
         }
-        //public async Task DeleteBrandsByOwnerIdAsync(string ownerId)
+
         [Test]
         public async Task DeleteBrandsByOwnerIdResult()
         {
             string ownerId = "2618f422-fb08-42a7-bd9c-ffc4d311822a";
             await brandService.DeleteBrandsByOwnerIdAsync(ownerId);
-            var brands = await brandService.GetAllBrandsAsCardsAsync();
-            Assert.That(brands.Count(), Is.EqualTo(1));
+            var query = new BrandQueryTransferModel()
+            {
+                SearchString = null
+            };
+            query = await brandService.GetAllBrandsAsCardsAsync(query);
+            Assert.That(query.Brands.Count(), Is.EqualTo(1));
         }
     }
 }

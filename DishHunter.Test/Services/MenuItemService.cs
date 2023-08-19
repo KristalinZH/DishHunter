@@ -1,6 +1,7 @@
 ﻿namespace DishHunter.Test.Services
 {
     using BaseTest;
+    using DishHunter.Services.Data.Models.Enums;
     using DishHunter.Services.Data.Models.MenuItem;
     using static Common.NotificationMessagesConstants;
     [TestFixture]
@@ -60,17 +61,27 @@
         {
             int menuItemId = 1;
             await menuItemService.DeleteMenuItemByIdAsync(menuItemId);
-            var result = await menuItemService.GetAllMenuItemsAsCardsAsync();
-            Assert.That(result.Count(), Is.EqualTo(3));
+            var query = new MenuItemQueryTransferModel()
+            {
+                SearchItem = null,
+                Sorting = MenuItemSorting.None
+            };
+            query = await menuItemService.GetAllMenuItemsAsCardsAsync(query);
+            Assert.That(query.MenuItems.Count(), Is.EqualTo(3));
         }
         
         [Test]
         public async Task DeleteMenuItemsByMenusIdRangeResult()
         {
             List<int> mids = new List<int>() { 1, 2 };
+            var query = new MenuItemQueryTransferModel()
+            {
+                SearchItem = null,
+                Sorting = MenuItemSorting.None
+            };
             await menuItemService.DeleteMenuItemsByMenusIdRangeAsync(mids);
-            var result = await menuItemService.GetAllMenuItemsAsCardsAsync();
-            Assert.That(result.Count(), Is.EqualTo(0));
+            query = await menuItemService.GetAllMenuItemsAsCardsAsync(query);
+            Assert.That(query.MenuItems.Count(), Is.EqualTo(0));
         }
         
         [Test]
@@ -101,8 +112,13 @@
         [Test]
         public async Task GetAllMenuItemsResult()
         {
-            var result = await menuItemService.GetAllMenuItemsAsCardsAsync();
-            Assert.That(result.Count(), Is.EqualTo(4));
+            var query = new MenuItemQueryTransferModel()
+            {
+                SearchItem = null,
+                Sorting = MenuItemSorting.None
+            };
+            query = await menuItemService.GetAllMenuItemsAsCardsAsync(query);
+            Assert.That(query.MenuItems.Count(), Is.EqualTo(4));
         }
 
         [Test]
