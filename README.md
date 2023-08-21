@@ -1,4 +1,5 @@
 # DishHunter
+![How the program looks like!](/readmeImage.png)
 # Предназначение
 Проект за завършване на модула ASP.NET Advanced към SoftUni
 # Описание на приложението
