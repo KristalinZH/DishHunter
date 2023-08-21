@@ -24,19 +24,24 @@
                     {
                         if (package == null)
                             return false;
+                        
                         var worksheets = package.Workbook.Worksheets;
+
                         foreach (var ws in worksheets)
                         {
                             var tables = ws.Tables;
+
                             foreach (var t in tables)
                             {
                                 if (t.Range.Columns != columnsPerEntity)
                                     return false;
                             }
                         }
+
                         return true;
                     }
                 });
+
         public async Task<MenuExtractResult> ExtractMenuDataFromExcel(Stream stream)
         {
             MenuExtractResult result = new MenuExtractResult()
@@ -44,8 +49,10 @@
                 IsDataExtracted = false,
                 Message = string.Empty
             };
+
             List<MenuExcelTransferModel> menus =
                 new List<MenuExcelTransferModel>();
+
 			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             bool isThereTable = false;
 			using (var package = new ExcelPackage(stream))

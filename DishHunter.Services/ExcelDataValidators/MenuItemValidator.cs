@@ -16,6 +16,7 @@
                 return false;
             if (menuItem.ImageUrl.Length > UrlMaxLenght)
                 return false;
+
             return true;
         }
     }

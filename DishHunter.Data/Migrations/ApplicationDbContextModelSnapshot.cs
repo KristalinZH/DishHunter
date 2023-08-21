@@ -109,7 +109,7 @@ namespace DishHunter.Data.Migrations
                         {
                             Id = new Guid("d5b353de-0b76-4168-ba6f-bcfcdb7e3029"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a733666b-fb67-4d2e-aa48-e825070282ce",
+                            ConcurrencyStamp = "536f9266-4b25-4ecd-a15f-747dd49f457a",
                             Email = "admin@email.com",
                             EmailConfirmed = false,
                             FirstName = "Administrator",
@@ -117,10 +117,10 @@ namespace DishHunter.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EMAIL.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAELp21Vl5rbDLrtATPgLTWt5MolkJrYKqUKeYXZj6bONcSPByFGCIEnuvkIIykWqbYw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM6vPFrJPiVMAAnEzD/qLuFfEmvblsO9JobZIps2Wlij16DnmsSkzP9iHmdi97j8Kw==",
                             PhoneNumber = "+359883333444",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4302d1eb-b446-4854-be2d-6ac3b07f54d7",
+                            SecurityStamp = "48a4e3ae-c356-4366-b5be-4c12eb410350",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         },
@@ -128,7 +128,7 @@ namespace DishHunter.Data.Migrations
                         {
                             Id = new Guid("b49d1805-e143-47ed-9b72-7761e20d6c88"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d66b7678-abe9-4083-aa00-54966be4a563",
+                            ConcurrencyStamp = "80bd5052-00f2-4e6c-b5de-801bd649bba7",
                             Email = "pesho@email.com",
                             EmailConfirmed = false,
                             FirstName = "Pesho",
@@ -136,11 +136,11 @@ namespace DishHunter.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PESHO@EMAIL.COM",
                             NormalizedUserName = "PESHOTHEOWNER",
-                            PasswordHash = "AQAAAAEAACcQAAAAECfYKYh6pG3zKzgXZhycjgIawJyxLkLBZU5rfTm+vim9o6LzQJarj3Mo5wxTIz9FzA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELujZJRpUg0DTYC4yhwwW+3f14oMAGeaDqoyrdBqdvjWj17fMGE782JQVxFyu4jT7w==",
                             PhoneNumber = "+359884444333",
                             PhoneNumberConfirmed = false,
                             RestaurantOwnerId = new Guid("62152f86-525b-454f-92c8-108cea75c239"),
-                            SecurityStamp = "dece7810-a7dd-4736-9487-24494ae58e9b",
+                            SecurityStamp = "6f663566-66d5-4062-a03d-f3912c75bed0",
                             TwoFactorEnabled = false,
                             UserName = "PeshoTheOwner"
                         },
@@ -148,7 +148,7 @@ namespace DishHunter.Data.Migrations
                         {
                             Id = new Guid("9e9d933d-973a-433a-ada2-19e4a7d4a509"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e73d99a8-602b-4225-9cb1-d1c1f5e7ddda",
+                            ConcurrencyStamp = "ef996705-9ddf-4473-a146-1f7225624400",
                             Email = "ivan@email.com",
                             EmailConfirmed = false,
                             FirstName = "Ivan",
@@ -156,11 +156,11 @@ namespace DishHunter.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "IVAN@EMAIL.COM",
                             NormalizedUserName = "IVANTHEOWNER",
-                            PasswordHash = "AQAAAAEAACcQAAAAELEryCvhmgd6eXHBJVQBPD52xaCXmXjPyxgTrjZrStyolxjqZ7ZvRkSxl/2sijJeVw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENgxrNcq2AmG3frVby/riQ6keFtU4oMlIl0mIT4qjgD9O/jQ0FbHngRf/QdD+vvw1A==",
                             PhoneNumber = "+359884444333",
                             PhoneNumberConfirmed = false,
                             RestaurantOwnerId = new Guid("62152f86-525b-454f-92c8-108cea75c240"),
-                            SecurityStamp = "13f45043-d2cd-45ac-a05f-76758a1b08ac",
+                            SecurityStamp = "5088a0b2-5888-4071-8fff-3f67a69035de",
                             TwoFactorEnabled = false,
                             UserName = "IvanTheOwner"
                         },
@@ -168,7 +168,7 @@ namespace DishHunter.Data.Migrations
                         {
                             Id = new Guid("8a4d1997-8ace-42ba-aac5-1fe005eabd99"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8417dc3d-d264-4ec8-8c45-a4abbd8d87d0",
+                            ConcurrencyStamp = "678359cf-8e16-4230-b5ac-661e4f2d14bb",
                             Email = "misho@email.com",
                             EmailConfirmed = false,
                             FirstName = "Misho",
@@ -176,9 +176,9 @@ namespace DishHunter.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MISHO@EMAIL.COM",
                             NormalizedUserName = "MISHOTHEUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEez196xAczVIZMyXxoCMZeKCIQIkv1qVP416Gx1XmbEu/zapJQaHr+IPONIkxv9pA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBwPgKvj7/AU7xIcilL9XdCgXWaWT84RwVHqB0DjKghRzEU0QaRnVixEYiuRGDaiJg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4c59519b-0e7f-48eb-82f4-6b94ab859040",
+                            SecurityStamp = "eb1bac97-056f-4cb2-80b4-ae10c55df370",
                             TwoFactorEnabled = false,
                             UserName = "MishoTheUser"
                         });
@@ -37346,13 +37346,6 @@ namespace DishHunter.Data.Migrations
                             IsActive = false,
                             Region = "обл.Пазарджик",
                             SettlementName = "с.Свети Константин"
-                        },
-                        new
-                        {
-                            Id = 5248,
-                            IsActive = true,
-                            Region = "mANGALOVO",
-                            SettlementName = "Asparuhovo"
                         });
                 });
 
@@ -37387,14 +37380,14 @@ namespace DishHunter.Data.Migrations
                         new
                         {
                             Id = new Guid("f39b8190-06f0-46ff-b35f-9e9d6703c5d2"),
-                            ConcurrencyStamp = "10c09048-ba68-4e46-9759-c0edc90143b6",
+                            ConcurrencyStamp = "02f45e0d-86e0-4b42-95d3-32802de336c6",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = new Guid("c421e5d4-85c6-4173-a17b-23c735028160"),
-                            ConcurrencyStamp = "fed8bbf1-bf16-4331-9c92-9e10c0a55520",
+                            ConcurrencyStamp = "a7ace30e-cb77-4cc7-be7d-cdb119b4fa11",
                             Name = "User",
                             NormalizedName = "USER"
                         });

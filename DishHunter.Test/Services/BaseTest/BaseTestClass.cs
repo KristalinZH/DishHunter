@@ -33,7 +33,7 @@
             menuItemService = new MenuItemService(dbContext);
             ownerService = new RestaurantOwnerService(dbContext);
             menuService = new MenuService(dbContext, menuItemService);
-            restaurantService = new RestaurantService(dbContext,settlementService,categoryService, geocodingService);
+            restaurantService = new RestaurantService(dbContext, settlementService, categoryService, geocodingService);
             brandService = new BrandService(dbContext, restaurantService, menuService);
             SeedDatabase();
         }
